@@ -13,3 +13,17 @@ body{background:#fff;color:#171719}
 .page-content{background:#F8F7F3}
 .placeholder-panel{border-left:4px solid #B20B62;background:#F2F0EB}
 .page-footer{background:#171719;color:#fff}
+
+.page-main{background:#fff;color:#171719}
+.page-main h1{color:#171719}
+.page-main h1 em,.page-main h2 em{color:#B20B62}
+.page-subtitle{color:#625D60}
+.page-content{background:#F8F7F3}
+.page-content h2{color:#171719}
+.page-content p{color:#514c48}
+.content-placeholder{border-color:#B20B62;background:#F2F0EB}
+.content-placeholder strong{color:#B20B62}
+.content-placeholder span{color:#625D60}
+.page-nav a{color:#242124}
+.page-nav a:hover{color:#B20B62}
+.page-footer{background:#171719;color:#fff}
