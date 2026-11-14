@@ -128,3 +128,15 @@ Relevant earlier commits recorded in GitHub history:
 - Verified that the homepage, shared CSS/JS, all twelve inner-page HTML files, README and this log can be fetched from GitHub `main`.
 - Source-level responsive checks are complete; visual checks at real viewport sizes remain outstanding.
 - Confirmed again that `assets/dso-logo.png` is not yet present. The official logo upload is the remaining asset blocker for the intended first look.
+
+
+## 2026-11-14 — Phase 1A approved direction: admin backend foundations and Vercel review
+
+- Added `docs/PHASE_1A_FIRST_LOOK_AND_BACKEND_FOUNDATIONS.md` as a sub-phase of the Phase 1 master plan.
+- Recorded the requirement for a future administrator backend with sign-in/sign-out, protected dashboard, content management workflows and role-based access planning.
+- Established the backend-ready principle: repeatable content should be structured and separated from presentation so database-backed content can replace placeholders later.
+- Deferred production Supabase, database schema, authentication, storage policies and live admin accounts until the content model and access rules are approved.
+- Confirmed the existing Vercel project is already linked to this GitHub repository under the Divine Symphony Orchestra team. Recent deployments of `main` have been marked as production by the existing Vercel configuration.
+- For the requested mobile review, use a Vercel Preview deployment where possible. A preview is for review only and is not a launch approval.
+- No admin login or database functionality is claimed as implemented in this sub-phase.
+- Next checks: deploy the current reviewed commit to Vercel Preview, inspect the mobile experience, and record any visual or responsive corrections before continuing.
