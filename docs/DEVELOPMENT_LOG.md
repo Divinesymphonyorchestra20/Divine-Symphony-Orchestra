@@ -166,3 +166,14 @@ Relevant earlier commits recorded in GitHub history:
 - Source files updated: `index.html`, all twelve inner-page HTML files, `styles.css`, `admin-editor.js`, `admin-editor.css`, `README.md`, `docs/ADMIN_EDITOR_PROTOTYPE.md` and this log.
 - Verification performed: repository file fetches and script/style inclusion checks. Full browser interaction, cross-device typography review and production authentication tests remain outstanding.
 - Next step: deploy a fresh Vercel review build and ask the owner to review the typography and editor interaction on mobile. Do not describe the prototype as a secure/live admin backend.
+
+
+## 2026-11-14 — DSO logo and MFM visual theme alignment
+
+- Reviewed the owner-supplied DSO logo as the primary source for the orchestra's visual palette: magenta, yellow, black, burgundy-red, teal, blue, red, green and white.
+- Reviewed the official MFM worldwide website and its mission and vision page. The public presentation foregrounds worship, scripture, ministry programmes, broadcasts, testimonies and institutional navigation; the mission page describes the ministry's focus on revival, apostolic signs, holiness, prayer and deliverance.
+- No formal downloadable MFM website colour specification was identified in the official pages reviewed. The theme documentation therefore distinguishes the MFM institutional reference from the exact palette values sampled/selected from the DSO logo; it does not mislabel the CSS palette as an official MFM standard.
+- Applied a restrained white/ivory/charcoal foundation, with magenta and yellow as the principal DSO accents. Green, teal, blue and red are limited to supporting details so the logo's full colour range is not overused.
+- Updated homepage styles, inner-page styles and editor toolbar styles: styles.css, pages.css and admin-editor.css.
+- Added docs/DSO_VISUAL_THEME_AND_BRAND_REFERENCES.md with source references, palette, usage rules and remaining visual checks.
+- The updated theme is committed to GitHub. A new Vercel preview build and mobile/desktop visual review are required before the theme is considered approved.
