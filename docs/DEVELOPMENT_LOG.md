@@ -105,3 +105,16 @@ Relevant earlier commits recorded in GitHub history:
 - The ZIP's stylesheet and script are not currently present in the repository; neither is the logo asset. The current repository's stylesheet differs from the ZIP's first-look stylesheet. The current repository has no standalone `script.js`.
 - The first-look still uses one-page anchor navigation, not the 13 separate principal pages. It contains placeholder content and is not a completed site.
 - No change has yet been made to replace the current homepage with the first-look. This review records the comparison only; the visual reference should be adopted deliberately after agreement.
+
+
+### 2026-11-14 — First-look import, homepage refinement and page framework
+- Imported the first-look responsive navigation script as `script.js`; added accessible expanded-state updates, Escape-key close behaviour and guarded footer-year handling.
+- Refined `styles.css` with responsive layout adjustments for tablet, mobile and narrow screens, plus reduced-motion support.
+- Updated `index.html` with the first-look visual structure, links to the planned inner pages, page description, social-sharing metadata, theme colour and PerformingGroup structured data.
+- Added search-engine metadata to the homepage and each initial inner-page framework. A canonical URL and production social preview image remain pending because the final domain and logo asset location are not yet confirmed.
+- Created the 12 inner-page frameworks matching the Phase 1 sitemap: About DSO, Our Heritage, Our Story, Our Legacy, The Orchestra, Meet the Members, Music & Performances, Concerts & Events, Media & Gallery, Ministry & Impact, News & Stories and Contact.
+- Added shared `pages.css` styles for the inner-page frameworks.
+- Preserved explicit content placeholders for pending approved biographies, leadership records, event details, historical sources, media and contact information.
+- Responsive CSS breakpoints and navigation behaviour have been reviewed in source. Full browser/device testing is still required.
+- The official DSO logo file is still not committed to the repository; homepage and page templates currently reference `assets/dso-logo.png`. This asset must be added and verified before the site can display the official logo.
+- No database, content-management system, form backend, hosting configuration or live deployment has been implemented in this work session.
