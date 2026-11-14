@@ -1,0 +1,96 @@
+# DSO Website — Development Log
+
+## Project record
+
+- Repository: https://github.com/Divinesymphonyorchestra20/Divine-Symphony-Orchestra
+- Working branch: `main`
+- Log started: 14 November 2026
+- Governing planning reference: **Phase 1 – Divine Symphony Orchestra Website Plan**, Version 1.0, prepared 14 November 2026.
+- Status: Initial website shell in progress. This is not yet a complete or deployed website.
+
+## Baseline and scope
+
+The Phase 1 plan is the project planning baseline. It defines the website purpose, audience, 13 proposed principal pages, page content requirements, design direction, functional considerations, governance and editorial standards, implementation stages, acceptance criteria, and outstanding decisions.
+
+The 13 proposed pages are:
+
+1. Home
+2. About DSO
+3. Our Heritage
+4. Our Story
+5. Our Legacy
+6. The Orchestra
+7. Meet the Members
+8. Music & Performances
+9. Concerts & Events
+10. Media & Gallery
+11. Ministry & Impact
+12. News & Stories
+13. Contact
+
+The plan specifies that historical claims, biographies, photographs, recordings, contact details and statements about the MFM relationship must be verified and appropriately approved before publication. The founding date recorded in the plan is 6 March 2007. Details about the seven founders and other historical points remain subject to confirmation where noted in the plan.
+
+## Work completed to date
+
+### 1. Initial homepage
+- Added `index.html` at the repository root.
+- Created a first homepage layout with navigation and introductory sections.
+- Included initial sections for DSO identity, founding information, heritage, legacy, members, music and performances, events, gallery and contact.
+- Added placeholder content where approved details or media have not yet been supplied.
+
+### 2. Initial styling
+- Added `styles.css` at the repository root.
+- Established an initial visual direction with a dark ink, warm ivory, gold and wine palette.
+- Added typography choices and responsive styling for smaller screens.
+
+### 3. Repository notes
+- Added `README.md` describing the initial website files and preview guidance.
+
+### 4. GitHub write-access check
+- Created a temporary write-access test file.
+- Confirmed that a repository write was possible.
+- Removed the temporary test file in a subsequent commit.
+- The temporary test file is not part of the current repository contents.
+
+## Verified repository state at the time of this log
+
+The following files were fetched successfully from the repository's `main` branch:
+
+- `index.html`
+- `styles.css`
+- `README.md`
+
+Relevant earlier commits recorded in GitHub history:
+
+- `9c3750070e334f7fcdc4e891dd7533b8a853d26d` — Create DSO website homepage
+- `acbdf306c1fa40b979ccfda936b9e4504d9129d1` — Add responsive DSO website styling
+- `6660d3522ba26935803e350674fb80788f82a8b5` — Document DSO website template
+- `22418de7406b82c463f04f0d8ccea596335c32cc` — Test GitHub write access
+- `65b899affe1c0cb13ced51bb996c0c13dda7deba` — Remove GitHub write access test
+
+## Not yet completed / outstanding
+
+- The Phase 1 master planning document file has **not yet been verified in the GitHub repository**. At the time of this check, it was not present at the repository root or at `docs/Phase_1_Divine_Symphony_Orchestra_Website_Plan.docx`. It must be added and verified as a separate repository asset.
+- The supplied official DSO logo has not yet been verified in the repository. It must be added without redrawing or altering the artwork, then the homepage logo reference must be checked.
+- The 13-page sitemap has not yet been implemented as 13 separate pages. The current work is a first homepage template.
+- No deployment or live website publication has been confirmed.
+- Placeholder sections must be replaced only when approved content and media are available.
+
+## Working rules for future changes
+
+1. Before a significant change, check the current repository version of the files being changed.
+2. Make one clearly described change at a time where practical.
+3. Use a commit message that states what changed.
+4. Update this log in the same work session as the code or content change.
+5. Record the files changed, reason, verification performed, and any remaining limitations.
+6. Do not describe a feature as complete until it has been checked in the repository and, where applicable, tested in the browser.
+7. Do not publish unverified history, personal details, images or recordings.
+
+## Change log
+
+### 2026-11-14 — Initial repository implementation and documentation
+- Recorded the initial homepage, stylesheet and README already present in `main`.
+- Recorded the write-access test and its removal.
+- Checked for the Phase 1 DOCX master plan in the repository; it was not found at the two expected paths.
+- Checked for the official logo; it has not yet been verified as committed.
+- Confirmed that the current site is an initial homepage template, not the complete 13-page website and not a confirmed live deployment.
