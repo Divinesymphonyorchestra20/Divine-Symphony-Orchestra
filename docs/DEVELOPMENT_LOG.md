@@ -144,3 +144,12 @@ Relevant earlier commits recorded in GitHub history:
 - Created a Vercel review deployment from commit `b375f93664d3f86257f430bf4d3b1490818573c4`; build completed and deployment state was verified as `READY`.
 - Review URL: https://divine-symphony-orchestra-qej5eeo9i-divine-symphony-orchestra.vercel.app
 - This is a review deployment, not a final launch approval. The official DSO logo asset remains outstanding in the repository and must be added before the visual review is considered complete.
+
+
+## 2026-11-14 — Mobile first-look feedback and clarified admin editing model
+
+- Owner feedback: overall mobile homepage visual direction is good; some wording/lettering appears out of position. Typography, wrapping, text widths, line-height, letter spacing and responsive alignment are recorded for the next visual refinement pass.
+- Clarified admin requirement: the admin experience should mirror the public website itself and provide in-context editing, rather than use a visually separate conventional dashboard. Authorised administrators should be able to edit website content directly in place, review changes and publish them without coding.
+- Confirmed current status: no real admin backend, authentication, protected editing mode, database persistence or publishing workflow has been integrated yet. The Vercel site is currently a public-facing review build; any simulated editing UI would be a prototype only.
+- Added `docs/PHASE_1A_REVIEW_NOTES_MOBILE_AND_ADMIN_EDITING.md` with the feedback, intended editing experience, architectural implications and instruction boundary.
+- Per owner instruction, wait for the next explicit direction before starting visual corrections, admin implementation, database setup or authentication work.
