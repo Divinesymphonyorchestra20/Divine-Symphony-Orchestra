@@ -118,3 +118,13 @@ Relevant earlier commits recorded in GitHub history:
 - Responsive CSS breakpoints and navigation behaviour have been reviewed in source. Full browser/device testing is still required.
 - The official DSO logo file is still not committed to the repository; homepage and page templates currently reference `assets/dso-logo.png`. This asset must be added and verified before the site can display the official logo.
 - No database, content-management system, form backend, hosting configuration or live deployment has been implemented in this work session.
+
+
+### Follow-up verification — Responsive styles and navigation
+- Replaced the earlier basic homepage styling layer with the first-look component styles so the current homepage markup uses the intended visual system.
+- Added responsive rules for desktop, tablet, mobile and narrow mobile widths; added reduced-motion handling.
+- Adjusted inner-page navigation to remain horizontally scrollable and available on narrow screens.
+- Added the homepage mobile menu script with keyboard Escape handling and accessible `aria-expanded` state.
+- Verified that the homepage, shared CSS/JS, all twelve inner-page HTML files, README and this log can be fetched from GitHub `main`.
+- Source-level responsive checks are complete; visual checks at real viewport sizes remain outstanding.
+- Confirmed again that `assets/dso-logo.png` is not yet present. The official logo upload is the remaining asset blocker for the intended first look.
