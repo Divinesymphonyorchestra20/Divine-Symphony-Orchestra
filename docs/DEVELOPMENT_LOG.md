@@ -153,3 +153,16 @@ Relevant earlier commits recorded in GitHub history:
 - Confirmed current status: no real admin backend, authentication, protected editing mode, database persistence or publishing workflow has been integrated yet. The Vercel site is currently a public-facing review build; any simulated editing UI would be a prototype only.
 - Added `docs/PHASE_1A_REVIEW_NOTES_MOBILE_AND_ADMIN_EDITING.md` with the feedback, intended editing experience, architectural implications and instruction boundary.
 - Per owner instruction, wait for the next explicit direction before starting visual corrections, admin implementation, database setup or authentication work.
+
+
+## 2026-11-14 — In-place editor prototype and mobile typography refinement
+
+- Added `admin-editor.js` and `admin-editor.css` to provide an in-place editing preview that uses the same public page layout.
+- Connected the editor prototype to the homepage and all twelve inner-page frameworks. Add `?edit=1` to a page URL to open the editing preview.
+- Prototype features: in-context editing of selected headings and text, browser-local draft saving, JSON draft export and return to public view.
+- Important limitation: this is not secure admin authentication or a production backend. It has no server-side access control, shared database, cloud persistence, media management, audit trail or publish workflow. Do not enter sensitive information. Real administrator login/logout and protected publishing require a server-side authentication and data layer.
+- Added `docs/ADMIN_EDITOR_PROTOTYPE.md` with usage instructions, limitations and production requirements; updated README with the preview route.
+- Corrected mobile typography and wrapping rules in `styles.css`: normal word wrapping, constrained text measure, more stable heading line-height and letter spacing, flexible grid children, and a single-column mobile footer to prevent narrow/stacked footer lettering.
+- Source files updated: `index.html`, all twelve inner-page HTML files, `styles.css`, `admin-editor.js`, `admin-editor.css`, `README.md`, `docs/ADMIN_EDITOR_PROTOTYPE.md` and this log.
+- Verification performed: repository file fetches and script/style inclusion checks. Full browser interaction, cross-device typography review and production authentication tests remain outstanding.
+- Next step: deploy a fresh Vercel review build and ask the owner to review the typography and editor interaction on mobile. Do not describe the prototype as a secure/live admin backend.
