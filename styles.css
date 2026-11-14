@@ -103,3 +103,59 @@ h1,h2,h3,p{word-break:normal;overflow-wrap:break-word;hyphens:none}
  .footer-message h2{font-size:36px}
  .footer-links{grid-template-columns:1fr 1fr}
 }
+
+/* DSO brand alignment: logo-led palette with MFM visual restraint */
+:root{
+ --ink:#171719;
+ --paper:#FFFFFF;
+ --paper-warm:#F8F7F3;
+ --surface:#F2F0EB;
+ --gold:#F2D000;
+ --gold-deep:#A98500;
+ --magenta:#B20B62;
+ --wine:#790B43;
+ --green:#087A3D;
+ --teal:#176B66;
+ --blue:#1746A2;
+ --red:#C9232C;
+ --muted:#625D60;
+ --line:#E3DED8;
+ --brand-dark:#171719;
+ --brand-accent:var(--magenta);
+}
+body{background:var(--paper);color:var(--ink)}
+.topline{background:var(--ink);color:#F2D000}
+.site-header{background:#fff;border-bottom:1px solid var(--line)}
+.site-header .nav a{color:#242124}
+.site-header .nav a:hover,.site-header .nav a.active{color:var(--magenta)}
+.nav-contact{border-color:var(--magenta);color:var(--magenta)}
+.hero{
+ background:
+ linear-gradient(90deg,rgba(18,17,19,.96),rgba(30,18,27,.84) 48%,rgba(30,18,27,.24)),
+ radial-gradient(ellipse at 78% 42%,#9A1458,#21171E 70%);
+}
+.hero h1 em,.intro h2 em,.feature h2 em,.cards-heading h2 em,.events h2 em,.gallery h2 em,.legacy-strip h2 em,.music-band h2 em,.footer-message h2 em{color:#F2D000}
+.eyebrow,.section-kicker,.light{color:var(--magenta)}
+.light{color:#F2D000}
+.button-gold,.button:not(.button-outline){background:#F2D000;color:#171719}
+.button-outline{border-color:#F2D000;color:#fff}
+.text-link{color:#fff}
+.under-link{border-color:var(--magenta);color:var(--magenta)}
+.dark-band,.music-band,.legacy-strip,footer{background:#171719;color:#fff}
+.dark-grid h2 em,.music-band h2 em,.legacy-strip h2 em{color:#F2D000}
+.milestone-row strong{color:#F2D000}
+.feature{background:#fff}
+.feature-image{background:linear-gradient(135deg,#21171E 0%,#8F0F50 48%,#F2D000 100%)}
+.image-note{color:#fff}
+.cards-section{background:#F2F0EB}
+.info-card{background:#fff;border-top:3px solid var(--magenta)}
+.card-number,.coming{color:var(--magenta)}
+.info-card h3{color:#171719}
+.tile-one{background:linear-gradient(135deg,#790B43,#B20B62)}
+.tile-two{background:linear-gradient(135deg,#171719,#176B66)}
+.tile-three{background:linear-gradient(135deg,#1746A2,#087A3D)}
+.footer-links span{color:#F2D000}
+.footer-bottom{border-color:#454044}
+.menu-toggle{color:var(--magenta)}
+.site-header .nav.open{background:#fff}
+@media(max-width:700px){.site-header .nav{background:#fff}}
