@@ -33,3 +33,8 @@ Then open `http://localhost:8000` in a browser. Visual Studio Code users can als
 - Add canonical URL and final social-sharing image after the production domain and approved artwork are confirmed.
 
 See `docs/DEVELOPMENT_LOG.md` for the dated work record.
+
+## In-place editor prototype
+- Open any page with `?edit=1` to preview the in-place editor, for example `/?edit=1` or `/about.html?edit=1`.
+- The editor prototype supports direct text editing, browser-local draft saving and JSON export.
+- This is not secure authentication or a production admin backend. Do not use it for sensitive content. See `docs/ADMIN_EDITOR_PROTOTYPE.md` for limits and the production work still required.
