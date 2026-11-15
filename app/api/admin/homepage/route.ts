@@ -1,0 +1,34 @@
+import { NextRequest, NextResponse } from "next/server";
+import { verifyAdminSession } from "../../../../lib/admin-auth";
+import { readHomepageStore, writeHomepageStore, type HomepageStore } from "../../../../lib/homepage-cms";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+export async function GET(request: NextRequest) {
+  if (!verifyAdminSession(request)) return NextResponse.json({ error: "Sign in to manage the homepage." }, { status: 401 });
+  return NextResponse.json(await readHomepageStore(), { headers: { "Cache-Control": "no-store" } });
+}
+
+export async function PUT(request: NextRequest) {
+  if (!verifyAdminSession(request)) return NextResponse.json({ error: "Sign in to manage the homepage." }, { status: 401 });
+  const body = await request.json().catch(() => null) as { action?: string; content?: HomepageStore["draft"] } | null;
+  if (!body || !body.content || body.content.version !== 1 || !Array.isArray(body.content.sections) || !Array.isArray(body.content.links) || !body.content.hero || !body.content.feature) {
+    return NextResponse.json({ error: "The submitted homepage content is not valid." }, { status: 400 });
+  }
+  if (JSON.stringify(body.content).length > 500_000 || body.content.links.length > 12 || body.content.sections.length > 12 || body.content.media.items.length > 12) {
+    return NextResponse.json({ error: "The homepage content exceeds the allowed limits." }, { status: 413 });
+  }
+  try {
+    const current = await readHomepageStore();
+    const next: HomepageStore = {
+      version: 1, updatedAt: new Date().toISOString(),
+      draft: body.content,
+      published: body.action === "publish" ? body.content : current.published
+    };
+    await writeHomepageStore(next);
+    return NextResponse.json({ ok: true, action: body.action === "publish" ? "publish" : "draft", updatedAt: next.updatedAt });
+  } catch (error) {
+    return NextResponse.json({ error: error instanceof Error ? error.message : "Could not save homepage content." }, { status: 500 });
+  }
+}
