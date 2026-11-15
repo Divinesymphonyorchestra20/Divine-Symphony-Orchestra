@@ -1,12 +1,13 @@
-# DSO Database Foundation — Setup and Migration Notes
+# DSO Database Foundation — Supabase Setup and Migration Notes
 
-**Status:** Schema and connection tooling committed; database provisioning and migration have not been run.  
-**Approved architecture:** Managed PostgreSQL for structured records; Vercel Blob retained for media binaries.
+**Provider selected:** Supabase PostgreSQL.  
+**Status:** Supabase has been selected, but no Supabase project is provisioned or connected yet. The initial schema and connection tooling are committed; no migration has been executed.  
+**Approved architecture:** PostgreSQL for structured records; Vercel Blob retained for media binaries.
 
-## 1. What has been added
+## 1. What is already in the repository
 
-- `drizzle-orm` and the PostgreSQL `postgres` driver.
-- `drizzle-kit` for schema generation and migrations.
+- Drizzle ORM and Drizzle Kit for schema management and migrations.
+- PostgreSQL drivers for application access and migration tooling.
 - `db/schema.ts` with the initial shared DSO schema:
   - Administrator accounts, roles, permissions and assignments.
   - Revocable administrator sessions.
@@ -17,67 +18,94 @@
 - `drizzle.config.ts` and the initial SQL migration at `db/migrations/0000_shared_admin_foundation.sql`.
 - Package scripts for database generation, migration, Studio and TypeScript checking.
 
-## 2. Database provider
+The application database client accepts a local/custom `DATABASE_URL` or the `POSTGRES_URL` variable supplied by the Supabase/Vercel integration. Runtime access uses a single-connection application pool and TLS. The migration configuration prefers a separate migration URL and then the Supabase non-pooling/session URL.
 
-The schema uses standard PostgreSQL and is not tied to a specific vendor. No database provider has been connected or selected by this setup.
+## 2. Recommended account and project ownership
 
-Before provisioning, DSO should confirm an organisation-owned managed PostgreSQL provider and account. Compare:
-- Database region and latency to the deployed application.
-- Managed backups and point-in-time recovery.
-- Connection pooling and serverless connection guidance.
-- Direct connection access for migrations.
-- Access control, audit facilities and account ownership.
-- Pricing and operational support.
+Create the Supabase organization under an email account controlled by Divine Symphony Orchestra, not an individual's personal email where that can be avoided. Give access only to the people who need database administration.
 
-Do not paste a database connection string into GitHub, source files or chat. Configure it as an encrypted Vercel environment variable.
+Create a dedicated development project first, for example:
 
-## 3. Environment configuration
+- Organization: Divine Symphony Orchestra
+- Project name: `dso-development`
+- Database: PostgreSQL
+- Region: choose the nearest suitable region after comparing the available Supabase regions with the Vercel deployment region and DSO's audience.
 
-Add the provider-issued PostgreSQL connection string to the Vercel project as:
+Use a strong, unique database password and store it in the organisation's password manager. Do not paste it into GitHub, source files or chat.
 
-- Key: `DATABASE_URL`
-- Type: Encrypted
-- Environments: Development, Preview and Production
+Keep production in a separate Supabase project. Do not use the development database for live public content.
 
-Use the provider's recommended connection URL for serverless application traffic. If the provider supplies a separate direct/unpooled URL for migrations, keep that value in a separate encrypted variable and update the migration configuration to use it before running migrations.
+## 3. Connect Supabase to Vercel
 
-The application client uses a small connection pool and disables prepared statements to support common transaction-pooling configurations. Confirm the provider's recommended settings before production use.
+The Vercel project is:
 
-## 4. Commands
+- Project: `divine-symphony-orchestra`
+- Repository: `Divinesymphonyorchestra20/Divine-Symphony-Orchestra`
+- Production branch: `main`
 
-After the provider has been selected and `DATABASE_URL` is configured in the local development environment:
+Recommended route: from the Supabase organization, open **Integrations**, install the official Vercel integration, and connect the `dso-development` project to the existing `divine-symphony-orchestra` Vercel project. Confirm the correct Vercel team and project before approving access.
 
-```bash
-npm install
-npm run db:generate
-npm run db:migrate
-npm run typecheck
-npm run build
-```
+The integration can synchronize database variables to Vercel. The application uses:
 
-Run migrations first against a disposable development database. Inspect the generated SQL and schema diff before applying any migration to Preview or Production.
+- `POSTGRES_URL` for server-side application queries (transaction pooler).
+- `POSTGRES_URL_NON_POOLING` for migration tooling when supplied by the integration (session pooler).
+- `DATABASE_URL` as an optional explicit override for local or manually managed environments.
+- `MIGRATION_DATABASE_URL` as an optional explicit override for migration commands.
 
-The migration command changes the connected database. Do not run it against production until the provider, backup policy, migration contents and rollback procedure have been reviewed.
+Do not expose any database connection string through a `NEXT_PUBLIC_` variable. Do not put database passwords or Supabase secret keys in browser code.
 
-## 5. Initial migration behaviour
+### Alternative: Vercel Marketplace
+
+Supabase can also be provisioned through the Vercel Marketplace. This creates a Supabase organization associated with the Vercel team, synchronizes connection variables, and routes Supabase billing through Vercel. The Marketplace documentation currently labels this route Public Alpha. If DSO prefers consolidated billing and Vercel-team-managed ownership, it can be considered, but confirm billing and organization ownership before installing it.
+
+## 4. Connection mode
+
+The DSO website runs on Vercel serverless functions. Supabase recommends its shared pooler in **transaction mode** for this kind of workload. The Supabase/Vercel integration supplies `POSTGRES_URL` for runtime use.
+
+The migration command should use a separate connection. Prefer `MIGRATION_DATABASE_URL` if configured explicitly, otherwise use `POSTGRES_URL_NON_POOLING` supplied by the integration. Supabase's Vercel integration uses a session-mode pooler for its non-pooling variable; this is suitable for migration sessions. If using a direct database URL instead, confirm that the machine running migrations can reach the project's direct endpoint.
+
+The runtime driver disables prepared statements by default through the PostgreSQL driver configuration and uses a small pool to limit connections from serverless instances.
+
+## 5. Development setup and validation
+
+After the development project has been created and connected:
+
+1. Confirm the Vercel project has the expected Supabase environment variables. Inspect names and targets only; never expose decrypted values in logs or chat.
+2. Set the integration connection for Development/Preview only while testing. Do not attach the development database to Production.
+3. Configure the local development environment from the Supabase dashboard if local commands are required. Keep `.env.local` out of Git.
+4. Run:
+   ```bash
+   npm install
+   npm run typecheck
+   npm run db:generate
+   npm run db:migrate
+   npm run build
+   ```
+5. Inspect the resulting tables, indexes, role records and permission assignments in Supabase Studio.
+6. Test a database read/write using a controlled development-only verification script or route, then remove the test data.
+
+Run migrations first against the development project. Inspect generated SQL and schema differences before applying any migration to Preview or Production.
+
+## 6. Initial migration behaviour
 
 The initial migration creates the shared tables and seeds the Owner, Editor and Publisher role definitions, together with the first permission catalogue and role-permission assignments.
 
 It does **not** create an administrator account, set a password, create a session, migrate History records, copy media files or change the public website. The first Owner account must be created through a controlled bootstrap procedure after the authentication flow is implemented.
 
-The migration is designed to be applied to a new, empty DSO database. It is not a migration to run against the current Blob-backed History data.
+The migration is designed for a new, empty DSO database. It is not a migration to run against the current Blob-backed History data.
 
-## 6. Data protection and migration sequence
+## 7. Data protection and production sequence
 
 - Keep the existing private Blob JSON at `cms/history-content.json` unchanged.
 - Keep all current media objects and pathnames unchanged.
-- Provision and test the new database separately.
-- Apply the initial schema to development first.
-- Implement and test authentication, permission checks, content services and audit writes.
+- Provision and test the new Supabase development project separately.
+- Apply and verify the initial schema in development.
+- Implement authentication, permission checks, content services and audit writes.
 - Build and verify the History migration on a non-production copy.
+- Create the separate production database only after the development setup is accepted.
 - Take a final export before production cutover.
 - Retain the old Blob content and media as a rollback source until DSO signs off the migration.
 
-## 7. Current implementation boundary
+## 8. Current implementation boundary
 
-The database schema and connection tooling are preparatory infrastructure. No database is currently connected, no migration has been executed, no administrator account has been created, and the existing History CMS continues to use its current Blob-backed store. The current shared-password admin authentication has not yet been replaced.
+Supabase has been selected, but no Supabase organization or project has yet been connected to Vercel. No database migration has been executed, no administrator account has been created, and the existing History CMS continues to use its current Blob-backed store. The current shared-password admin authentication has not yet been replaced.
