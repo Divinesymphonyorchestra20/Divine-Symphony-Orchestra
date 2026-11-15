@@ -127,3 +127,38 @@ Biography One is an introductory working document, not a final authorised instit
 
 ## 10. Record status and limitations
 This report records repository and deployment information as of 15 November 2026. It distinguishes deployed homepage work from planned features. The successful deployment does not mean the full website or production admin backend is complete. The current admin does not control the live website.
+
+
+## 11. History pages and private CMS implementation — 15 November 2026
+
+The History area has now been implemented as three public routes:
+- `/history` — the main institutional history, with a reusable photographs and YouTube video area.
+- `/history/founding-members` — the eight supplied founding names and original instruments, connected to editable biography records, with a photographs/video area.
+- `/history/milestones` — a CMS-driven chronological timeline, a South Africa/Stellenbosch international participation feature, a dedicated gallery area and a YouTube video area.
+
+### 11.1 Timeline and editorial handling
+- The timeline is now sourced from the History CMS rather than a hard-coded page array.
+- The 2006 Symphonies of Praise item is retained in the admin as an unpublished draft because the supplied record also gives 6 March 2007 as the formal establishment date and asks for the relationship between those dates to be checked.
+- The published entries use the years and descriptions already present in the supplied institutional history. Missing venues, exact dates, participants and programme details have not been invented.
+- The South Africa section records the supplied Stellenbosch participation years (2011, 2012, 2013, 2015 and 2016), the 2016 delegation of 35 as recorded by Stellenbosch University, and the documented July 2013 participation of violinist Jennifer Obaze.
+
+### 11.2 Media and video management
+- A reusable media section is available for History, Founding Members and Milestones.
+- The admin placement selector is also prepared for the planned About, Music, Events, People, Gallery and Contact pages when those public routes are created.
+- Image uploads accept JPG, PNG, WebP and GIF files up to 12 MB. Media records support page placement, gallery/collection name, alt text, caption, credit and publication status.
+- YouTube videos are embedded from supplied YouTube URLs. Video files are not uploaded to DSO.
+- Public pages display only published media. Draft media is delivered only to an authenticated admin session.
+
+### 11.3 Storage and access
+- A private Vercel Blob store named `dso-history-cms` was created in the Cape Town region and connected to the project.
+- The Vercel project now has the Blob read/write token and a generated session-signing secret.
+- Admin authentication uses a signed HTTP-only session cookie. The administrator password variable `DSO_ADMIN_PASSWORD` still needs to be set by the project owner in Vercel → Project → Settings → Environment Variables, then the project must be redeployed. The History Manager sign-in will remain unavailable until that variable is configured.
+- Admin route: `/admin/history`.
+- The existing homepage visual editor at `/admin` remains a browser-local preview tool; it is not yet connected to this shared CMS.
+
+### 11.4 Deployment and remaining work
+- The final Git commit for this stage is `ba59d296bb2d30a4ec033c7605a98053dfac5a24`.
+- Vercel production deployment `dpl_EhyqyGvdkA1Psrb6ifc8BHW148pJ` reached **READY** and the production aliases were assigned.
+- The History and Admin History routes were fetched successfully from the deployment. A full browser-based review of editing, authentication, image upload and publication still needs to be completed after the admin password is configured.
+- No South Africa photographs or YouTube links have been added yet. The public gallery and video areas are intentionally empty until DSO supplies and approves material.
+- The other planned public pages do not yet exist; their page-placement options are ready, and the shared media component can be added when those routes are implemented.
