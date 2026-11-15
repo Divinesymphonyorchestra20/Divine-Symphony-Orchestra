@@ -2,7 +2,7 @@
 
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 
-type PageKey = "history" | "founding-members" | "milestones" | "about" | "music" | "events" | "people" | "gallery" | "contact";
+type PageKey = "history" | "founding-members" | "milestones" | "about" | "music" | "events" | "people" | "gallery" | "contact" | "our-heritage" | "our-story" | "our-legacy" | "orchestra" | "meet-the-members";
 type Milestone = { id: string; year: string; title: string; kind: string; text: string; published: boolean; editorialNote?: string };
 type Founder = { id: string; name: string; instrument: string; section: string; biography: string; published: boolean };
 type Media = { id: string; page: PageKey; collection: string; pathname: string; alt: string; caption: string; credit: string; published: boolean };
@@ -10,7 +10,7 @@ type Video = { id: string; page: PageKey; title: string; description: string; yo
 type Content = { version: 1; updatedAt: string; milestones: Milestone[]; founders: Founder[]; media: Media[]; videos: Video[] };
 type Tab = "milestones" | "founders" | "media" | "videos";
 
-const pageLabels: Record<PageKey,string> = { history:"The History of DSO", "founding-members":"Founding Members", milestones:"Our Milestones", about:"About DSO", music:"Music", events:"Events", people:"People", gallery:"Gallery", contact:"Contact" };
+const pageLabels: Record<PageKey,string> = { history:"The History of DSO", "founding-members":"Founding Members", milestones:"Our Milestones", about:"About DSO", music:"Music", events:"Events", people:"People", gallery:"Gallery", contact:"Contact", "our-heritage":"Our Heritage", "our-story":"Our Story", "our-legacy":"Our Legacy", orchestra:"The Orchestra", "meet-the-members":"Meet the Members" };
 const anniversaryCollection = "Concert Highlights | April 2026 | DSO 19th Anniversary";
 
 export default function HistoryAdmin() {
