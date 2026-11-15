@@ -1,4 +1,5 @@
-import Image from "next/image";
+import SiteHeader from "../components/site-header";
+import SiteFooter from "../components/site-footer";
 
 const links = [
   ["Our History", "A story of growth, dedication and music-making", "/history"],
@@ -10,17 +11,7 @@ const links = [
 export default function Home() {
   return (
     <main>
-      <header className="site-header">
-        <a className="brand" href="/" aria-label="Divine Symphony Orchestra home">
-          <Image className="brand-logo" src="/images/dso-logo-original.png" alt="Divine Symphony Orchestra logo" width={72} height={108} priority />
-        </a>
-        <nav aria-label="Main navigation">
-          <a className="active" href="/">Home</a><a href="/about">About</a><a href="/history">Our History</a>
-          <a href="/music">Music</a><a href="/events">Events</a><a href="/gallery">Gallery</a><a href="/contact">Contact</a>
-        </nav>
-        <a className="menu-link" href="/contact">Get in touch</a>
-      </header>
-
+      <SiteHeader active="Home" />
       <section className="hero">
         <div className="hero-photo" role="img" aria-label="Divine Symphony Orchestra performing on stage" />
         <div className="hero-shade" />
@@ -68,12 +59,7 @@ export default function Home() {
         <div><p className="eyebrow dark">Stay connected</p><h2>Music brings us together.</h2><p>Explore the orchestra, discover its music and keep up with upcoming activities.</p></div>
         <a className="solid-cta" href="/events">Explore events <span>→</span></a>
       </section>
-
-      <footer className="site-footer">
-        <a className="brand footer-brand" href="/" aria-label="Divine Symphony Orchestra home"><Image className="footer-logo" src="/images/dso-logo-original.png" alt="Divine Symphony Orchestra" width={54} height={81}/></a>
-        <p>Music for Inspiration • Excellence • Impact</p>
-        <div className="footer-bottom"><span>© {new Date().getFullYear()} Divine Symphony Orchestra</span><a href="/contact">Contact DSO</a><a href="/admin">Admin preview</a></div>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }
