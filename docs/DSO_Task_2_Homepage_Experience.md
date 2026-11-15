@@ -3,7 +3,7 @@
 **Project:** Divine Symphony Orchestra website  
 **Branch:** `main`  
 **Stage:** Task 2 of 7  
-**Status:** Implementation committed and production build verified. DSO visual/content sign-off and authenticated publish workflow test remain pending.
+**Status:** Task 2 accepted by DSO for appearance and content. Implementation committed and production build verified. Authenticated draft/publish browser test remains pending for the later QA stage.
 
 ## Objective
 
@@ -96,16 +96,16 @@ No claim of a complete manual visual, mobile, keyboard, screen-reader or authent
 1. Supabase migration and shared content database integration remain for Task 6.
 2. Named administrator accounts and Owner/Editor/Publisher permissions remain for Task 6. The current editor uses the existing shared-password signed session.
 3. The current Blob JSON store is a transitional implementation and does not yet provide database-backed revisions or per-field audit history.
-4. DSO must review the default homepage positioning statement and approve final wording.
+4. DSO reviewed the homepage appearance/content and confirmed it is good. The approved copy can be refined later if DSO supplies further wording.
 5. DSO must provide and approve the original homepage photographs, selected media, image credits and publication permissions.
 6. The homepage content order is fixed to the Phase One plan; only section visibility is editable.
 7. Automated and manual accessibility, responsive, security and publish workflow testing remain part of the later QA stage.
 
 ## Checkpoint for the next session
 
-**Current stopping point:** Task 2 homepage content model, public rendering, administrator editor, private media path and draft/publish API have been committed to `main`. Production build is Ready and public homepage/admin HTTP checks returned 200. Do not begin Task 3 until DSO has reviewed the homepage appearance/content and the authenticated draft/publish workflow has been exercised.
+**Current stopping point:** Task 2 homepage content model, public rendering, administrator editor, private media path and draft/publish API have been committed to `main`. Production build is Ready; public homepage and admin page HTTP checks returned 200. DSO has approved the homepage appearance and content. The authenticated draft/publish browser test remains outstanding and is carried forward to the final QA stage.
 
-**Next action:** DSO should review the homepage at the public website and sign in at `/admin` to test saving a draft and publishing it. Once appearance/content and the publish flow are accepted, proceed to Task 3: About DSO and institutional pages.
+**Next action:** Proceed to Task 3: About DSO and institutional pages. Include the authenticated homepage draft/publish test in Task 7 launch QA.
 
 ## Git history
 
