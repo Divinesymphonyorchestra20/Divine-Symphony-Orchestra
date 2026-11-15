@@ -253,3 +253,26 @@ The project now has a deployed homepage, a set of public route shells, three His
 ## 13. Next-stage implementation plan
 
 The detailed recommendation for the next development stage has been documented separately in [DSO_Next_Development_Stage_Plan.md](DSO_Next_Development_Stage_Plan.md). It defines the proposed Shared Admin and Content Management Foundation, including the technical audit, architecture decisions, unified admin access, shared content and media workflows, History integration, homepage content management, About and Contact modules, acceptance criteria and the proposed sequence for later modules. This is a plan only; implementation has not started.
+
+
+## 14. Workstream 1 technical audit — 15 November 2026
+
+The repository source-code audit and architecture recommendation are complete. See [DSO_Workstream_1_Technical_Audit_and_Architecture.md](DSO_Workstream_1_Technical_Audit_and_Architecture.md).
+
+Key findings:
+- The History CMS stores all structured History content in one private Vercel Blob JSON document. Writes replace the complete document, and reads fall back to in-code defaults when storage is unavailable or invalid.
+- The current admin sign-in uses one shared `DSO_ADMIN_PASSWORD` and an eight-hour signed HTTP-only cookie. It does not yet provide named users, roles, per-user revocation or a content audit trail.
+- History API write and upload routes check the signed session, but the current implementation does not provide a central role/permission service.
+- Media binaries are in private Vercel Blob. Media metadata is embedded in the History JSON document; upload validation relies on the supplied MIME type and size.
+- The homepage editor uses browser `localStorage` and data URLs. The public homepage remains hard-coded and does not read or publish those local drafts.
+- The other non-History page routes remain structural shells without shared persisted content or matching editors.
+
+Architecture recommendation:
+- Retain the existing Next.js application.
+- Use managed PostgreSQL for structured content, administrator accounts, sessions, revisions and audit records.
+- Retain Vercel Blob for media binaries and move media metadata/usage relationships into PostgreSQL.
+- Introduce named administrator accounts and server-side Owner, Editor and Publisher permissions.
+- Migrate History incrementally, retaining the current Blob JSON and media as a verified rollback source.
+- Connect the homepage and subsequent public modules to the same shared content and publishing services.
+
+The audit did not inspect private Blob contents, secret values or live Vercel environment settings, and it did not change application code, production data or deployment settings. Workstream 1 is complete at source-audit level; Gate 1 architecture/provider approval is still required before database and authentication setup begins.
