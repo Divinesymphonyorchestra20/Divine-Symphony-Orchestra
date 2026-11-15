@@ -115,9 +115,10 @@ Updated:
 ## Checks and deployment
 
 At the time of this documentation commit:
-- Code and documentation changes are committed to GitHub `main`.
-- A Vercel deployment for an earlier implementation commit reached `READY`; that deployment does not include all later page, navigation and media refinements.
-- The final deployment/build for the complete combined Tasks 3 and 4 change set is still pending.
+- Code and documentation changes are committed to GitHub `main`. The latest implementation validation commit is `589f5d7aa20eb964a5704d2b215f1d65cc709ce4`; the current checkpoint documentation update is being committed separately.
+- Vercel deployment `dpl_9KErPrcyKdWqTu6v7FGaqQX5myJ9` for commit `7e2a0397599482bed34059cab576901718d5cd08` reached `READY`. That build occurred before the remaining page, navigation, media, admin and validation refinements, so it does not verify the complete latest change set.
+- A forced deployment of the complete latest `main` commit was attempted but Vercel returned HTTP 402 because the team exceeded the API deployment quota (24-hour restriction). No billing or project settings were changed.
+- The final production build and route checks remain pending until Vercel permits another deployment. No local build environment was available as a substitute.
 - No claim is made that all public routes, authenticated admin editing, draft/publish behaviour, media publication, responsive behaviour, accessibility or keyboard navigation have been browser-tested.
 - These checks must be completed against the final deployment and the authenticated administrator session.
 
