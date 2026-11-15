@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS "admin_users" (
   "updated_at" timestamptz NOT NULL DEFAULT now()
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX IF NOT EXISTS "admin_users_email_uq" ON "admin_users" ("email");
+CREATE UNIQUE INDEX IF NOT EXISTS "admin_users_email_uq" ON "admin_users" (lower("email"));
 CREATE INDEX IF NOT EXISTS "admin_users_status_idx" ON "admin_users" ("status");
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user_roles" (
