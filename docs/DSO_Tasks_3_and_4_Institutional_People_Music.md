@@ -3,7 +3,7 @@
 **Project:** Divine Symphony Orchestra website  
 **Branch:** `main`  
 **Scope:** Combined Tasks 3 and 4 of the seven-stage development plan  
-**Status:** Implementation committed. Final deployment/build and route checks are pending.
+**Status:** Implementation and documentation committed. Final production build and route checks are blocked pending Vercel deployment quota reset or user resolution of the Vercel API limit.
 
 ## Scope agreed
 
@@ -110,7 +110,7 @@ Updated:
 - The current admin still uses the existing shared-password signed session. Named administrator accounts and role-based permissions remain for Task 6.
 - The API checks the signed admin session before read/write operations.
 - Public access to uploaded institutional media is limited to media referenced by published records.
-- The Institutional Content Manager uses structured JSON text areas for repeatable section/item records. The data is typed and validated by the API, but the editor's ease of use should be reviewed with DSO during browser QA.
+- The Institutional Content Manager uses structured JSON text areas for repeatable section/item records. The data is typed and validated by the API, including safe link/media destinations, but the editor's ease of use should be reviewed with DSO during browser QA.
 
 ## Checks and deployment
 
@@ -123,7 +123,7 @@ At the time of this documentation commit:
 
 ## Remaining work
 
-1. Verify the final Vercel build and all seven public routes plus `/admin/institutional`.
+1. After the Vercel deployment quota resets (or the team resolves the quota restriction), deploy the latest `main` commit and verify the production build and all seven public routes plus `/admin/institutional`.
 2. Test authenticated content loading, draft save, publish and private/public media behaviour in a real admin browser session.
 3. Review the Institutional Content Manager's structured-record editing usability.
 4. Obtain DSO approval for the About page's final organisational and MFM wording, and any mission/vision/values statements.
@@ -135,9 +135,9 @@ At the time of this documentation commit:
 
 ## Checkpoint
 
-**Current stopping point:** The seven institutional and people/music pages, shared content model, authenticated admin API, Institutional Content Manager, navigation, Site Pages register and History & Media Manager integration have been committed to `main`. Await the final deployment/build check before treating the combined implementation as production-ready.
+**Current stopping point:** The seven institutional and people/music pages, shared content model, authenticated admin API with content/link validation, Institutional Content Manager, navigation, Site Pages register and History & Media Manager integration have been committed to `main`. The final build is not yet verified because Vercel rejected a deployment request with a 24-hour API quota limit. Do not treat this combined implementation as production-ready until the latest commit builds and its routes are checked.
 
-**Next action:** Check the final deployment and route responses, correct any build issues, then ask DSO to review the page content and administrator workflow. The combined Tasks 3 and 4 should not be signed off until the authenticated draft/publish workflow has been exercised.
+**Next action:** Once Vercel's deployment limit clears, deploy the latest `main` commit, check the build and route responses, correct any build issues, then ask DSO to review the page content and administrator workflow. The combined Tasks 3 and 4 should not be signed off until the authenticated draft/publish workflow has been exercised.
 
 ## Git history
 
@@ -158,4 +158,4 @@ Implementation commits:
 - Institutional media display: `0abb59b38279887abd622b46d2a32983df46ad3e`, `578f73098ccfddb6a92872d10929711617c2ce6d`
 - Site Pages and dashboard links: `f96f3cd5ddc48c1243852827c12fc636a36f441f`, `2a9360c7e9966cd2fc834faa33828c4e40bac590`
 - Styling: `41c036f11e8d8081233a10d5a7f66cc089025767`
-- Admin structured-record editor refinement: `6d2bf00467d89b6de800c54b70e49beb4b12ecae`
+- Admin structured-record editor refinement: `6d2bf00467d89b6de800c54b70e49beb4b12ecae`\n- Institutional content/link/media validation: `589f5d7aa20eb964a5704d2b215f1d65cc709ce4`\n- Task 3 and 4 documentation: `f8745bc2b31277db46aa75ae5f5477064b0875e7`
