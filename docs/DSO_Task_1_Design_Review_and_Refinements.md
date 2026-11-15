@@ -67,9 +67,11 @@ The changes are deliberately additive. Existing page layouts, content, navigatio
 
 - The latest source was fetched from GitHub `main` before editing.
 - The stylesheet change was committed to GitHub.
+- Vercel production deployment for stylesheet commit `22f417bc88811d061838abb0bb0cc9adf6c19158` reached **Ready**.
+- HTTP checks against that deployment returned **200 OK** for the public homepage (`/`), homepage admin (`/admin`) and site-pages admin (`/admin/site-pages`).
 - No public content or administrator data was changed.
 - No Supabase migration, environment variable, authentication or media-storage setting was changed.
-- A live visual review at desktop and mobile widths has not yet been completed in a browser.
+- HTTP checks confirm the pages respond, but they do not replace a visual browser review at desktop and mobile widths. That review remains outstanding.
 - Keyboard-only and screen-reader testing has not yet been completed.
 - The Vercel deployment must be checked for a successful build before this task is marked fully verified.
 
