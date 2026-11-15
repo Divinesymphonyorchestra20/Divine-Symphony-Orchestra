@@ -276,3 +276,44 @@ Architecture recommendation:
 - Connect the homepage and subsequent public modules to the same shared content and publishing services.
 
 The audit did not inspect private Blob contents, secret values or live Vercel environment settings, and it did not change application code, production data or deployment settings. Workstream 1 is complete at source-audit level; Gate 1 architecture/provider approval is still required before database and authentication setup begins.
+
+
+## 15. Architecture approval and database foundation implementation — 15 November 2026
+
+DSO approved the Workstream 1 architecture recommendation:
+- Managed PostgreSQL for structured content, administrator accounts, sessions, revisions and audit records.
+- Vercel Blob retained for media binaries; media metadata and usage links move into PostgreSQL.
+- Named administrator accounts with Owner, Editor and Publisher permissions.
+- Existing History data and media retained until a verified migration and rollback plan is accepted.
+
+### 15.1 Initial implementation committed
+
+The repository now includes:
+- Drizzle ORM and PostgreSQL driver dependencies, plus Drizzle Kit tooling.
+- Initial shared schema for administrator accounts, roles, permissions, sessions, content entries, revisions, media assets, media usage, audit events and site settings.
+- Server-only database client using `DATABASE_URL`.
+- Initial SQL migration and Drizzle migration journal.
+- Database setup instructions in `docs/DSO_DATABASE_SETUP.md`.
+- Package scripts for schema generation, migration, Studio and TypeScript checking.
+
+### 15.2 What has not happened yet
+
+- No PostgreSQL provider has been selected or connected.
+- No `DATABASE_URL` has been added to Vercel.
+- No database migration has been executed.
+- No administrator account or authentication flow has been created.
+- No History content or media has been migrated.
+- The existing History CMS and current shared-password sign-in remain unchanged.
+- The homepage remains a browser-local preview editor and public hard-coded page.
+
+### 15.3 Next implementation sequence
+
+1. Confirm the organisation-owned managed PostgreSQL provider and database region.
+2. Configure encrypted database connection variables for Development, Preview and Production.
+3. Apply and verify the initial migration against a development database.
+4. Implement named administrator authentication, revocable sessions and server-enforced role checks.
+5. Build the unified admin shell and central content services.
+6. Migrate History only after dry-run verification and backup.
+7. Connect homepage content and then implement About and Contact with their matching editors.
+
+The initial schema and setup instructions are committed, but the database is not yet provisioned and no production content has been changed.
