@@ -162,3 +162,89 @@ The History area has now been implemented as three public routes:
 - The History and Admin History routes were fetched successfully from the deployment. A full browser-based review of editing, authentication, image upload and publication still needs to be completed after the admin password is configured.
 - No South Africa photographs or YouTube links have been added yet. The public gallery and video areas are intentionally empty until DSO supplies and approves material.
 - The other planned public pages do not yet exist; their page-placement options are ready, and the shared media component can be added when those routes are implemented.
+
+
+## 12. Current implementation update — 15 November 2026
+
+This section supersedes any earlier status in this report that says the non-History public routes do not exist. The repository has since been extended with the first set of public page shells and a page-to-admin readiness register.
+
+### 12.1 Public routes now present
+
+The current public route set includes:
+- `/` — homepage.
+- `/about` — About page shell.
+- `/history` — History of DSO.
+- `/history/founding-members` — Founding Members.
+- `/history/milestones` — Milestones.
+- `/music` — Music & Media page shell.
+- `/concerts-and-events` — Concerts & Events page shell.
+- `/people` — People page shell.
+- `/gallery` — Gallery page shell.
+- `/contact` — Contact page shell.
+- `/events` — redirects to `/concerts-and-events`.
+
+The six newer non-History pages are structural page shells built with the shared section-page presentation. They establish the route structure and visual direction; they are not yet full content-managed pages. The earlier statement that these routes were missing is no longer current.
+
+### 12.2 Navigation and dropdown correction
+
+The shared header is implemented in `components/site-header.tsx`. Its History dropdown contains these three destinations:
+- History of DSO — `/history`
+- Founding Members — `/history/founding-members`
+- Milestones — `/history/milestones`
+
+A visibility defect was traced to a legacy CSS selector left over from an earlier HTML `details` dropdown. The selector `.nav-dropdown:not([open]) .nav-dropdown-menu` permanently hid the submenu because the current dropdown parent is a `div` controlled by React state, not a `details` element with an `open` attribute. The current click handler changed the arrow state, but the stale selector continued to hide the links.
+
+The correction removes the obsolete `details`/hover-specific rules and makes the HTML `hidden` state authoritative with `.nav-dropdown-menu[hidden]{display:none!important}`. The menu remains controlled by the accessible button state, including `aria-expanded`, and the three visible labels have been aligned to the requested wording. The mobile navigation continues to use its separate menu toggle and responsive layout.
+
+### 12.3 Admin page register and current parity
+
+The site-wide page register is available at `/admin/site-pages`. It lists the six new public page areas, their intended content, and the matching admin capability still required. It also links to the existing History Manager.
+
+The current state is:
+- **History:** has a shared CMS for timeline entries, founding-member records, images and YouTube links, with draft/published handling.
+- **About:** public shell exists; editable organisational profile, purpose, values and approved image controls remain to be built.
+- **Music & Media:** public shell exists; managed audio/video records, repertoire, descriptions, ordering and publishing controls remain to be built.
+- **Concerts & Events:** public shell exists; event records, date/time, venue, programme, registration/ticket link, past/upcoming status and publishing controls remain to be built.
+- **People:** public shell exists; musician and leadership profile records, roles, biographies, portraits, status and ordering remain to be built.
+- **Gallery:** public shell exists; album/collection management, uploads, captions, alt text, credits, ordering and publishing controls remain to be built. The History media manager has reusable media functionality, but this is not yet a complete dedicated site-wide gallery workflow.
+- **Contact:** public shell exists; official contact details, social links, enquiry handling and admin routing remain to be built.
+- **Homepage:** the existing `/admin` visual editor remains a browser-local preview prototype. It is not a shared live homepage CMS.
+
+This register exists to enforce the project rule that each public feature must have a corresponding backend/admin capability planned and implemented alongside it. Do not treat the presence of a public page shell as evidence that its content can already be edited in the admin.
+
+### 12.4 Current deployment record and verification limits
+
+The last production deployment known before this update was:
+- Deployment: `dpl_7sxHS3yLJ4NRcuE5GXjVAx75tpv6`
+- Commit: `6e010154c2100b762375d140e1f1b8496eb958ad`
+- State: **READY**
+- Production alias: https://divine-symphony-orchestra.vercel.app
+
+The navigation and documentation updates in this stage are being committed after that deployment record. A new Vercel production deployment is expected from the `main` branch. Update this record with the new commit and deployment ID after the build reaches READY.
+
+A successful Vercel build confirms compilation and deployment, not complete visual or interaction QA. The dropdown should be checked by clicking it on desktop and mobile, confirming that all three links appear, each destination loads, Escape closes the menu, and clicking outside closes it. Also check the mobile menu open/close behavior. Do not mark these browser acceptance checks as passed until they have actually been performed.
+
+### 12.5 Recommended next development stage
+
+The next stage should be the **shared content-management foundation for the non-History sections**, not another round of public-only page expansion.
+
+Recommended order:
+
+1. **Confirm the backend architecture.** Review the existing History CMS storage/authentication approach and decide whether it should become the shared content service or remain a module over a common data layer. Define content schemas, roles, media relationships and publication states before building separate editors.
+2. **Unify admin access.** Establish one protected admin shell, sign-in/session handling, permission checks and a dashboard. Keep the current History Manager working while migrating it into the common admin structure.
+3. **Build the shared content model and workflows.** Add draft, preview, publish, unpublish, revision history and server-side validation. Every write must be authenticated and authorised on the server.
+4. **Implement modules in a practical order.** Start with About and Contact, then People, Events, Music & Media, and Gallery. For every module, build the public rendering and the matching admin editor together.
+5. **Connect the homepage.** Replace the browser-local preview-only values with shared, persisted homepage content and a safe preview/publish workflow.
+6. **Complete media management.** Provide one library with upload validation, alt text, captions, credits, page/collection placement, ordering, usage references and publication controls.
+7. **Quality, security and launch checks.** Test desktop/tablet/mobile layouts, navigation, forms, authentication, permissions, uploads, draft privacy, accessibility, SEO, backups and recovery. Confirm all institutional facts and media rights before publication.
+
+### 12.6 Outstanding owner inputs and safeguards
+
+- Set `DSO_ADMIN_PASSWORD` in Vercel Production, Preview and Development, then redeploy. Do not place the password in source control. The History Manager sign-in should not be described as ready until this is configured and tested.
+- Supply and approve official About copy, current leadership/people records, event information, music links, gallery media, contact details and enquiry destination.
+- Confirm any historical name-order, leadership, date or event ambiguity before publishing. Preserve the existing unpublished 2006 Symphonies of Praise draft until the relationship with the recorded 6 March 2007 establishment date is confirmed.
+- Obtain consent for personal profiles and image use, and confirm rights for audio, video and concert recordings.
+
+### 12.7 Current stage conclusion
+
+The project now has a deployed homepage, a set of public route shells, three History pages supported by a dedicated History CMS, a site-page/admin readiness register, and a shared responsive navigation component. The History dropdown defect has been identified and corrected in source. The remaining work is to confirm the resulting production deployment and perform the interaction checks, then build the common admin/content foundation so the rest of the public pages can be managed properly.
