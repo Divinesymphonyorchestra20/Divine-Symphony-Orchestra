@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import SiteHeader from "../../components/site-header";
 import SiteFooter from "../../components/site-footer";
+import HistoryMedia from "../../components/history-media";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Our History | Divine Symphony Orchestra",
@@ -98,7 +101,7 @@ export default function HistoryPage() {
             <p className="eyebrow dark">Concerts and presentations</p>
             <h2>A continuing record of performance</h2>
             <p>Concerts have been an important part of DSO’s life. Symphonies of Praise III, held in May 2016 and marking the Orchestra’s ninth anniversary, is one of the best-documented events in the public academic record. It is an important milestone, but it represents only one part of a much wider history of concerts and musical presentations.</p>
-            <p>The Orchestra’s internal historical record also identifies the 2006 Symphonies of Praise concert as an early highlight, alongside concerts in 2010 and 2013 and many other performances over the years. DSO has also taken part in wider MFM musical presentations, including the 2018 Mountain Top Mega Concert and a concert presentation honouring Professor Anthony Mereni.</p>
+            <p>The Orchestra’s internal historical record identifies concerts in 2010 and 2013, alongside many other performances over the years. DSO has also taken part in wider MFM musical presentations, including the 2018 Mountain Top Mega Concert and a concert presentation honouring Professor Anthony Mereni. The 2006 Symphonies of Praise reference is being retained for historical review until its relationship to the formal establishment date is confirmed.</p>
             <p>Each concert has contributed to the Orchestra’s continuing artistic life, bringing musicians together in performance and sharing orchestral music with audiences.</p>
           </div>
         </section>
@@ -133,6 +136,7 @@ export default function HistoryPage() {
           </div>
         </section>
       </article>
+      <HistoryMedia page="history" galleryTitle="Moments from the Orchestra’s history" galleryDescription="A growing collection of photographs from DSO rehearsals, concerts, performances and special occasions." />
       <SiteFooter />
     </main>
   );
