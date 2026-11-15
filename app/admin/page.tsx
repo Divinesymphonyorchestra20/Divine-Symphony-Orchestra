@@ -1,222 +1,35 @@
 "use client";
-
 import Image from "next/image";
-import { ChangeEvent, CSSProperties, useEffect, useMemo, useState } from "react";
-
-type SectionId = "hero" | "quickLinks" | "feature" | "strings" | "updates";
-type Section = { id: SectionId; label: string; visible: boolean };
-type SiteDraft = {
-  brandPurple: string; plum: string; accent: string; pageBackground: string;
-  heroTitle: string; heroAccent: string; heroEyebrow: string; heroText: string; heroButton: string;
-  heroImage: string; heroImagePosition: string;
-  featureEyebrow: string; featureTitle: string; featureAccent: string; featureText: string; featureButton: string;
-  featureImage: string; featureImagePosition: string;
-  stringsEyebrow: string; stringsTitle: string; stringsAccent: string; stringsText: string; stringsButton: string;
-  stringsImage: string; stringsImagePosition: string;
-  updatesEyebrow: string; updatesTitle: string; updatesText: string; updatesButton: string;
-  sections: Section[];
-};
-const defaults: SiteDraft = {
-  brandPurple: "#59065b", plum: "#310333", accent: "#f2c21b", pageBackground: "#ffffff",
-  heroTitle: "Divine Symphony", heroAccent: "Orchestra", heroEyebrow: "Music for Inspiration • Excellence • Impact",
-  heroText: "A shared love of music. A commitment to excellence. A sound that brings people together.",
-  heroButton: "Discover DSO", heroImage: "/images/hero-main-stage.jpg", heroImagePosition: "50% 42%",
-  featureEyebrow: "The sound of many, the purpose of one", featureTitle: "A shared passion.", featureAccent: "A lasting harmony.",
-  featureText: "Divine Symphony Orchestra brings musicians together through the discipline, joy and expressive power of orchestral music.",
-  featureButton: "Learn more about DSO", featureImage: "/images/hero-brass-section.jpg", featureImagePosition: "50% 50%",
-  stringsEyebrow: "The people behind the music", stringsTitle: "One orchestra.", stringsAccent: "Many voices.",
-  stringsText: "Meet the musicians whose dedication and shared artistry shape the DSO sound.",
-  stringsButton: "Meet our people", stringsImage: "/images/hero-strings-section.jpg", stringsImagePosition: "50% 42%",
-  updatesEyebrow: "Stay connected", updatesTitle: "Music brings us together.",
-  updatesText: "Explore the orchestra, discover its music and keep up with upcoming activities.",
-  updatesButton: "Explore events",
-  sections: [
-    { id: "hero", label: "Hero / opening banner", visible: true },
-    { id: "quickLinks", label: "Explore DSO links", visible: true },
-    { id: "feature", label: "Orchestra feature", visible: true },
-    { id: "strings", label: "People / strings feature", visible: true },
-    { id: "updates", label: "Updates and events band", visible: true }
-  ]
-};
-const sectionNames: Record<SectionId, string> = {
-  hero: "Hero / opening banner", quickLinks: "Explore DSO links", feature: "Orchestra feature",
-  strings: "People / strings feature", updates: "Updates and events band"
-};
-type Tab = "content" | "images" | "design" | "sections";
-
-export default function AdminPage() {
-  const [draft, setDraft] = useState<SiteDraft>(defaults);
-  const [active, setActive] = useState<SectionId>("hero");
-  const [tab, setTab] = useState<Tab>("content");
-  const [saved, setSaved] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem("dso-homepage-editor-v1");
-      if (stored) setDraft({ ...defaults, ...JSON.parse(stored) });
-    } catch {}
-    setHydrated(true);
-  }, []);
-
-  const patch = (values: Partial<SiteDraft>) => { setDraft(current => ({ ...current, ...values })); setSaved(false); };
-  const setField = (key: keyof SiteDraft, value: string) => patch({ [key]: value } as Partial<SiteDraft>);
-  const saveDraft = () => {
-    try { localStorage.setItem("dso-homepage-editor-v1", JSON.stringify(draft)); setSaved(true); }
-    catch { alert("The browser could not save this draft. Large images may exceed local storage. Use smaller images or wait for the shared media library."); }
-  };
-  const resetDraft = () => {
-    if (confirm("Restore the editor to the original homepage content and images?")) {
-      setDraft(defaults); localStorage.removeItem("dso-homepage-editor-v1"); setSaved(false);
-    }
-  };
-  const uploadImage = (key: "heroImage" | "featureImage" | "stringsImage", event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    if (!file.type.startsWith("image/")) { alert("Please select an image file."); return; }
-    if (file.size > 4 * 1024 * 1024) { alert("For this preview prototype, choose an image under 4 MB. The full media library will use server storage."); return; }
-    const reader = new FileReader();
-    reader.onload = () => setField(key, String(reader.result));
-    reader.readAsDataURL(file);
-  };
-  const visible = (id: SectionId) => draft.sections.find(s => s.id === id)?.visible !== false;
-  const updateSection = (id: SectionId, values: Partial<Section>) => patch({
-    sections: draft.sections.map(s => s.id === id ? { ...s, ...values } : s)
-  });
-  const moveSection = (id: SectionId, direction: -1 | 1) => {
-    const list = [...draft.sections]; const index = list.findIndex(s => s.id === id); const target = index + direction;
-    if (target < 0 || target >= list.length) return;
-    [list[index], list[target]] = [list[target], list[index]]; patch({ sections: list });
-  };
-  const imageStyle = (src: string, position: string): CSSProperties => ({
-    backgroundImage: "linear-gradient(90deg,rgba(37,14,40,.08),rgba(37,14,40,.08)),url('" + src + "')",
-    backgroundPosition: position, backgroundSize: "cover"
-  });
-  const themeStyle = { "--purple": draft.brandPurple, "--plum": draft.plum, "--gold": draft.accent, background: draft.pageBackground } as CSSProperties;
-
-  const input = (label: string, key: keyof SiteDraft, value: string, multiline = false) => (
-    <label className="dso-field">{label}
-      {multiline ? <textarea value={value} onChange={e => setField(key, e.target.value)} rows={3}/> :
-        <input value={value} onChange={e => setField(key, e.target.value)}/>}
-    </label>
-  );
-  const color = (label: string, key: keyof SiteDraft, value: string) => (
-    <label className="dso-color-field">{label}<span><input type="color" value={value} onChange={e => setField(key, e.target.value)}/><code>{value}</code></span></label>
-  );
-  const imageControl = (label: string, key: "heroImage" | "featureImage" | "stringsImage", positionKey: keyof SiteDraft, value: string, position: string) => (
-    <div className="dso-image-control">
-      <strong>{label}</strong>
-      <div className="dso-image-thumb" style={imageStyle(value, position)}/>
-      <label className="dso-upload-button"><span>↑ Upload replacement</span><input type="file" accept="image/*" onChange={e => uploadImage(key, e)}/></label>
-      <label className="dso-field">Image focal position
-        <select value={position} onChange={e => setField(positionKey, e.target.value)}>
-          <option value="50% 50%">Centre</option><option value="50% 30%">Upper centre</option>
-          <option value="50% 70%">Lower centre</option><option value="30% 50%">Left</option>
-          <option value="70% 50%">Right</option>
-        </select>
-      </label>
-      <p className="dso-help">Current image can be replaced. Uploaded preview images are stored in this browser only for now.</p>
-    </div>
-  );
-
-  const editorPanel = useMemo(() => {
-    if (tab === "design") return <div className="dso-editor-group">
-      <h3>Homepage colours</h3><p className="dso-help">These controls update the live preview beside this panel.</p>
-      {color("Primary DSO purple", "brandPurple", draft.brandPurple)}
-      {color("Deep plum", "plum", draft.plum)}
-      {color("Gold accent", "accent", draft.accent)}
-      {color("Page background", "pageBackground", draft.pageBackground)}
-      <div className="dso-palette"><span style={{background:draft.brandPurple}}/><span style={{background:draft.plum}}/><span style={{background:draft.accent}}/><span style={{background:draft.pageBackground}}/></div>
-    </div>;
-    if (tab === "sections") return <div className="dso-editor-group">
-      <h3>Homepage sections</h3><p className="dso-help">Show or hide a section and change its order. The preview updates immediately.</p>
-      {draft.sections.map((section, i) => <div className="dso-section-row" key={section.id}>
-        <div><strong>{section.label}</strong><small>{section.visible ? "Visible on homepage preview" : "Hidden from preview"}</small></div>
-        <div className="dso-section-actions">
-          <button onClick={() => moveSection(section.id, -1)} disabled={i===0} aria-label="Move up">↑</button>
-          <button onClick={() => moveSection(section.id, 1)} disabled={i===draft.sections.length-1} aria-label="Move down">↓</button>
-          <button className={section.visible ? "is-on" : ""} onClick={() => updateSection(section.id,{visible:!section.visible})}>{section.visible ? "Shown" : "Hidden"}</button>
-        </div>
-      </div>)}
-      <p className="dso-help">The navigation, logo and footer are retained as shared site elements. Their detailed controls will be added with the full site-wide editor.</p>
-    </div>;
-    if (tab === "images") return <div className="dso-editor-group">
-      <h3>Homepage images</h3><p className="dso-help">Replace the current DSO photographs or adjust their focal point.</p>
-      {imageControl("Hero / main stage photograph","heroImage","heroImagePosition",draft.heroImage,draft.heroImagePosition)}
-      {imageControl("Orchestra feature photograph","featureImage","featureImagePosition",draft.featureImage,draft.featureImagePosition)}
-      {imageControl("People / strings photograph","stringsImage","stringsImagePosition",draft.stringsImage,draft.stringsImagePosition)}
-    </div>;
-    if (active === "hero") return <div className="dso-editor-group">
-      <h3>Hero section</h3>{input("Eyebrow / introductory line","heroEyebrow",draft.heroEyebrow)}
-      {input("Main heading","heroTitle",draft.heroTitle)}{input("Highlighted heading text","heroAccent",draft.heroAccent)}
-      {input("Introductory paragraph","heroText",draft.heroText,true)}{input("Button label","heroButton",draft.heroButton)}
-      <p className="dso-help">Use the Images tab to replace the hero photograph and the Design tab to change the site colours.</p>
-    </div>;
-    if (active === "feature") return <div className="dso-editor-group">
-      <h3>Orchestra feature</h3>{input("Eyebrow","featureEyebrow",draft.featureEyebrow)}
-      {input("Heading – first line","featureTitle",draft.featureTitle)}{input("Heading – highlighted line","featureAccent",draft.featureAccent)}
-      {input("Description","featureText",draft.featureText,true)}{input("Link label","featureButton",draft.featureButton)}
-    </div>;
-    if (active === "strings") return <div className="dso-editor-group">
-      <h3>People / strings feature</h3>{input("Eyebrow","stringsEyebrow",draft.stringsEyebrow)}
-      {input("Heading – first line","stringsTitle",draft.stringsTitle)}{input("Heading – highlighted line","stringsAccent",draft.stringsAccent)}
-      {input("Description","stringsText",draft.stringsText,true)}{input("Link label","stringsButton",draft.stringsButton)}
-    </div>;
-    return <div className="dso-editor-group">
-      <h3>Updates band</h3>{input("Eyebrow","updatesEyebrow",draft.updatesEyebrow)}
-      {input("Heading","updatesTitle",draft.updatesTitle)}{input("Description","updatesText",draft.updatesText,true)}
-      {input("Button label","updatesButton",draft.updatesButton)}
-    </div>;
-  }, [tab, active, draft]);
-
-  return <main className="dso-admin" style={themeStyle}>
-    <header className="dso-admin-topbar">
-      <a href="/" className="dso-admin-brand"><Image src="/images/dso-logo-original.png" alt="DSO" width={38} height={56}/><span><b>DSO</b><em>Website Studio</em></span></a>
-      <div className="dso-admin-top-actions"><span className="dso-draft-state">{saved ? "Draft saved in this browser" : "Unsaved preview changes"}</span><a href="/" target="_blank">View public website ↗</a></div>
-    </header>
-    <div className="dso-admin-heading"><div><p className="dso-kicker">WEBSITE MANAGEMENT / HOMEPAGE</p><h1>Homepage editor</h1><p>Select any section to edit its content, imagery and appearance. The preview changes as you work.</p></div>
-      <div className="dso-admin-buttons"><button className="dso-secondary" onClick={resetDraft}>Reset preview</button><button className="dso-primary" onClick={saveDraft}>Save draft preview</button></div>
-    </div>
-    <div className="dso-prototype-warning"><b>Preview workspace</b><span>This homepage preview editor still saves locally in this browser. Use the History, timeline & media manager for secure shared content storage, private image uploads and published YouTube embeds.</span></div>
-    <div className="dso-editor-layout">
-      <aside className="dso-editor-sidebar">
-        <div className="dso-sidebar-title">HOMEPAGE ELEMENTS</div>
-        {draft.sections.map(section => <button key={section.id} className={"dso-element-button "+(active===section.id?"selected":"")} onClick={()=>{setActive(section.id);setTab("content");}}>
-          <span className="dso-element-dot"/><span>{section.label}</span><small>{section.visible?"●":"○"}</small>
-        </button>)}
-        <div className="dso-sidebar-title dso-sidebar-tabs-title">SITE-WIDE CONTROLS</div>
-        <a className="dso-element-button" href="/admin/site-pages"><span className="dso-element-icon">▤</span>Site pages & admin readiness →</a>
-        <a className="dso-element-button" href="/admin/history"><span className="dso-element-icon">⌘</span>History, timeline & media manager →</a>
-        <button className={"dso-element-button "+(tab==="images"?"selected":"")} onClick={()=>setTab("images")}><span className="dso-element-icon">▧</span>Images & media</button>
-        <button className={"dso-element-button "+(tab==="design"?"selected":"")} onClick={()=>setTab("design")}><span className="dso-element-icon">◐</span>Colours & appearance</button>
-        <button className={"dso-element-button "+(tab==="sections"?"selected":"")} onClick={()=>setTab("sections")}><span className="dso-element-icon">☷</span>Section order & visibility</button>
-      </aside>
-      <section className="dso-control-panel">
-        <div className="dso-panel-heading"><div><span>EDITING</span><h2>{tab==="content"?sectionNames[active]:tab==="images"?"Images & media":tab==="design"?"Colours & appearance":"Section order & visibility"}</h2></div><span className="dso-live-label">LIVE PREVIEW</span></div>
-        {editorPanel}
-      </section>
-      <section className="dso-preview-column">
-        <div className="dso-preview-toolbar"><strong>Homepage preview</strong><span>Desktop layout</span></div>
-        <div className="dso-home-preview" style={{"--purple":draft.brandPurple,"--plum":draft.plum,"--gold":draft.accent} as CSSProperties}>
-          <header className="site-header"><a className="brand" href="#"><Image className="brand-logo" src="/images/dso-logo-original.png" alt="Divine Symphony Orchestra" width={72} height={108}/></a>
-            <nav><a className="active">Home</a><a>About</a><a>Our History</a><a>Music</a><a>Events</a><a>Gallery</a><a>Contact</a></nav><span className="menu-link">Get in touch</span>
-          </header>
-          {draft.sections.map(section => !section.visible ? null : section.id==="hero" ? <section className="hero" key={section.id}>
-            <div className="hero-photo" style={{backgroundImage:"url('"+draft.heroImage+"')",backgroundPosition:draft.heroImagePosition}}/><div className="hero-shade"/>
-            <div className="hero-copy"><p className="eyebrow">{draft.heroEyebrow}</p><h1>{draft.heroTitle}<br/><span>{draft.heroAccent}</span></h1><div className="gold-rule"/><p className="hero-intro">{draft.heroText}</p><span className="outline-cta">{draft.heroButton} <span>→</span></span></div>
-            <div className="ribbons"><i/><i/><i/><i/></div>
-          </section> : section.id==="quickLinks" ? <section className="quick-links" key={section.id}>
-            {[["♬","Our History","A story of growth, dedication and music-making"],["♫","Our Music","Repertoire, performances and recordings"],["▦","Events","Concerts, programmes and appearances"],["♟","Our People","Musicians, leadership and contributors"]].map(([icon,title,desc])=><div className="quick-card" key={title}><span className="quick-icon">{icon}</span><h2>{title}</h2><p>{desc}</p></div>)}
-          </section> : section.id==="feature" ? <section className="feature" key={section.id}>
-            <div className="feature-copy"><p className="eyebrow">{draft.featureEyebrow}</p><h2>{draft.featureTitle}<br/><span>{draft.featureAccent}</span></h2><div className="gold-rule"/><p>{draft.featureText}</p><span className="text-link">{draft.featureButton} →</span></div>
-            <div className="feature-photo" style={{...imageStyle(draft.featureImage,draft.featureImagePosition)}}/>
-          </section> : section.id==="strings" ? <section className="strings-feature" key={section.id}>
-            <div className="strings-photo" style={{...imageStyle(draft.stringsImage,draft.stringsImagePosition)}}/><div className="strings-copy"><p className="eyebrow dark">{draft.stringsEyebrow}</p><h2>{draft.stringsTitle}<br/><em>{draft.stringsAccent}</em></h2><p>{draft.stringsText}</p><span className="text-link">{draft.stringsButton} →</span></div>
-          </section> : <section className="updates" key={section.id}><div><p className="eyebrow dark">{draft.updatesEyebrow}</p><h2>{draft.updatesTitle}</h2><p>{draft.updatesText}</p></div><span className="solid-cta">{draft.updatesButton} →</span></section>)}
-          <footer className="site-footer"><Image className="footer-logo" src="/images/dso-logo-original.png" alt="DSO" width={54} height={81}/><p>Music for Inspiration • Excellence • Impact</p><div className="footer-bottom"><span>© Divine Symphony Orchestra</span><span>Contact DSO</span><span>Admin</span></div></footer>
-        </div>
-      </section>
-    </div>
-    <footer className="dso-admin-footer">DSO WEBSITE STUDIO · HOMEPAGE VISUAL EDITOR · {hydrated ? "READY" : "LOADING DRAFT"}</footer>
-  </main>;
+import {ChangeEvent,useEffect,useState} from "react";
+import type {HomepageContent} from "../../lib/homepage-cms";
+type Store={version:1;updatedAt:string;draft:HomepageContent;published:HomepageContent};
+type Tab="hero"|"links"|"history"|"feature"|"event"|"design";
+export default function AdminPage(){
+ const [store,setStore]=useState<Store|null>(null),[tab,setTab]=useState<Tab>("hero"),[password,setPassword]=useState(""),[signed,setSigned]=useState(false),[loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[notice,setNotice]=useState(""),[error,setError]=useState("");
+ const c=store?.draft;
+ async function load(){setLoading(true);setError("");try{const r=await fetch("/api/admin/homepage",{cache:"no-store"});if(r.status===401){setSigned(false);return}const d=await r.json();if(!r.ok)throw Error(d.error);setStore(d);setSigned(true)}catch(e){setError(e instanceof Error?e.message:"Could not load homepage")}finally{setLoading(false)}}
+ useEffect(()=>{void load()},[]);
+ async function login(e:React.FormEvent){e.preventDefault();setLoading(true);try{const r=await fetch("/api/admin/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password})});const d=await r.json();if(!r.ok)throw Error(d.error);setPassword("");await load()}catch(e){setError(e instanceof Error?e.message:"Sign-in failed");setLoading(false)}}
+ function patch<K extends keyof HomepageContent>(key:K,value:HomepageContent[K]){if(store)setStore({...store,draft:{...store.draft,[key]:value}});setNotice("")}
+ function group<K extends "hero"|"history"|"feature"|"event">(key:K,value:Partial<HomepageContent[K]>){if(c)patch(key,{...c[key],...value} as HomepageContent[K])}
+ async function save(action:"draft"|"publish"){if(!c||!store)return;setSaving(true);setError("");try{const r=await fetch("/api/admin/homepage",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,content:c})});const d=await r.json();if(!r.ok)throw Error(d.error);setStore({...store,updatedAt:d.updatedAt,published:action==="publish"?c:store.published});setNotice(action==="publish"?"Homepage published successfully.":"Private draft saved. The public homepage is unchanged.")}catch(e){setError(e instanceof Error?e.message:"Save failed")}finally{setSaving(false)}}
+ async function upload(which:"hero"|"feature",e:ChangeEvent<HTMLInputElement>){const f=e.target.files?.[0];if(!f||!c)return;setSaving(true);try{const form=new FormData();form.append("file",f);const r=await fetch("/api/admin/media",{method:"POST",body:form});const d=await r.json();if(!r.ok)throw Error(d.error);group(which,{image:{...c[which].image,src:"/api/media/"+d.pathname.split("/").map(encodeURIComponent).join("/"),alt:f.name}});setNotice("Image stored privately. Publish the homepage to make it public.")}catch(e){setError(e instanceof Error?e.message:"Upload failed")}finally{setSaving(false);e.target.value=""}}
+ function field(label:string,value:string,onChange:(v:string)=>void,multi=false){return <label className="dso-field">{label}{multi?<textarea rows={4} value={value} onChange={e=>onChange(e.target.value)}/>:<input value={value} onChange={e=>onChange(e.target.value)}/>}</label>}
+ if(loading&&!signed)return <main className="dso-cms-shell"><div className="dso-cms-loading">Opening DSO Website Studio…</div></main>;
+ if(!signed)return <main className="dso-cms-shell"><div className="dso-cms-login"><a href="/" className="dso-cms-back">← Return to public website</a><p className="dso-cms-kicker">DIVINE SYMPHONY ORCHESTRA</p><h1>Homepage editor</h1><p>Sign in to edit and publish the public homepage.</p><form onSubmit={login}><label>Administrator password<input type="password" value={password} onChange={e=>setPassword(e.target.value)} required autoComplete="current-password"/></label><button className="dso-cms-primary" disabled={loading}>Sign in</button></form>{error&&<p className="dso-cms-error">{error}</p>}</div></main>;
+ if(!c||!store)return <main className="dso-cms-shell"><p>{error||"Homepage content unavailable"}</p><button onClick={load}>Try again</button></main>;
+ const tabs:[Tab,string][]=[["hero","Hero"],["links","Quick links"],["history","History feature"],["feature","Orchestra feature"],["event","Events band"],["design","Design & sections"]];
+ return <main className="dso-admin"><header className="dso-admin-topbar"><a href="/" className="dso-admin-brand"><Image src="/images/dso-logo-original.png" alt="DSO" width={38} height={56}/><span><b>DSO</b><em>Website Studio</em></span></a><div className="dso-admin-top-actions"><span className="dso-draft-state">Last saved: {store.updatedAt?new Date(store.updatedAt).toLocaleString():"Not yet saved"}</span><a href="/" target="_blank">View public website ↗</a></div></header>
+ <div className="dso-admin-heading"><div><p className="dso-kicker">WEBSITE MANAGEMENT / HOMEPAGE</p><h1>Homepage editor</h1><p>Edit content, save a private draft, and publish approved changes.</p></div><div className="dso-admin-buttons"><button className="dso-secondary" onClick={()=>void load()}>Reload saved</button><button className="dso-secondary" onClick={()=>void save("draft")} disabled={saving}>Save draft</button><button className="dso-primary" onClick={()=>void save("publish")} disabled={saving}>{saving?"Saving…":"Publish homepage"}</button></div></div>
+ <div className="dso-prototype-warning"><b>Publishing workflow</b><span>Draft changes remain private. Publishing updates the public homepage. Supabase integration remains scheduled for the shared backend stage.</span></div>{error&&<div className="dso-cms-alert error">{error}</div>}{notice&&<div className="dso-cms-alert">{notice}</div>}
+ <div className="dso-editor-layout"><aside className="dso-editor-sidebar"><div className="dso-sidebar-title">HOMEPAGE CONTENT</div>{tabs.map(([k,label])=><button key={k} className={"dso-element-button "+(tab===k?"selected":"")} onClick={()=>setTab(k)}>{label}</button>)}<div className="dso-sidebar-title dso-sidebar-tabs-title">SITE-WIDE CONTROLS</div><a className="dso-element-button" href="/admin/site-pages">Site pages & admin readiness →</a><a className="dso-element-button" href="/admin/history">History, timeline & media →</a></aside>
+ <section className="dso-control-panel"><div className="dso-panel-heading"><div><span>EDITING</span><h2>{tabs.find(x=>x[0]===tab)?.[1]}</h2></div></div>
+ {tab==="hero"&&<div className="dso-editor-group">{field("Eyebrow",c.hero.eyebrow,v=>group("hero",{eyebrow:v}))}{field("Main heading",c.hero.title,v=>group("hero",{title:v}))}{field("Highlighted heading",c.hero.accent,v=>group("hero",{accent:v}))}{field("Introductory text",c.hero.text,v=>group("hero",{text:v}),true)}{field("Button label",c.hero.button,v=>group("hero",{button:v}))}{field("Button destination",c.hero.href,v=>group("hero",{href:v}))}{field("Image alt text",c.hero.image.alt,v=>group("hero",{image:{...c.hero.image,alt:v}}))}<label className="dso-upload-button">Upload hero photograph<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={e=>upload("hero",e)}/></label><p className="dso-help">Image: {c.hero.image.src}</p></div>}
+ {tab==="links"&&<div className="dso-editor-group"><h3>Four homepage entry points</h3>{c.links.map((x,i)=><article className="dso-cms-record" key={i}>{field("Title",x.title,v=>patch("links",c.links.map((y,j)=>i===j?{...y,title:v}:y)))}{field("Description",x.description,v=>patch("links",c.links.map((y,j)=>i===j?{...y,description:v}:y)))}{field("Destination",x.href,v=>patch("links",c.links.map((y,j)=>i===j?{...y,href:v}:y)))}</article>)}</div>}
+ {tab==="history"&&<div className="dso-editor-group">{field("Eyebrow",c.history.eyebrow,v=>group("history",{eyebrow:v}))}{field("Heading",c.history.title,v=>group("history",{title:v}))}{field("Description",c.history.text,v=>group("history",{text:v}),true)}{field("Link label",c.history.button,v=>group("history",{button:v}))}{field("Destination",c.history.href,v=>group("history",{href:v}))}</div>}
+ {tab==="feature"&&<div className="dso-editor-group">{field("Eyebrow",c.feature.eyebrow,v=>group("feature",{eyebrow:v}))}{field("Heading",c.feature.title,v=>group("feature",{title:v}))}{field("Highlighted heading",c.feature.accent,v=>group("feature",{accent:v}))}{field("Description",c.feature.text,v=>group("feature",{text:v}),true)}{field("Link label",c.feature.button,v=>group("feature",{button:v}))}{field("Destination",c.feature.href,v=>group("feature",{href:v}))}{field("Image alt text",c.feature.image.alt,v=>group("feature",{image:{...c.feature.image,alt:v}}))}<label className="dso-upload-button">Upload supporting photograph<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={e=>upload("feature",e)}/></label><p className="dso-help">Image: {c.feature.image.src}</p></div>}
+ {tab==="event"&&<div className="dso-editor-group">{field("Eyebrow",c.event.eyebrow,v=>group("event",{eyebrow:v}))}{field("Heading",c.event.title,v=>group("event",{title:v}))}{field("Description",c.event.text,v=>group("event",{text:v}),true)}{field("Button label",c.event.button,v=>group("event",{button:v}))}{field("Destination",c.event.href,v=>group("event",{href:v}))}</div>}
+ {tab==="design"&&<div className="dso-editor-group"><h3>Homepage colours</h3>{(["purple","plum","magenta","gold"] as const).map(k=><label className="dso-color-field" key={k}>{k}<span><input type="color" value={c.theme[k]} onChange={e=>patch("theme",{...c.theme,[k]:e.target.value})}/><code>{c.theme[k]}</code></span></label>)}<h3>Section visibility</h3>{c.sections.map(s=><label className="dso-field" key={s.id}><span><input type="checkbox" checked={s.visible} onChange={()=>patch("sections",c.sections.map(x=>x.id===s.id?{...x,visible:!x.visible}:x))}/> Show {s.id}</span></label>)}</div>}
+ </section><section className="dso-preview-column"><div className="dso-preview-toolbar"><strong>Homepage preview</strong><span>Draft content</span></div><div className="dso-home-preview"><section className="hero"><div className="hero-photo" style={{backgroundImage:"url('"+c.hero.image.src+"')"}}/><div className="hero-shade"/><div className="hero-copy"><p className="eyebrow">{c.hero.eyebrow}</p><h1>{c.hero.title}<br/><span>{c.hero.accent}</span></h1><div className="gold-rule"/><p className="hero-intro">{c.hero.text}</p><span className="outline-cta">{c.hero.button} →</span></div></section><section className="quick-links">{c.links.map(x=><div className="quick-card" key={x.title}><span className="quick-icon">{x.icon}</span><h2>{x.title}</h2><p>{x.description}</p></div>)}</section><section className="feature"><div className="feature-copy"><p className="eyebrow">{c.feature.eyebrow}</p><h2>{c.feature.title}<br/><span>{c.feature.accent}</span></h2><p>{c.feature.text}</p></div><div className="feature-photo" style={{backgroundImage:"url('"+c.feature.image.src+"')"}}/></section><section className="updates"><div><p className="eyebrow dark">{c.event.eyebrow}</p><h2>{c.event.title}</h2><p>{c.event.text}</p></div></section></div></section></div>
+ <footer className="dso-admin-footer">DSO WEBSITE STUDIO · HOMEPAGE CONTENT MANAGEMENT</footer></main>;
 }
