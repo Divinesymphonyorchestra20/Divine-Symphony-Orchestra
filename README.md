@@ -7,6 +7,7 @@ Phase One implementation of the official DSO website and its administrative work
 - [Current website progress, implementation status and next-stage plan](docs/DSO_Website_Progress_and_Next_Stage_Report_2026-11-15.md)
 - [Next development stage plan: Shared Admin and Content Management Foundation](docs/DSO_Next_Development_Stage_Plan.md)
 - [Workstream 1 technical audit and architecture recommendation](docs/DSO_Workstream_1_Technical_Audit_and_Architecture.md)
+- [PostgreSQL foundation setup and migration notes](docs/DSO_DATABASE_SETUP.md)
 - [CMS environment setup and administrator configuration](docs/DSO_CMS_SETUP.md)
 
 ## Current implementation
