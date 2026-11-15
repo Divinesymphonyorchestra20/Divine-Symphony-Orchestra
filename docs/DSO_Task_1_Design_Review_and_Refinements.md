@@ -2,7 +2,7 @@
 
 ## Task 1 of 7: Review and improve the existing website design
 
-**Status:** Design-system baseline and shared visual refinements committed. Live browser verification remains outstanding.
+**Status:** Complete. User reviewed the appearance and confirmed it is fine. Production deployment is Ready and key pages return HTTP 200.
 
 **Date:** 15 November 2026  
 **Repository:** https://github.com/Divinesymphonyorchestra20/Divine-Symphony-Orchestra  
@@ -71,9 +71,9 @@ The changes are deliberately additive. Existing page layouts, content, navigatio
 - HTTP checks against that deployment returned **200 OK** for the public homepage (`/`), homepage admin (`/admin`) and site-pages admin (`/admin/site-pages`).
 - No public content or administrator data was changed.
 - No Supabase migration, environment variable, authentication or media-storage setting was changed.
-- HTTP checks confirm the pages respond, but they do not replace a visual browser review at desktop and mobile widths. That review remains outstanding.
+- User reviewed the appearance of the website and admin pages and confirmed that it is fine.
 - Keyboard-only and screen-reader testing has not yet been completed.
-- The Vercel deployment must be checked for a successful build before this task is marked fully verified.
+- Vercel production deployment for the design update reached **Ready**. The subsequent documentation-only commit also triggered a deployment; its final status was not separately checked.
 
 ### 8. Important findings carried into later tasks
 
@@ -83,17 +83,15 @@ The changes are deliberately additive. Existing page layouts, content, navigatio
 - Keep the existing History and Gallery manager working while the shared admin foundation is introduced.
 - Preserve the current DSO visual identity rather than replacing it with an unrelated theme.
 
-### 9. Next action before Task 2
+### 9. Task 1 sign-off
 
-1. Confirm that the Vercel deployment for this commit reaches **Ready**.
-2. Review the public homepage, header, dropdown and representative content pages at desktop and mobile widths.
-3. Review the admin homepage editor and History manager at desktop and mobile widths.
-4. Record any visible defects that need correction before moving to Task 2.
+The user confirmed that the appearance is fine. No further visual changes were requested. Task 1 is signed off and the project can proceed to Task 2.
 
 ### 10. Development checkpoint
 
 **Last completed code commit:** `22f417bc88811d061838abb0bb0cc9adf6c19158`  
 **Changed file:** `app/globals.css`  
+**Task 1 sign-off:** Confirmed by user.  
 **Next planned stage:** Task 2 of 7 — Complete the homepage experience, including a working public homepage and its matching admin editor.
 
 Do not assume the homepage editor publishes to the public website until the shared content connection is implemented and verified.
