@@ -1,5 +1,4 @@
 import {
-  boolean,
   index,
   integer,
   jsonb,
@@ -46,7 +45,7 @@ export const adminUsers = pgTable("admin_users", {
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 }, (table) => [
-  uniqueIndex("admin_users_email_lower_uq").on(table.email),
+  uniqueIndex("admin_users_email_uq").on(table.email),
   index("admin_users_status_idx").on(table.status),
 ]);
 
