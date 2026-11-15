@@ -3,7 +3,7 @@ import Image from "next/image";
 import {ChangeEvent,useEffect,useState} from "react";
 import type {HomepageContent} from "../../lib/homepage-cms";
 type Store={version:1;updatedAt:string;draft:HomepageContent;published:HomepageContent};
-type Tab="hero"|"links"|"history"|"feature"|"event"|"design";
+type Tab="hero"|"links"|"history"|"feature"|"event"|"media"|"design";
 export default function AdminPage(){
  const [store,setStore]=useState<Store|null>(null),[tab,setTab]=useState<Tab>("hero"),[password,setPassword]=useState(""),[signed,setSigned]=useState(false),[loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[notice,setNotice]=useState(""),[error,setError]=useState("");
  const c=store?.draft;
