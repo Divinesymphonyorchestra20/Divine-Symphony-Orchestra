@@ -8,6 +8,7 @@ export default async function HistoryMedia({ page, galleryTitle, galleryDescript
   const content = await readHistoryContent();
   const images = content.media.filter(item => item.page === page && item.published);
   const videos = content.videos.filter(item => item.page === page && item.published);
+  const collections = Array.from(new Set(images.map(item => item.collection.trim() || "DSO Gallery")));
   const title = galleryTitle || (page === "milestones" ? "South Africa: in pictures" : "Photographs and memories");
   const description = galleryDescription || "Photographs and visual records will be added here as DSO’s archive is prepared and approved.";
   return (
@@ -18,13 +19,18 @@ export default async function HistoryMedia({ page, galleryTitle, galleryDescript
         <p>{description}</p>
       </div>
       {images.length ? (
-        <div className="history-gallery-grid">
-          {images.map(item => (
-            <figure className="history-gallery-item" key={item.id}>
-              <img src={mediaUrl(item.pathname)} alt={item.alt || item.caption || "Divine Symphony Orchestra"} loading="lazy" />
-              {(item.caption || item.credit) && <figcaption>{item.caption}{item.credit && <small>{item.credit}</small>}</figcaption>}
-            </figure>
-          ))}
+        <div className="history-gallery-collections">
+          {collections.map(collection => <div className="history-gallery-collection" key={collection}>
+            {collections.length > 1 && <h3>{collection}</h3>}
+            <div className="history-gallery-grid">
+              {images.filter(item => (item.collection.trim() || "DSO Gallery") === collection).map(item => (
+                <figure className="history-gallery-item" key={item.id}>
+                  <img src={mediaUrl(item.pathname)} alt={item.alt || item.caption || "Divine Symphony Orchestra"} loading="lazy" />
+                  {(item.caption || item.credit) && <figcaption>{item.caption}{item.credit && <small>{item.credit}</small>}</figcaption>}
+                </figure>
+              ))}
+            </div>
+          </div>)}
         </div>
       ) : (
         <div className="history-media-empty"><span className="history-media-empty-icon">▧</span><strong>Photographs will be added here</strong><p>{page === "milestones" ? "This gallery is reserved for photographs from DSO’s South Africa visits, festival activities and performances in Stellenbosch." : "This section is ready for approved photographs from the Orchestra’s archive."}</p></div>
