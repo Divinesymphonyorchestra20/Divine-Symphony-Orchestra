@@ -28,8 +28,7 @@ CREATE TABLE IF NOT EXISTS "admin_users" (
   "status" varchar(24) NOT NULL DEFAULT 'invited',
   "last_login_at" timestamptz,
   "created_at" timestamptz NOT NULL DEFAULT now(),
-  "updated_at" timestamptz NOT NULL DEFAULT now(),
-  CONSTRAINT "admin_users_status_check" CHECK ("status" IN ('invited', 'active', 'disabled'))
+  "updated_at" timestamptz NOT NULL DEFAULT now()
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "admin_users_email_uq" ON "admin_users" ("email");
@@ -68,8 +67,7 @@ CREATE TABLE IF NOT EXISTS "content_entries" (
   "updated_by" uuid REFERENCES "admin_users"("id") ON DELETE SET NULL,
   "published_at" timestamptz,
   "created_at" timestamptz NOT NULL DEFAULT now(),
-  "updated_at" timestamptz NOT NULL DEFAULT now(),
-  CONSTRAINT "content_entries_status_check" CHECK ("status" IN ('draft', 'in_review', 'published', 'archived'))
+  "updated_at" timestamptz NOT NULL DEFAULT now()
 );
 --> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "content_entries_type_status_idx" ON "content_entries" ("content_type", "status");
@@ -86,14 +84,9 @@ CREATE TABLE IF NOT EXISTS "content_revisions" (
   "change_note" text,
   "created_by" uuid REFERENCES "admin_users"("id") ON DELETE SET NULL,
   "created_at" timestamptz NOT NULL DEFAULT now(),
-  CONSTRAINT "content_revisions_entry_number_uq" UNIQUE ("content_entry_id", "revision_number"),
-  CONSTRAINT "content_revisions_status_check" CHECK ("status" IN ('draft', 'in_review', 'published', 'archived'))
+  CONSTRAINT "content_revisions_entry_number_uq" UNIQUE ("content_entry_id", "revision_number")
 );
 CREATE INDEX IF NOT EXISTS "content_revisions_created_idx" ON "content_revisions" ("content_entry_id", "created_at");
---> statement-breakpoint
-ALTER TABLE "content_entries"
-  ADD CONSTRAINT "content_entries_published_revision_fk"
-  FOREIGN KEY ("published_revision_id") REFERENCES "content_revisions"("id") ON DELETE SET NULL;
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "media_assets" (
   "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -109,9 +102,7 @@ CREATE TABLE IF NOT EXISTS "media_assets" (
   "status" varchar(24) NOT NULL DEFAULT 'draft',
   "uploaded_by" uuid REFERENCES "admin_users"("id") ON DELETE SET NULL,
   "created_at" timestamptz NOT NULL DEFAULT now(),
-  "updated_at" timestamptz NOT NULL DEFAULT now(),
-  CONSTRAINT "media_assets_size_check" CHECK ("byte_size" > 0 AND "byte_size" <= 12582912),
-  CONSTRAINT "media_assets_status_check" CHECK ("status" IN ('draft', 'published', 'archived'))
+  "updated_at" timestamptz NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS "media_assets_status_idx" ON "media_assets" ("status");
 CREATE INDEX IF NOT EXISTS "media_assets_uploaded_idx" ON "media_assets" ("uploaded_by");
