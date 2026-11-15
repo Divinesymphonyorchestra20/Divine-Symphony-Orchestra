@@ -1,26 +1,19 @@
 import type { Metadata } from "next";
 import SiteHeader from "../../../components/site-header";
 import SiteFooter from "../../../components/site-footer";
+import HistoryMedia from "../../../components/history-media";
+import { readHistoryContent, publishedHistoryContent } from "../../../lib/history-cms";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Our Milestones | Divine Symphony Orchestra",
   description: "A timeline of notable concerts, development and international participation in the history of the Divine Symphony Orchestra.",
 };
 
-const milestones = [
-  { year: "2006", title: "An early Symphonies of Praise highlight", text: "The Orchestra’s internal historical account remembers a Symphonies of Praise concert in 2006 as one of its early highlights." , kind: "Concert" },
-  { year: "2007", title: "Formal establishment", text: "The institutional biography records 6 March 2007 as the formal establishment of the ensemble at MFM’s international headquarters in Lagos.", kind: "Foundation" },
-  { year: "2010", title: "Concert presentation", text: "The Orchestra’s internal history identifies a concert in 2010 as part of its continuing programme of public performances.", kind: "Concert" },
-  { year: "2011", title: "Stellenbosch, South Africa", text: "DSO’s internal record identifies participation in the Stellenbosch International Chamber Music Festival in South Africa.", kind: "International" },
-  { year: "2012", title: "Stellenbosch, South Africa", text: "A further South African festival participation forms part of the Orchestra’s recorded international activity.", kind: "International" },
-  { year: "2013", title: "Concerts and international participation", text: "The Orchestra’s internal history identifies a concert in 2013 and a Stellenbosch festival visit in the same year.", kind: "Concert & International" },
-  { year: "2015", title: "Stellenbosch, South Africa", text: "Members again participated in the Stellenbosch International Chamber Music Festival, according to the Orchestra’s historical record.", kind: "International" },
-  { year: "2016", title: "Symphonies of Praise III", text: "Held in May 2016, this concert marked the Orchestra’s ninth anniversary. Academic research documents the programme and its combination of classical and Nigerian works.", kind: "Concert" },
-  { year: "2016", title: "A 35-member Stellenbosch delegation", text: "Stellenbosch University records that the D.K.O. Orchestra from Nigeria sent 35 participants to the festival in 2016.", kind: "International" },
-  { year: "2018", title: "Public musical presentations", text: "DSO was listed among ensembles participating in the Mountain Top Mega Concert and a concert presentation honouring Professor Anthony Mereni.", kind: "Performance" },
-];
-
-export default function MilestonesPage() {
+export default async function MilestonesPage() {
+  const content = publishedHistoryContent(await readHistoryContent());
+  const milestones = content.milestones;
   return (
     <main className="history-page">
       <SiteHeader active="History" />
@@ -41,11 +34,11 @@ export default function MilestonesPage() {
         <div className="milestones-intro">
           <p className="eyebrow dark">A living timeline</p>
           <h2>More than one concert.<br /><em>A continuing musical history.</em></h2>
-          <p>This is a selection of significant moments currently recorded in DSO’s institutional history. It is not intended as a complete list of every concert, appearance or international engagement.</p>
+          <p>This timeline brings together recorded concerts, institutional milestones and international participation. Entries are added as information is confirmed and approved.</p>
         </div>
         <div className="milestone-timeline">
           {milestones.map((item, index) => (
-            <article className="milestone-item" key={`${item.year}-${item.title}`}>
+            <article className="milestone-item" key={item.id}>
               <div className="milestone-marker"><span>{index + 1}</span></div>
               <div className="milestone-card">
                 <div className="milestone-meta"><span>{item.year}</span><small>{item.kind}</small></div>
@@ -56,10 +49,25 @@ export default function MilestonesPage() {
           ))}
         </div>
         <div className="milestones-footnote">
-          <p>Historical records continue to be gathered so that additional concerts, programmes, festival visits and achievements can be included as they are confirmed.</p>
+          <p>The timeline is a selected record, not a complete concert catalogue. Additional dates, programmes, locations and supporting photographs can be added through the DSO website admin as the Orchestra’s archive is gathered.</p>
           <a className="history-inline-link" href="/history">Return to the full history <span>→</span></a>
         </div>
       </section>
+      <section className="south-africa-feature">
+        <div className="south-africa-copy">
+          <p className="eyebrow dark">International participation</p>
+          <h2>South Africa and the Stellenbosch International Chamber Music Festival</h2>
+          <p>International musical exposure has formed an important part of DSO’s development. The Orchestra’s historical record lists participation connected with the Stellenbosch International Chamber Music Festival in 2011, 2012, 2013, 2015 and 2016. These visits created opportunities for musical study, coaching, collaboration and performance alongside musicians from South Africa and other countries.</p>
+          <p>The 2016 participation is confirmed by Stellenbosch University’s Department of Music, which records that the D.K.O. Orchestra from Nigeria sent a delegation of 35 participants. The University’s record preserves an important link between the Orchestra’s former name and its international festival participation.</p>
+          <p>A professional curriculum vitae for violinist Jennifer Obaze also records her participation with DSO at the Stellenbosch Chamber Music Festival in July 2013, including a performance with the Stellenbosch Concert Orchestra. The Orchestra’s broader international record also includes individual members’ musical engagements in other countries. Those individual achievements will be added separately when names, dates, roles and supporting records are confirmed.</p>
+          <div className="history-source-links">
+            <a href="https://www0.sun.ac.za/music/sicmf-community-partners/" target="_blank" rel="noreferrer">Stellenbosch University: Community Partners ↗</a>
+            <a href="https://sheisthemusic.org/wp-content/uploads/2024/09/Jennifer-Curriculum.V-1.pdf" target="_blank" rel="noreferrer">Jennifer Obaze: Professional CV ↗</a>
+            <a href="https://etheses.dur.ac.uk/13051/" target="_blank" rel="noreferrer">Durham University research ↗</a>
+          </div>
+        </div>
+      </section>
+      <HistoryMedia page="milestones" galleryTitle="South Africa: Stellenbosch in pictures" galleryDescription="This gallery is reserved for photographs from DSO’s South Africa visits, festival activities, rehearsals and performances. Images will be added as the Orchestra supplies and approves them." />
       <SiteFooter />
     </main>
   );
