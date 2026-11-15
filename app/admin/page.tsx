@@ -185,6 +185,7 @@ export default function AdminPage() {
           <span className="dso-element-dot"/><span>{section.label}</span><small>{section.visible?"●":"○"}</small>
         </button>)}
         <div className="dso-sidebar-title dso-sidebar-tabs-title">SITE-WIDE CONTROLS</div>
+        <a className="dso-element-button" href="/admin/history"><span className="dso-element-icon">⌘</span>History, timeline & media manager →</a>
         <button className={"dso-element-button "+(tab==="images"?"selected":"")} onClick={()=>setTab("images")}><span className="dso-element-icon">▧</span>Images & media</button>
         <button className={"dso-element-button "+(tab==="design"?"selected":"")} onClick={()=>setTab("design")}><span className="dso-element-icon">◐</span>Colours & appearance</button>
         <button className={"dso-element-button "+(tab==="sections"?"selected":"")} onClick={()=>setTab("sections")}><span className="dso-element-icon">☷</span>Section order & visibility</button>
