@@ -16,6 +16,11 @@ export async function PUT(request: NextRequest) {
   if (!body || !body.content || body.content.version !== 1 || !Array.isArray(body.content.sections) || !Array.isArray(body.content.links) || !body.content.hero || !body.content.feature) {
     return NextResponse.json({ error: "The submitted homepage content is not valid." }, { status: 400 });
   }
+  const safeHref = (value: string) => value.startsWith("/") && !value.startsWith("//") || /^https:\/\//i.test(value);
+  const hrefs = [body.content.hero.href, body.content.history.href, body.content.feature.href, body.content.event.href, ...body.content.links.map(item => item.href), ...body.content.media.items.map(item => item.href)];
+  if (hrefs.some(value => typeof value !== "string" || !safeHref(value))) {
+    return NextResponse.json({ error: "Homepage links must use a site path or a secure HTTPS address." }, { status: 400 });
+  }
   if (JSON.stringify(body.content).length > 500_000 || body.content.links.length > 12 || body.content.sections.length > 12 || body.content.media.items.length > 12) {
     return NextResponse.json({ error: "The homepage content exceeds the allowed limits." }, { status: 413 });
   }
