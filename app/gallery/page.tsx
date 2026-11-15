@@ -53,6 +53,7 @@ export default async function Page() {
           page="gallery"
           galleryTitle="Concert Highlights"
           galleryDescription="Photographs and approved visual memories from the April 2026 celebration of the Divine Symphony Orchestra's 19th anniversary."
+          collectionFilter="Concert Highlights | April 2026 | DSO 19th Anniversary"
         />
       </section>
     </>
