@@ -1,22 +1,26 @@
 import "server-only";
-import postgres from "postgres";
-import { drizzle } from "drizzle-orm/postgres-js";
+import { Pool } from "pg";
+import { drizzle } from "drizzle-orm/node-postgres";
 import { schema } from "./schema";
 
-let client: ReturnType<typeof postgres> | undefined;
+let pool: Pool | undefined;
 
 export function getDatabase() {
-  const url = process.env.DATABASE_URL;
-  if (!url) {
-    throw new Error("The DSO database is not configured. Set DATABASE_URL in the server environment.");
+  const connectionString = process.env.DATABASE_URL ?? process.env.POSTGRES_URL;
+
+  if (!connectionString) {
+    throw new Error(
+      "The DSO database is not configured. Set DATABASE_URL or connect the Supabase project to provide POSTGRES_URL.",
+    );
   }
 
-  client ??= postgres(url, {
-    max: 5,
-    idle_timeout: 20,
-    connect_timeout: 10,
-    prepare: false,
+  pool ??= new Pool({
+    connectionString,
+    max: 1,
+    idleTimeoutMillis: 20_000,
+    connectionTimeoutMillis: 10_000,
+    ssl: { rejectUnauthorized: true },
   });
 
-  return drizzle(client, { schema });
+  return drizzle(pool, { schema });
 }
