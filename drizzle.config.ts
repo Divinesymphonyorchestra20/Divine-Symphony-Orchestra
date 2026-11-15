@@ -1,7 +1,15 @@
 import { defineConfig } from "drizzle-kit";
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL is required to run database tooling.");
+const migrationUrl =
+  process.env.MIGRATION_DATABASE_URL ??
+  process.env.POSTGRES_URL_NON_POOLING ??
+  process.env.DATABASE_URL ??
+  process.env.POSTGRES_URL;
+
+if (!migrationUrl) {
+  throw new Error(
+    "A migration database URL is required. Set MIGRATION_DATABASE_URL, POSTGRES_URL_NON_POOLING, or DATABASE_URL.",
+  );
 }
 
 export default defineConfig({
@@ -9,7 +17,7 @@ export default defineConfig({
   out: "./db/migrations",
   dialect: "postgresql",
   dbCredentials: {
-    url: process.env.DATABASE_URL,
+    url: migrationUrl,
   },
   strict: true,
   verbose: true,
