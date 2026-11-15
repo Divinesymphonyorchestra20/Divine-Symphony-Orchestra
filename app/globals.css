@@ -29,17 +29,7 @@
 @media(max-width:620px){.dso-admin-topbar{height:64px;padding:0 14px}.dso-admin-top-actions{gap:10px}.dso-draft-state{display:none}.dso-admin-heading{padding:22px 14px 16px;display:block;margin:0}.dso-admin-heading h1{font-size:27px}.dso-admin-buttons{margin-top:14px}.dso-prototype-warning{margin:0 14px 14px;display:block}.dso-prototype-warning b{display:block;margin-bottom:4px}.dso-editor-layout{display:flex;flex-direction:column;padding:0 12px;gap:12px}.dso-editor-sidebar,.dso-control-panel,.dso-preview-column{width:100%;position:static}.dso-editor-sidebar{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:12px}.dso-sidebar-title{grid-column:1/-1;padding:5px 7px}.dso-sidebar-tabs-title{margin-top:8px}.dso-element-button{font-size:10px;padding:10px 7px}.dso-control-panel{padding:15px}.dso-preview-column{order:3}.dso-home-preview .site-header{height:auto;min-height:60px;flex-wrap:wrap;padding:8px 4%}.dso-home-preview .site-header nav{order:3;width:100%;overflow:auto;padding-bottom:7px;gap:15px;font-size:9px}.dso-home-preview .menu-link{margin-left:auto}.dso-home-preview .hero{min-height:430px;align-items:flex-end}.dso-home-preview .hero-copy{max-width:88%;margin:0;padding:145px 7% 45px}.dso-home-preview .hero h1{font-size:45px}.dso-home-preview .hero-photo{inset:0;background-position:58% center;mask-image:linear-gradient(180deg,transparent 0%,#000 24%)}.dso-home-preview .hero-shade{background:linear-gradient(0deg,rgba(48,3,52,.98) 0%,rgba(67,5,69,.82) 56%,rgba(66,5,69,.15) 100%)}.dso-home-preview .quick-links{grid-template-columns:repeat(2,1fr)}.dso-home-preview .feature,.dso-home-preview .strings-feature{grid-template-columns:1fr}.dso-home-preview .feature-copy{padding:35px 8% 20px}.dso-home-preview .feature-photo{min-height:220px}.dso-home-preview .strings-photo{min-height:220px;order:2}.dso-home-preview .strings-copy{order:1;padding:32px 8%}.dso-home-preview .updates{display:block}.dso-home-preview .updates .solid-cta{display:inline-flex;margin-top:15px}.dso-preview-toolbar{position:sticky;top:0;background:#fff;z-index:1}}
 
 
-/* History navigation dropdown */
-.nav-dropdown{position:relative;display:flex;align-items:center}
-.nav-dropdown summary{list-style:none;cursor:pointer;padding:10px 0;color:#332c35;white-space:nowrap}
-.nav-dropdown summary::-webkit-details-marker{display:none}
-.nav-dropdown summary span{font-size:12px;margin-left:4px;color:#8e7d91}
-.nav-dropdown[open] summary,.nav-dropdown:hover summary,.nav-dropdown:focus-within summary,.nav-dropdown.active summary{color:var(--purple)}
-.nav-dropdown-menu{position:absolute;top:calc(100% + 2px);left:-16px;min-width:220px;padding:8px;background:#fff;border:1px solid #eadfeb;border-radius:10px;box-shadow:0 14px 35px rgba(39,12,43,.14);display:grid;gap:2px;z-index:20}
-.nav-dropdown-menu a{display:block!important;padding:11px 12px!important;border-radius:6px;color:#46394a!important;font-size:12px!important}
-.nav-dropdown-menu a:hover,.nav-dropdown-menu a[aria-current="page"]{background:#f7f0f7;color:var(--purple)!important}
-.nav-dropdown:not([open]) .nav-dropdown-menu{display:none}
-@media(hover:hover){.nav-dropdown:hover .nav-dropdown-menu{display:grid}}
+/* History navigation uses the click-controlled button in SiteHeader. */
 /* Public history pages */
 .history-hero{min-height:440px;position:relative;display:flex;align-items:center;overflow:hidden;background:#35063b;color:#fff}
 .history-hero-image{position:absolute;inset:0;background-image:url('/images/hero-main-stage.jpg');background-size:cover;background-position:center 42%;opacity:.72}
@@ -162,7 +152,7 @@
 .nav-dropdown-trigger{border:0;background:transparent;cursor:pointer;display:flex;align-items:center;gap:7px;padding:10px 0;color:inherit;font:inherit;white-space:nowrap}
 .nav-dropdown-trigger span{transition:transform .22s ease}
 .nav-dropdown-menu{position:absolute;top:calc(100% + 9px);left:-14px;z-index:20;min-width:230px;padding:8px;background:#fff;border:1px solid #eadfeb;border-radius:12px;box-shadow:0 16px 38px rgba(39,12,43,.14);display:grid;gap:3px;animation:menuIn .18s ease-out}
-.nav-dropdown-menu[hidden]{display:none}
+.nav-dropdown-menu[hidden]{display:none!important}
 .nav-dropdown-menu a{display:block;padding:11px 12px;border-radius:7px;font-size:12px;color:#443648;white-space:normal}
 .nav-dropdown-menu a:hover{background:#f7f1f8;color:var(--purple)}
 .nav-dropdown.active .nav-dropdown-trigger{color:var(--purple)}
