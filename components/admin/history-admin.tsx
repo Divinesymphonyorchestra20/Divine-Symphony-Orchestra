@@ -10,7 +10,7 @@ type Video = { id: string; page: PageKey; title: string; description: string; yo
 type Content = { version: 1; updatedAt: string; milestones: Milestone[]; founders: Founder[]; media: Media[]; videos: Video[] };
 type Tab = "milestones" | "founders" | "media" | "videos";
 
-const pageLabels: Record<PageKey,string> = { history:"The History of DSO", "founding-members":"Founding Members", milestones:"Our Milestones" };
+const pageLabels: Record<PageKey,string> = { history:"The History of DSO", "founding-members":"Founding Members", milestones:"Our Milestones", about:"About DSO", music:"Music", events:"Events", people:"People", gallery:"Gallery", contact:"Contact" };
 
 export default function HistoryAdmin() {
   const [content,setContent]=useState<Content|null>(null);
