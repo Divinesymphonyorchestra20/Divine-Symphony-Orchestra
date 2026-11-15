@@ -3,7 +3,7 @@
 **Project:** Divine Symphony Orchestra website  
 **Branch:** `main`  
 **Stage:** Task 2 of 7  
-**Status:** Implementation committed; deployment and live acceptance checks pending at the time of this note.
+**Status:** Implementation committed and production build verified. DSO visual/content sign-off and authenticated publish workflow test remain pending.
 
 ## Objective
 
@@ -80,13 +80,14 @@ The selected-media manager supports image title, image path, alt text, upload an
 
 ## Checks and deployment
 
-Checks to record here after the latest deployment completes:
+Checks performed on the production deployment for commit `e109351ca90b051d5c8abdac0aa70f5d856a9ef6`:
 
-- Vercel production build state and commit.
-- HTTP response for the public homepage.
-- HTTP response for the admin page.
-- HTTP response for the protected homepage API when unauthenticated (expected: 401).
-- Whether any deployment build errors were reported.
+- Vercel production deployment `dpl_HEvEUsjFf3eMsJkVU7LPL7fDrNq9` reached `READY`.
+- Next.js production build completed; type checking passed and 16/16 static pages were generated.
+- Public homepage `/` returned HTTP 200 and rendered the new server-driven homepage sections and baseline content.
+- Admin page `/admin` returned HTTP 200 and loaded the homepage editor client bundle.
+- The protected homepage API check could not be completed through the deployment fetch path because Vercel deployment authentication intercepted the request. The route is protected in code by `verifyAdminSession`; its unauthenticated 401 response remains to be verified in an authenticated browser/session test.
+- An earlier build caught a missing `media` member in the admin tab type. This was fixed in commit `e109351ca90b051d5c8abdac0aa70f5d856a9ef6`, and the subsequent build passed.
 
 No claim of a complete manual visual, mobile, keyboard, screen-reader or authenticated publish test should be made unless those checks are actually performed.
 
@@ -102,9 +103,9 @@ No claim of a complete manual visual, mobile, keyboard, screen-reader or authent
 
 ## Checkpoint for the next session
 
-**Current stopping point:** Task 2 homepage content model, public rendering, administrator editor, private media path and draft/publish API have been committed to `main`. Do not begin Task 3 until the Task 2 deployment checks and DSO's review of the homepage appearance/content have been recorded.
+**Current stopping point:** Task 2 homepage content model, public rendering, administrator editor, private media path and draft/publish API have been committed to `main`. Production build is Ready and public homepage/admin HTTP checks returned 200. Do not begin Task 3 until DSO has reviewed the homepage appearance/content and the authenticated draft/publish workflow has been exercised.
 
-**Next action:** Verify the latest Vercel deployment and the homepage/admin endpoints, then ask DSO to review the homepage. After approval, proceed to Task 3: About DSO and institutional pages.
+**Next action:** DSO should review the homepage at the public website and sign in at `/admin` to test saving a draft and publishing it. Once appearance/content and the publish flow are accepted, proceed to Task 3: About DSO and institutional pages.
 
 ## Git history
 
@@ -118,3 +119,5 @@ Implementation commits:
 - Homepage styling: `e3c8e33f5250a9019590d8b938d19e68c9e818be`
 - Selected-media editor: `9d337592a9b5103d80a94698e184bc0faf0c0cf3`
 - Selected-media navigation: `4a95c2c1b561444a403ebab5ad8f8b5857fcfc09`
+- Homepage link validation: `1ed6bbaef4ae9b090d0034b4ddfa24cf1fffbdda`
+- Selected-media tab type fix and successful production build: `e109351ca90b051d5c8abdac0aa70f5d856a9ef6`
