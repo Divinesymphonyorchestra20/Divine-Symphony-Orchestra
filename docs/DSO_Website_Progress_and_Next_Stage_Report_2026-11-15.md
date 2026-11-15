@@ -248,3 +248,8 @@ Recommended order:
 ### 12.7 Current stage conclusion
 
 The project now has a deployed homepage, a set of public route shells, three History pages supported by a dedicated History CMS, a site-page/admin readiness register, and a shared responsive navigation component. The History dropdown defect has been identified and corrected in source. The remaining work is to confirm the resulting production deployment and perform the interaction checks, then build the common admin/content foundation so the rest of the public pages can be managed properly.
+
+
+## 13. Next-stage implementation plan
+
+The detailed recommendation for the next development stage has been documented separately in [DSO_Next_Development_Stage_Plan.md](DSO_Next_Development_Stage_Plan.md). It defines the proposed Shared Admin and Content Management Foundation, including the technical audit, architecture decisions, unified admin access, shared content and media workflows, History integration, homepage content management, About and Contact modules, acceptance criteria and the proposed sequence for later modules. This is a plan only; implementation has not started.
