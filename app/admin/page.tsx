@@ -177,7 +177,7 @@ export default function AdminPage() {
     <div className="dso-admin-heading"><div><p className="dso-kicker">WEBSITE MANAGEMENT / HOMEPAGE</p><h1>Homepage editor</h1><p>Select any section to edit its content, imagery and appearance. The preview changes as you work.</p></div>
       <div className="dso-admin-buttons"><button className="dso-secondary" onClick={resetDraft}>Reset preview</button><button className="dso-primary" onClick={saveDraft}>Save draft preview</button></div>
     </div>
-    <div className="dso-prototype-warning"><b>Preview workspace</b><span>This editor currently saves drafts and uploaded preview images in this browser only. Shared database storage, secure user accounts and live publishing are the next backend connection stage.</span></div>
+    <div className="dso-prototype-warning"><b>Preview workspace</b><span>This homepage preview editor still saves locally in this browser. Use the History, timeline & media manager for secure shared content storage, private image uploads and published YouTube embeds.</span></div>
     <div className="dso-editor-layout">
       <aside className="dso-editor-sidebar">
         <div className="dso-sidebar-title">HOMEPAGE ELEMENTS</div>
