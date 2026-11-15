@@ -1,65 +1,17 @@
 import SiteHeader from "../components/site-header";
 import SiteFooter from "../components/site-footer";
-
-const links = [
-  ["Our History", "A story of growth, dedication and music-making", "/history"],
-  ["Our Music", "Repertoire, performances and recordings", "/music"],
-  ["Events", "Concerts, programmes and appearances", "/events"],
-  ["Our People", "Musicians, leadership and contributors", "/people"],
-];
-
-export default function Home() {
-  return (
-    <main>
-      <SiteHeader active="Home" />
-      <section className="hero">
-        <div className="hero-photo" role="img" aria-label="Divine Symphony Orchestra performing on stage" />
-        <div className="hero-shade" />
-        <div className="hero-copy">
-          <p className="eyebrow">Music for Inspiration • Excellence • Impact</p>
-          <h1>Divine Symphony<br /><span>Orchestra</span></h1>
-          <div className="gold-rule" />
-          <p className="hero-intro">A shared love of music. A commitment to excellence. A sound that brings people together.</p>
-          <a className="outline-cta" href="/about">Discover DSO <span>→</span></a>
-        </div>
-        <div className="ribbons" aria-hidden="true"><i/><i/><i/><i/></div>
-      </section>
-
-      <section className="quick-links" aria-label="Explore the orchestra">
-        {links.map(([title, description, href], index) => (
-          <a className="quick-card" href={href} key={title}>
-            <span className="quick-icon">{["♬","♫","▦","♟"][index]}</span>
-            <h2>{title}</h2><p>{description}</p>
-          </a>
-        ))}
-      </section>
-
-      <section className="feature">
-        <div className="feature-copy">
-          <p className="eyebrow">The sound of many, the purpose of one</p>
-          <h2>A shared passion.<br /><span>A lasting harmony.</span></h2>
-          <div className="gold-rule" />
-          <p>Divine Symphony Orchestra brings musicians together through the discipline, joy and expressive power of orchestral music.</p>
-          <a className="text-link" href="/about">Learn more about DSO <span>→</span></a>
-        </div>
-        <div className="feature-photo" role="img" aria-label="DSO brass and wind musicians performing" />
-      </section>
-
-      <section className="strings-feature">
-        <div className="strings-photo" role="img" aria-label="DSO string musicians playing together" />
-        <div className="strings-copy">
-          <p className="eyebrow dark">The people behind the music</p>
-          <h2>One orchestra.<br/><em>Many voices.</em></h2>
-          <p>Meet the musicians whose dedication and shared artistry shape the DSO sound.</p>
-          <a className="text-link" href="/people">Meet our people <span>→</span></a>
-        </div>
-      </section>
-
-      <section className="updates">
-        <div><p className="eyebrow dark">Stay connected</p><h2>Music brings us together.</h2><p>Explore the orchestra, discover its music and keep up with upcoming activities.</p></div>
-        <a className="solid-cta" href="/events">Explore events <span>→</span></a>
-      </section>
-      <SiteFooter />
-    </main>
-  );
+import { readPublishedHomepage } from "../lib/homepage-cms";
+export const dynamic = "force-dynamic";
+const bg=(src:string,pos:string)=>({backgroundImage:"linear-gradient(90deg,rgba(37,14,40,.18),rgba(37,14,40,.08)),url("+JSON.stringify(src)+")",backgroundPosition:pos,backgroundSize:"cover"});
+export default async function Home(){
+ const c=await readPublishedHomepage();const show=(id:string)=>c.sections.find(s=>s.id===id)?.visible!==false;
+ const theme={"--purple":c.theme.purple,"--plum":c.theme.plum,"--gold":c.theme.gold,"--magenta":c.theme.magenta} as React.CSSProperties;
+ return <main style={theme}><SiteHeader active="Home"/>
+ {show("hero")&&<section className="hero"><div className="hero-photo" role="img" aria-label={c.hero.image.alt} style={bg(c.hero.image.src,c.hero.image.position)}/><div className="hero-shade"/><div className="hero-copy"><p className="eyebrow">{c.hero.eyebrow}</p><h1>{c.hero.title}<br/><span>{c.hero.accent}</span></h1><div className="gold-rule"/><p className="hero-intro">{c.hero.text}</p><a className="outline-cta" href={c.hero.href}>{c.hero.button} <span>→</span></a></div><div className="ribbons" aria-hidden="true"><i/><i/><i/><i/></div></section>}
+ {show("links")&&<section className="quick-links" aria-label="Explore the orchestra">{c.links.map(x=><a className="quick-card" href={x.href} key={x.title}><span className="quick-icon" aria-hidden="true">{x.icon}</span><h2>{x.title}</h2><p>{x.description}</p></a>)}</section>}
+ {show("history")&&<section className="home-history-band"><div className="home-history-inner"><p className="eyebrow">{c.history.eyebrow}</p><h2>{c.history.title}</h2><p>{c.history.text}</p><a className="text-link" href={c.history.href}>{c.history.button} →</a></div></section>}
+ {show("feature")&&<section className="feature"><div className="feature-copy"><p className="eyebrow">{c.feature.eyebrow}</p><h2>{c.feature.title}<br/><span>{c.feature.accent}</span></h2><div className="gold-rule"/><p>{c.feature.text}</p><a className="text-link" href={c.feature.href}>{c.feature.button} →</a></div><div className="feature-photo" role="img" aria-label={c.feature.image.alt} style={bg(c.feature.image.src,c.feature.image.position)}/></section>}
+ {show("event")&&<section className="updates"><div><p className="eyebrow dark">{c.event.eyebrow}</p><h2>{c.event.title}</h2><p>{c.event.text}</p></div><a className="solid-cta" href={c.event.href}>{c.event.button} →</a></section>}
+ {show("media")&&c.media.items.length>0&&<section className="home-media"><div className="home-media-heading"><p className="eyebrow dark">{c.media.eyebrow}</p><h2>{c.media.title}</h2><p>{c.media.text}</p></div><div className="home-media-grid">{c.media.items.map((x,i)=><a href={x.href||"/gallery"} className="home-media-item" key={i}><div role="img" aria-label={x.image.alt} style={bg(x.image.src,x.image.position)}/><span>{x.title}</span></a>)}</div></section>}
+ <SiteFooter/></main>;
 }
