@@ -45,7 +45,7 @@ export const adminUsers = pgTable("admin_users", {
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 }, (table) => [
-  uniqueIndex("admin_users_email_uq").on(table.email),
+  uniqueIndex("admin_users_email_uq").on(sql`lower(${table.email})`),
   index("admin_users_status_idx").on(table.status),
 ]);
 
@@ -86,7 +86,7 @@ export const contentEntries = pgTable("content_entries", {
 }, (table) => [
   index("content_entries_type_status_idx").on(table.contentType, table.status),
   index("content_entries_sort_idx").on(table.contentType, table.sortOrder),
-  uniqueIndex("content_entries_type_slug_uq").on(table.contentType, table.slug),
+  uniqueIndex("content_entries_type_slug_uq").on(table.contentType, table.slug).where(sql`${table.slug} IS NOT NULL`),
 ]);
 
 export const contentRevisions = pgTable("content_revisions", {
