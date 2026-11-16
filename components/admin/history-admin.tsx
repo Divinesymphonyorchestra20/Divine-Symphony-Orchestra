@@ -17,6 +17,7 @@ export default function HistoryAdmin() {
   const [content,setContent]=useState<Content|null>(null);
   const [tab,setTab]=useState<Tab>("milestones");
   const [password,setPassword]=useState("");
+  const [email,setEmail]=useState("");
   const [signedIn,setSignedIn]=useState(false);
   const [loading,setLoading]=useState(true);
   const [saving,setSaving]=useState(false);
@@ -47,7 +48,7 @@ export default function HistoryAdmin() {
   async function signIn(e:React.FormEvent) {
     e.preventDefault();setError("");setNotice("");setLoading(true);
     try {
-      const response=await fetch("/api/admin/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password})});
+      const response=await fetch("/api/admin/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email,password})});
       const data=await response.json();
       if(!response.ok) throw new Error(data.error||"Sign-in failed.");
       setPassword("");await loadContent();
@@ -96,7 +97,7 @@ export default function HistoryAdmin() {
   if(loading&&!signedIn)return <main className="dso-cms-shell"><div className="dso-cms-loading">Opening DSO Website Studio…</div></main>;
   if(!signedIn)return <main className="dso-cms-shell"><div className="dso-cms-login">
     <a href="/" className="dso-cms-back">← Return to the public website</a><p className="dso-cms-kicker">DIVINE SYMPHONY ORCHESTRA</p><h1>History & media manager</h1><p>Sign in to manage History pages, Gallery photographs and collections, founding-member profiles and YouTube videos.</p>
-    <form onSubmit={signIn}><label>Administrator password<input type="password" value={password} onChange={e=>setPassword(e.target.value)} autoComplete="current-password" required /></label><button className="dso-cms-primary" disabled={loading}>Sign in</button></form>
+    <form onSubmit={signIn}><label>Administrator email<input type="email" value={email} onChange={e=>setEmail(e.target.value)} required autoComplete="username"/></label><label>Administrator password<input type="password" value={password} onChange={e=>setPassword(e.target.value)} autoComplete="current-password" required /></label><button className="dso-cms-primary" disabled={loading}>Sign in</button></form>
     {error&&<p className="dso-cms-error">{error}</p>}<small>Admin access is protected by a signed, HTTP-only session. The administrator password is configured in the Vercel project environment.</small>
   </div></main>;
 
