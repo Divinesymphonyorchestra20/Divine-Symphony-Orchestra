@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyAdminSession } from "../../../../lib/admin-auth";
+import { hasAdminPermission } from "../../../../lib/admin-auth";
 import { readHistoryContent, writeHistoryContent, type HistoryContent } from "../../../../lib/history-cms";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
-  if (!verifyAdminSession(request)) return NextResponse.json({ error: "Sign in to manage DSO history content." }, { status: 401 });
+  if (!(await hasAdminPermission(request, "content.read_drafts"))) return NextResponse.json({ error: "You do not have permission to manage DSO history content." }, { status: 403 });
   return NextResponse.json(await readHistoryContent(), { headers: { "Cache-Control": "no-store" } });
 }
 
 export async function PUT(request: NextRequest) {
-  if (!verifyAdminSession(request)) return NextResponse.json({ error: "Sign in to manage DSO history content." }, { status: 401 });
+  if (!(await hasAdminPermission(request, "content.publish"))) return NextResponse.json({ error: "You do not have permission to publish DSO history content." }, { status: 403 });
   const content = await request.json().catch(() => null) as HistoryContent | null;
   if (!content || content.version !== 1 || !Array.isArray(content.milestones) || !Array.isArray(content.founders) || !Array.isArray(content.media) || !Array.isArray(content.videos)) {
     return NextResponse.json({ error: "The submitted history content is not valid." }, { status: 400 });
