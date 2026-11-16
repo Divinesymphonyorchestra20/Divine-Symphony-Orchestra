@@ -115,4 +115,31 @@ The DSO repository has the shared database schema and migration, and the connect
 
 The Supabase table inspection reported Row Level Security disabled on all 12 new public tables. This is a critical exposure risk if the tables are reachable through Supabase's Data API using the `anon` or `authenticated` roles. Do not expose these tables to browser clients or publish elevated keys. Before module integration, design and apply a least-privilege access model: keep database access server-side, enable RLS and add only the policies actually required by the application (or ensure public roles have no access while trusted server-side database access uses a protected privileged connection). Enabling RLS without considering server access will block legitimate reads/writes. Review Supabase security advisors again after policies and grants are in place.
 
-The project was verified active/healthy. The migration and role/permission counts were verified through direct SQL. RLS is enabled on all 12 tables and direct table grants to `anon` and `authenticated` are revoked. Supabase's security advisor now reports 12 informational `rls_enabled_no_policy` findings because no policies exist; this is intentional until the application access model is implemented. The application must use a protected server-side database connection and must never expose privileged credentials in browser code. Verify the runtime DB role and effective privileges before switching any application CMS to Supabase. Actual website-to-database runtime connectivity, secure Owner activation/password setup, auth/session flows and content migration remain pending.
+The project was verified active/healthy. The migration and role/permission counts were verified through direct SQL. RLS is enabled on all 12 tables and direct table grants to `anon` and `authenticated` are revoked. Supabase's security advisor now reports 12 informational `rls_enabled_no_policy` findings because no policies exist; this is intentional until the application access model is implemented. The application must use a protected server-side database connection and must never expose privileged credentials in browser code. Verify the runtime DB role and effective privileges before switching any application CMS to Supabase. Named-account authentication has now been added to the application code: email/password login, scrypt password verification, random session tokens stored as SHA-256 hashes, eight-hour expiry, server-side role/permission lookup, logout revocation and an Owner activation endpoint/page. The existing shared-password session remains available only when no database URL is configured, to avoid interrupting the current deployment before the database cutover. The activation endpoint requires DSO_OWNER_SETUP_TOKEN to be set as a private server-side Vercel environment variable. No password or setup token is stored in GitHub or this documentation. Runtime database connectivity, Owner activation, live login/logout tests, rate limiting and full role-specific editor workflows remain pending.
+
+## 9. Named administrator authentication — implementation in progress
+
+The application now contains:
+- Email-based administrator login against admin_users.
+- Password verification using Node.js scrypt hashes; plaintext passwords are never stored.
+- Cryptographically random session tokens; only SHA-256 token hashes are stored in admin_sessions.
+- Eight-hour expiry and database-backed logout revocation.
+- Role and permission lookups from the seeded role catalogue.
+- API checks for content draft reading, publishing and media upload.
+- A one-time Owner activation endpoint and /admin/activate page. Activation is restricted to the invited Owner email and changes the account from invited to active only after a valid setup token and password are supplied.
+- A compatibility path for the former shared-password session only when no database URL is configured. This is temporary and must be removed after the production database is connected and the Owner login is verified.
+
+### Required private environment configuration
+
+Before Owner activation, set DSO_OWNER_SETUP_TOKEN as a private server-side Vercel environment variable for the intended non-production deployment. Generate a long, random value (at least 32 random bytes), store it in the organisation's password manager, and share it with the Owner through a secure channel. Do not use a NEXT_PUBLIC_ variable. After activation, remove this environment variable and redeploy. Do not send the token through public messages or commit it to source control.
+
+The Owner can then open /admin/activate, enter the setup token, choose an approved display name and set a password of at least 12 characters. The activation endpoint is single-use because it only accepts an account still in invited status with no password hash.
+
+### Remaining security work before production cutover
+
+- Confirm the Vercel runtime database connection uses a protected server-side role and verify its effective grants.
+- Add login throttling/lockout and monitoring before production use.
+- Test Owner, Editor and Publisher against each admin route, including forbidden operations.
+- Verify database-backed session creation, expiry and revocation end-to-end.
+- Remove the legacy shared-password fallback only after the named Owner account has signed in successfully.
+- Do not migrate Blob CMS records until these checks pass.
