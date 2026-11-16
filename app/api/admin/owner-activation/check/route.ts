@@ -22,10 +22,13 @@ export async function POST(request: NextRequest) {
     }
     return NextResponse.json({ ok: true, database: "connected", invitation: "ready" });
   } catch (error) {
-    const dbError = error as { code?: string; name?: string };
+    const dbError = error as { code?: string; name?: string; message?: string; cause?: { code?: string; message?: string } };
     console.error("DSO owner activation preflight failed", {
       code: dbError?.code || "unknown",
       name: dbError?.name || "Error",
+      message: String(dbError?.message || "No error message").replace(/(?:postgres(?:ql)?:\\/\\/)[^\\s]+/gi, "[connection-redacted]").slice(0, 180),
+      causeCode: dbError?.cause?.code || "none",
+      causeMessage: String(dbError?.cause?.message || "").slice(0, 120),
     });
     return NextResponse.json(
       { error: "The secure database check failed. No account changes were made." },
