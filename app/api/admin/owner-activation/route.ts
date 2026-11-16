@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { adminCookieName, adminSessionSeconds, createAdminSession, hashAdminPassword, verifyOwnerSetupToken } from "../../../../../lib/admin-auth";
-import { queryDatabase } from "../../../../../db/client";
+import { adminCookieName, adminSessionSeconds, createAdminSession, hashAdminPassword, verifyOwnerSetupToken } from "../../../../lib/admin-auth";
+import { queryDatabase } from "../../../../db/client";
 export const runtime="nodejs";
 export async function POST(request:NextRequest){
  const body=await request.json().catch(()=>({})) as {email?:string;setupToken?:string;password?:string;fullName?:string};
