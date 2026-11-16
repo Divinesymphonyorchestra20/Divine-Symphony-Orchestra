@@ -1,0 +1,6 @@
+import type {Metadata} from "next";
+import {notFound} from "next/navigation";
+import {readPublishedSiteContent} from "../../../lib/site-content-cms";
+export const dynamic="force-dynamic";
+export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{const {slug}=await params;const item=(await readPublishedSiteContent()).news.find(n=>n.slug===slug&&n.status==="published");return item?{title:item.title+" | DSO News",description:item.summary}:{};}
+export default async function Page({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const item=(await readPublishedSiteContent()).news.find(n=>n.slug===slug&&n.status==="published");if(!item)notFound();return <main className="dso-news-article">{item.image&&<img src={item.image} alt={item.imageAlt||item.title}/>}<p className="eyebrow dark">{item.publishedAt?new Date(item.publishedAt).toLocaleDateString("en-NG",{dateStyle:"long"}):""}</p><h1>{item.title}</h1>{item.author&&<p className="dso-news-author">{item.author}</p>}<p className="dso-news-summary">{item.summary}</p><div className="dso-news-body">{item.body.split("\n").map((p,i)=><p key={i}>{p}</p>)}</div>{item.sourceUrl&&<p><a href={item.sourceUrl} rel="noreferrer">Related source</a></p>}</main>;}
