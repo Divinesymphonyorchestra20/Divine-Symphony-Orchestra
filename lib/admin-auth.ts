@@ -9,6 +9,9 @@ export const adminSessionSeconds = 60 * 60 * 8;
 export type AdminIdentity = { id: string; email: string; fullName: string; roles: string[] };
 
 export function adminCookieName() { return COOKIE_NAME; }
+function signLegacy(value: string) { return createHmac("sha256", process.env.DSO_SESSION_SECRET || "").update(value).digest("base64url"); }
+export function createLegacyAdminSession() { const payload=Buffer.from(JSON.stringify({exp:Math.floor(Date.now()/1000)+adminSessionSeconds})).toString("base64url"); return payload+"."+signLegacy(payload); }
+function verifyLegacyAdminSession(token:string) { if(!process.env.DSO_SESSION_SECRET)return false; const [payload,signature]=token.split("."); if(!payload||!signature||!safeEqual(signature,signLegacy(payload)))return false; try { const data=JSON.parse(Buffer.from(payload,"base64url").toString("utf8")) as {exp:number}; return Number.isFinite(data.exp)&&data.exp>Math.floor(Date.now()/1000); } catch{return false;} }
 const hashToken = (token: string) => createHash("sha256").update(token).digest("hex");
 const safeEqual = (left: string, right: string) => {
   const a = Buffer.from(left); const b = Buffer.from(right);
@@ -43,6 +46,7 @@ export async function createAdminSession(userId: string) {
 export async function getAdminSession(request: NextRequest): Promise<AdminIdentity | null> {
   const token = request.cookies.get(COOKIE_NAME)?.value;
   if (!token || token.length > 200) return null;
+  if (!process.env.DATABASE_URL && !process.env.POSTGRES_URL && verifyLegacyAdminSession(token)) return { id:"legacy-shared-admin", email:"legacy-admin@dso.local", fullName:"Legacy DSO Administrator", roles:["owner"] };
   try {
     const result = await queryDatabase<{
       id: string; email: string; full_name: string; role_key: string;
