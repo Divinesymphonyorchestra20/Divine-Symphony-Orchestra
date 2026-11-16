@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { adminCookieName, adminSessionSeconds, createAdminSession, verifyAdminPassword } from "../../../../lib/admin-auth";
+import { timingSafeEqual } from "node:crypto";
+import { adminCookieName, adminSessionSeconds, createAdminSession, createLegacyAdminSession, verifyAdminPassword } from "../../../../lib/admin-auth";
 import { queryDatabase } from "../../../../db/client";
 export const runtime = "nodejs";
 export async function POST(request: NextRequest) {
-  if (!process.env.DATABASE_URL && !process.env.POSTGRES_URL) return NextResponse.json({ error: "Administrator sign-in is temporarily unavailable. The secure database connection is not configured." }, { status: 503 });
+  if (!process.env.DATABASE_URL && !process.env.POSTGRES_URL) { if (!process.env.DSO_ADMIN_PASSWORD || !process.env.DSO_SESSION_SECRET) return NextResponse.json({error:"Administrator sign-in is not configured."},{status:503}); const legacyBody=await request.json().catch(()=>({})) as {password?:string}; const supplied=Buffer.from(String(legacyBody.password||"")); const expected=Buffer.from(process.env.DSO_ADMIN_PASSWORD); if(supplied.length!==expected.length||!timingSafeEqual(supplied,expected))return NextResponse.json({error:"The email or password is not correct."},{status:401}); const legacyResponse=NextResponse.json({ok:true,legacy:true}); legacyResponse.cookies.set(adminCookieName(),createLegacyAdminSession(),{httpOnly:true,secure:process.env.NODE_ENV==="production",sameSite:"strict",path:"/",maxAge:adminSessionSeconds}); return legacyResponse; }
   const body = await request.json().catch(() => ({})) as { email?: string; password?: string };
   const email = String(body.email || "").trim().toLowerCase();
   const password = String(body.password || "");
