@@ -1,7 +1,7 @@
 # DSO Database Foundation — Supabase Setup and Migration Notes
 
 **Provider selected:** Supabase PostgreSQL.  
-**Status:** Supabase has been selected, but no Supabase project is provisioned or connected yet. The initial schema and connection tooling are committed; no migration has been executed.  
+**Status (16 November 2026):** The initial schema and connection tooling are committed. Supabase/PostgreSQL integration variables are present in Vercel for Preview and Development only. Their presence does not prove that the database is reachable or that the migration has run. The initial migration has not been executed or verified.  
 **Approved architecture:** PostgreSQL for structured records; Vercel Blob retained for media binaries.
 
 ## 1. What is already in the repository
@@ -71,7 +71,7 @@ The runtime driver disables prepared statements by default through the PostgreSQ
 After the development project has been created and connected:
 
 1. Confirm the Vercel project has the expected Supabase environment variables. Inspect names and targets only; never expose decrypted values in logs or chat.
-2. Set the integration connection for Development/Preview only while testing. Do not attach the development database to Production.
+2. Confirm the integration connection is for the intended DSO development database and remains limited to Development/Preview. Do not attach the development database to Production.
 3. Configure the local development environment from the Supabase dashboard if local commands are required. Keep `.env.local` out of Git.
 4. Run:
    ```bash
@@ -81,7 +81,7 @@ After the development project has been created and connected:
    npm run db:migrate
    npm run build
    ```
-5. Inspect the resulting tables, indexes, role records and permission assignments in Supabase Studio.
+5. Run `db/verification/0000_verify_shared_admin_foundation.sql` in Supabase SQL Editor. Inspect the resulting tables, indexes, role records and permission assignments in Supabase Studio.
 6. Test a database read/write using a controlled development-only verification script or route, then remove the test data.
 
 Run migrations first against the development project. Inspect generated SQL and schema differences before applying any migration to Preview or Production.
@@ -108,4 +108,4 @@ The migration is designed for a new, empty DSO database. It is not a migration t
 
 ## 8. Current implementation boundary
 
-Supabase has been selected, but no Supabase organization or project has yet been connected to Vercel. No database migration has been executed, no administrator account has been created, and the existing History CMS continues to use its current Blob-backed store. The current shared-password admin authentication has not yet been replaced.
+The DSO repository has the shared database schema and migration, and Vercel has database-related integration variables targeted at Preview and Development. The exact Supabase project identity and successful live database connectivity still need confirmation. No database migration has been executed, no administrator account has been created, and the existing History CMS continues to use its current Blob-backed store. The current shared-password admin authentication has not yet been replaced. Production has not been connected to the development database.
