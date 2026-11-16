@@ -5,35 +5,49 @@ import { schema } from "./schema";
 
 let pool: Pool | undefined;
 
-export function getDatabase() {
-  const connectionString = process.env.DATABASE_URL ?? process.env.POSTGRES_URL;
+function getPool() {
+  if (pool) return pool;
 
-  if (!connectionString) {
+  const rawConnectionString = process.env.DATABASE_URL ?? process.env.POSTGRES_URL;
+  if (!rawConnectionString) {
     throw new Error(
       "The DSO database is not configured. Set DATABASE_URL or connect the Supabase project to provide POSTGRES_URL.",
     );
   }
 
-  pool ??= new Pool({
-    connectionString,
+  const ca = process.env.SUPABASE_CA_CERT;
+  if (!ca) {
+    throw new Error(
+      "The Supabase root CA certificate is missing. Set SUPABASE_CA_CERT from the project's Database Settings SSL certificate.",
+    );
+  }
+
+  // node-postgres parses sslmode=require as certificate verification. Remove
+  // URL-level SSL options so the explicit CA-backed TLS configuration below
+  // is used consistently and hostname verification remains enabled.
+  const connectionUrl = new URL(rawConnectionString);
+  for (const key of ["sslmode", "sslrootcert", "sslcert", "sslkey", "uselibpqcompat"]) {
+    connectionUrl.searchParams.delete(key);
+  }
+
+  pool = new Pool({
+    connectionString: connectionUrl.toString(),
     max: 1,
     idleTimeoutMillis: 20_000,
     connectionTimeoutMillis: 10_000,
-    ssl: { rejectUnauthorized: true },
+    ssl: { ca, rejectUnauthorized: true },
   });
 
-  return drizzle(pool, { schema });
+  return pool;
 }
 
-export async function queryDatabase<T extends import("pg").QueryResultRow = import("pg").QueryResultRow>(text: string, values: unknown[] = []) {
-  const connectionString = process.env.DATABASE_URL ?? process.env.POSTGRES_URL;
-  if (!connectionString) throw new Error("The DSO database is not configured.");
-  pool ??= new Pool({
-    connectionString,
-    max: 1,
-    idleTimeoutMillis: 20_000,
-    connectionTimeoutMillis: 10_000,
-    ssl: { rejectUnauthorized: true },
-  });
-  return pool.query<T>(text, values);
+export function getDatabase() {
+  return drizzle(getPool(), { schema });
+}
+
+export async function queryDatabase<T extends import("pg").QueryResultRow = import("pg").QueryResultRow>(
+  text: string,
+  values: unknown[] = [],
+) {
+  return getPool().query<T>(text, values);
 }
