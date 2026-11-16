@@ -1,0 +1,6 @@
+import type {Metadata} from "next";
+import Link from "next/link";
+import {readPublishedSiteContent} from "../../lib/site-content-cms";
+export const dynamic="force-dynamic";
+export const metadata:Metadata={title:"News | Divine Symphony Orchestra",description:"News and announcements from Divine Symphony Orchestra."};
+export default async function Page(){const items=(await readPublishedSiteContent()).news.filter(n=>n.status==="published").sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt));return <main className="dso-news-page"><header><p className="eyebrow dark">Updates from DSO</p><h1>News & Stories</h1><p>Announcements, orchestra updates and selected stories from Divine Symphony Orchestra.</p></header><section className="dso-managed-list">{items.length?items.map(n=><article key={n.id}>{n.image&&<img src={n.image} alt={n.imageAlt||n.title}/>}<div><p className="eyebrow dark">{n.publishedAt?new Date(n.publishedAt).toLocaleDateString("en-NG",{dateStyle:"long"}):""}</p><h2><Link href={"/news/"+n.slug}>{n.title}</Link></h2><p>{n.summary}</p><Link href={"/news/"+n.slug}>Read story</Link></div></article>):<p className="dso-managed-empty">There are no published news stories yet.</p>}</section></main>;}
