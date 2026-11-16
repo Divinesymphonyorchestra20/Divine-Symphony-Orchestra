@@ -1,34 +1,6 @@
-import type { Metadata } from "next";
-import SectionPage, { type SectionPageProps } from "../../components/section-page";
-export const metadata: Metadata = {"title":"Concerts & Events | Divine Symphony Orchestra","description":"Concerts, programmes and appearances by Divine Symphony Orchestra."};
-const pageContent: SectionPageProps = {
-  "active": "Concerts & Events",
-  "eyebrow": "Where music meets its audience",
-  "title": "Concerts & Events",
-  "titleEmphasis": "Live, shared, remembered",
-  "intro": "Find information about DSO concerts, special programmes, appearances and other musical events.",
-  "sectionEyebrow": "The concert calendar",
-  "sectionTitle": "Upcoming and past events",
-  "sectionText": "The event area is established and ready for the Orchestra’s confirmed dates, venues, programme details and event photographs.",
-  "cards": [
-    {
-      "icon": "▦",
-      "title": "Upcoming concerts",
-      "description": "Confirmed future concerts and performance dates will be listed here."
-    },
-    {
-      "icon": "♫",
-      "title": "Past performances",
-      "description": "A record of selected concerts, programmes and special appearances.",
-      "href": "/history/milestones",
-      "linkLabel": "View milestones"
-    },
-    {
-      "icon": "✦",
-      "title": "Special programmes",
-      "description": "Festival appearances, collaborative performances and special musical presentations."
-    }
-  ],
-  "note": "No dates or venues have been invented. Event listings will be published when the Orchestra supplies and approves the details."
-};
-export default function Page(){ return <SectionPage {...pageContent} />; }
+import type {Metadata} from "next";
+import SectionPage from "../../components/section-page";
+import {readPublishedSiteContent} from "../../lib/site-content-cms";
+export const dynamic="force-dynamic";
+export const metadata:Metadata={title:"Concerts & Events | Divine Symphony Orchestra",description:"Confirmed concerts, programmes and appearances by Divine Symphony Orchestra."};
+export default async function Page(){const items=(await readPublishedSiteContent()).events.filter(e=>e.status==="published").sort((a,b)=>a.startAt.localeCompare(b.startAt));return <><SectionPage active="Concerts & Events" eyebrow="Where music meets its audience" title="Concerts & Events" titleEmphasis="Live, shared, remembered" intro="Find information about DSO concerts, special programmes, appearances and other musical events." sectionEyebrow="The concert calendar" sectionTitle="Upcoming and past events" sectionText="Confirmed concerts and special appearances are listed when details have been approved by the Orchestra." cards={[]} note={items.length?"Event details are presented as supplied and approved by DSO.":"No confirmed event listings have been published yet."}/><section className="dso-managed-list">{items.length?items.map(e=><article key={e.id}>{e.image&&<img src={e.image} alt={e.imageAlt||e.title}/>}<div><p className="eyebrow dark">{e.startAt?new Date(e.startAt).toLocaleString("en-NG",{dateStyle:"long",timeStyle:"short"}):"Date to be confirmed"}{e.venue?" · "+e.venue:""}</p><h2>{e.title}</h2><p>{e.description}</p>{e.programme&&<p>{e.programme}</p>}{e.registrationUrl&&<a href={e.registrationUrl}>Event information / registration</a>}</div></article>):null}</section></>;}
