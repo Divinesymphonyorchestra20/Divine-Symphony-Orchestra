@@ -1,32 +1,5 @@
-import type { Metadata } from "next";
-import SectionPage, { type SectionPageProps } from "../../components/section-page";
-export const metadata: Metadata = {"title":"Contact | Divine Symphony Orchestra","description":"Contact information and enquiries for Divine Symphony Orchestra."};
-const pageContent: SectionPageProps = {
-  "active": "Contact",
-  "eyebrow": "Stay in touch",
-  "title": "Contact Divine Symphony",
-  "titleEmphasis": "Orchestra",
-  "intro": "For enquiries, collaborations and information about the Orchestra, this is the place to find the appropriate contact details.",
-  "sectionEyebrow": "Contact DSO",
-  "sectionTitle": "Contact information is being prepared",
-  "sectionText": "The page structure is ready. Official email addresses, telephone numbers, location details and enquiry routing will be added once confirmed by the Orchestra.",
-  "cards": [
-    {
-      "icon": "✉",
-      "title": "General enquiries",
-      "description": "Official email contact details will appear here once supplied and approved."
-    },
-    {
-      "icon": "♫",
-      "title": "Concerts & collaborations",
-      "description": "Information for concert invitations, partnerships and musical collaborations."
-    },
-    {
-      "icon": "◎",
-      "title": "Location & correspondence",
-      "description": "Official address and relevant contact information will be published here."
-    }
-  ],
-  "note": "We have not inserted guessed email addresses, telephone numbers or postal details. The enquiry form and admin-managed contact routing should be connected after the official contact details and receiving address are confirmed."
-};
-export default function Page(){ return <SectionPage {...pageContent} />; }
+import type {Metadata} from "next";
+import {readPublishedSiteContent} from "../../lib/site-content-cms";
+export const dynamic="force-dynamic";
+export const metadata:Metadata={title:"Contact | Divine Symphony Orchestra",description:"Official contact information for Divine Symphony Orchestra."};
+export default async function Page(){const c=(await readPublishedSiteContent()).contact;return <main className="dso-contact-page"><header><p className="eyebrow dark">Stay in touch</p><h1>Contact Divine Symphony Orchestra</h1><p>{c.intro}</p></header><section className="dso-contact-grid">{c.generalEmail&&<article><h2>General enquiries</h2><a href={"mailto:"+c.generalEmail}>{c.generalEmail}</a></article>}{c.telephone&&<article><h2>Telephone</h2><a href={"tel:"+c.telephone.replace(/[^+\d]/g,"")}>{c.telephone}</a></article>}{c.address&&<article><h2>Address</h2><p>{c.address}</p></article>}{c.socialLinks.filter(x=>x.url).map(x=><article key={x.label}><h2>{x.label}</h2><a href={x.url} rel="noreferrer">{x.url}</a></article>)}</section><p className="dso-contact-note">{c.enquiryNote}</p></main>;}
