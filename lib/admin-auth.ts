@@ -43,46 +43,25 @@ export async function createAdminSession(userId: string) {
   return token;
 }
 
-export async function getAdminSession(request: NextRequest): Promise<AdminIdentity | null> {
-  const token = request.cookies.get(COOKIE_NAME)?.value;
-  if (!token || token.length > 200) return null;
-  if (!process.env.DATABASE_URL && !process.env.POSTGRES_URL && verifyLegacyAdminSession(token)) return { id:"legacy-shared-admin", email:"legacy-admin@dso.local", fullName:"Legacy DSO Administrator", roles:["owner"] };
-  try {
-    const result = await queryDatabase<{
-      id: string; email: string; full_name: string; role_key: string;
-    }>(
-      `SELECT u.id,u.email,u.full_name,r.key AS role_key
-       FROM public.admin_sessions s
-       JOIN public.admin_users u ON u.id=s.user_id
-       JOIN public.user_roles ur ON ur.user_id=u.id
-       JOIN public.roles r ON r.id=ur.role_id
-       WHERE s.token_hash=$1 AND s.revoked_at IS NULL AND s.expires_at>now() AND u.status='active'`,
-      [hashToken(token)]
-    );
-    if (!result.rows.length) return null;
-    const first = result.rows[0];
-    return { id:first.id, email:first.email, fullName:first.full_name, roles:[...new Set(result.rows.map(row=>row.role_key))] };
-  } catch { return null; }
+// TEMPORARY DEVELOPMENT MODE: administrator access is intentionally open.
+// Restore the database-backed session and role checks before public launch.
+const temporaryOpenAdmin: AdminIdentity = {
+  id: "temporary-open-admin",
+  email: "open-admin@dso.local",
+  fullName: "Temporary DSO Administrator",
+  roles: ["owner"],
+};
+
+export async function getAdminSession(_request: NextRequest): Promise<AdminIdentity> {
+  return temporaryOpenAdmin;
 }
 
-export async function verifyAdminSession(request: NextRequest): Promise<boolean> {
-  return Boolean(await getAdminSession(request));
+export async function verifyAdminSession(_request: NextRequest): Promise<boolean> {
+  return true;
 }
 
-export async function hasAdminPermission(request: NextRequest, permission: string): Promise<boolean> {
-  const identity = await getAdminSession(request);
-  if (!identity) return false;
-  if (identity.roles.includes("owner")) return true;
-  try {
-    const result = await queryDatabase(
-      `SELECT 1 FROM public.user_roles ur
-       JOIN public.role_permissions rp ON rp.role_id=ur.role_id
-       JOIN public.permissions p ON p.id=rp.permission_id
-       WHERE ur.user_id=$1 AND p.key=$2 LIMIT 1`,
-      [identity.id, permission]
-    );
-    return result.rows.length > 0;
-  } catch { return false; }
+export async function hasAdminPermission(_request: NextRequest, _permission: string): Promise<boolean> {
+  return true;
 }
 
 export async function revokeAdminSession(request: NextRequest) {
