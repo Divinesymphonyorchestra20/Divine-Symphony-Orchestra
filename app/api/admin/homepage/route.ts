@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyAdminSession } from "../../../../lib/admin-auth";
+import { hasAdminPermission } from "../../../../lib/admin-auth";
 import { readHomepageStore, writeHomepageStore, type HomepageStore } from "../../../../lib/homepage-cms";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
-  if (!verifyAdminSession(request)) return NextResponse.json({ error: "Sign in to manage the homepage." }, { status: 401 });
+  if (!(await hasAdminPermission(request, "content.read_drafts"))) return NextResponse.json({ error: "You do not have permission to edit the homepage." }, { status: 403 });
   return NextResponse.json(await readHomepageStore(), { headers: { "Cache-Control": "no-store" } });
 }
 
 export async function PUT(request: NextRequest) {
-  if (!verifyAdminSession(request)) return NextResponse.json({ error: "Sign in to manage the homepage." }, { status: 401 });
+  if (!(await hasAdminPermission(request, "content.publish"))) return NextResponse.json({ error: "You do not have permission to publish homepage changes." }, { status: 403 });
   const body = await request.json().catch(() => null) as { action?: string; content?: HomepageStore["draft"] } | null;
   if (!body || !body.content || body.content.version !== 1 || !Array.isArray(body.content.sections) || !Array.isArray(body.content.links) || !body.content.hero || !body.content.feature) {
     return NextResponse.json({ error: "The submitted homepage content is not valid." }, { status: 400 });
