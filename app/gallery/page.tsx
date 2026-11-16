@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import SectionPage, { type SectionPageProps } from "../../components/section-page";
 import HistoryMedia from "../../components/history-media";
+import {readPublishedSiteContent} from "../../lib/site-content-cms";
+export const dynamic="force-dynamic";
 
 export const metadata: Metadata = {
   title: "Gallery | Divine Symphony Orchestra",
@@ -39,6 +41,7 @@ const pageContent: SectionPageProps = {
 };
 
 export default async function Page() {
+  const albums=(await readPublishedSiteContent()).albums.filter(album=>album.status==="published").sort((a,b)=>a.sortOrder-b.sortOrder);
   return (
     <>
       <SectionPage {...pageContent} />
@@ -49,6 +52,7 @@ export default async function Page() {
           <p className="concert-highlights-theme">Celebrating Years of Musical Excellence</p>
           <p>Divine Symphony Is God's Presence.</p>
         </div>
+        {albums.length>0&&<div className="dso-managed-list">{albums.map(album=><article key={album.id}>{album.coverImage&&<img src={album.coverImage} alt={album.coverAlt||album.title}/>}<div><h2>{album.title}</h2><p>{album.description}</p></div></article>)}</div>}
         <HistoryMedia
           page="gallery"
           galleryTitle="Concert Highlights"
