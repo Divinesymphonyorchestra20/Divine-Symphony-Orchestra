@@ -143,3 +143,7 @@ The Owner can then open /admin/activate, enter the setup token, choose an approv
 - Verify database-backed session creation, expiry and revocation end-to-end.
 - Remove the legacy shared-password fallback only after the named Owner account has signed in successfully.
 - Do not migrate Blob CMS records until these checks pass.
+
+### Deployment verification — 16 November 2026
+
+The named-account authentication foundation was deployed to Vercel successfully from main at commit f1cd0970bfcfce5f69349ab59cd82687142bb460. The Next.js production build completed, TypeScript validation passed, and 16 static pages were generated. HTTP 200 was confirmed for the public homepage, /admin and /admin/activate. This confirms deployment and page availability only; Owner activation, database connectivity from the production runtime and authenticated API workflows have not yet been tested. The production project is still not connected to the development database.
