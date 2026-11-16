@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     console.error("DSO owner activation preflight failed", {
       code: dbError?.code || "unknown",
       name: dbError?.name || "Error",
-      message: String(dbError?.message || "No error message").replace(/(?:postgres(?:ql)?:\\/\\/)[^\\s]+/gi, "[connection-redacted]").slice(0, 180),
+      message: String(dbError?.message || "No error message").slice(0, 180),
       causeCode: dbError?.cause?.code || "none",
       causeMessage: String(dbError?.cause?.message || "").slice(0, 120),
     });
