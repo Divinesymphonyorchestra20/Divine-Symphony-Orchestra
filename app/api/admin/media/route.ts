@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { randomUUID } from "node:crypto";
-import { verifyAdminSession } from "../../../../lib/admin-auth";
+import { hasAdminPermission } from "../../../../lib/admin-auth";
 
 export const runtime = "nodejs";
 
 const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
 
 export async function POST(request: NextRequest) {
-  if (!verifyAdminSession(request)) return NextResponse.json({ error: "Sign in before uploading media." }, { status: 401 });
+  if (!(await hasAdminPermission(request, "media.upload")) ) return NextResponse.json({ error: "Sign in before uploading media." }, { status: 401 });
   if (!process.env.BLOB_READ_WRITE_TOKEN) return NextResponse.json({ error: "DSO private media storage is not connected." }, { status: 503 });
   const form = await request.formData();
   const file = form.get("file");
