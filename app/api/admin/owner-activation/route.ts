@@ -32,7 +32,7 @@ export async function POST(request:NextRequest){
   return response;
  }catch(error){
   const dbError=error as {code?:string;name?:string;syscall?:string;message?:string;cause?:{code?:string;message?:string}};
-  console.error("DSO owner activation failed",{stage,code:dbError?.code||"unknown",name:dbError?.name||"Error",syscall:dbError?.syscall||null,message:String(dbError?.message||"No error message").replace(/(?:postgres(?:ql)?:\\/\\/)[^\\s]+/gi,"[connection-redacted]").slice(0,180),causeCode:dbError?.cause?.code||"none",causeMessage:String(dbError?.cause?.message||"").slice(0,120)});
+  console.error("DSO owner activation failed",{stage,code:dbError?.code||"unknown",name:dbError?.name||"Error",syscall:dbError?.syscall||null,message:String(dbError?.message||"No error message").slice(0,180),causeCode:dbError?.cause?.code||"none",causeMessage:String(dbError?.cause?.message||"").slice(0,120)});
   return NextResponse.json({error:"Owner activation could not complete securely. The administrator has been notified."},{status:503});
  }
 }
