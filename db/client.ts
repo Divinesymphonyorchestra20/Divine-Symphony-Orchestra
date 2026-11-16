@@ -24,3 +24,16 @@ export function getDatabase() {
 
   return drizzle(pool, { schema });
 }
+
+export async function queryDatabase<T extends import("pg").QueryResultRow = import("pg").QueryResultRow>(text: string, values: unknown[] = []) {
+  const connectionString = process.env.DATABASE_URL ?? process.env.POSTGRES_URL;
+  if (!connectionString) throw new Error("The DSO database is not configured.");
+  pool ??= new Pool({
+    connectionString,
+    max: 1,
+    idleTimeoutMillis: 20_000,
+    connectionTimeoutMillis: 10_000,
+    ssl: { rejectUnauthorized: true },
+  });
+  return pool.query<T>(text, values);
+}
