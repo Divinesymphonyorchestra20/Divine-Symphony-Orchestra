@@ -66,10 +66,23 @@ export async function PUT(request: NextRequest) {
   if (!(await hasAdminPermission(request, permission))) {
     return NextResponse.json({ error: "You do not have permission to make this media change." }, { status: 403 });
   }
+  if (body.status === "published" && !body.altText.trim()) {
+    return NextResponse.json({ error: "Add alternative text before publishing this image, or mark it as decorative in its page content." }, { status: 400 });
+  }
   if (!isDatabaseContentStoreEnabled()) {
     return NextResponse.json({ error: "The shared media library is available on the development Preview only." }, { status: 503 });
   }
   try {
+    if (body.status === "archived") {
+      const usage = await queryDatabase<{ total: number }>(
+        `SELECT COUNT(*)::int AS total FROM public.media_usage
+         WHERE media_asset_id = $1 AND (placement = 'published' OR placement LIKE 'published:%')`,
+        [body.id],
+      );
+      if ((usage.rows[0]?.total ?? 0) > 0) {
+        return NextResponse.json({ error: "This file is still used by published pages. Replace or remove it from those pages before archiving it." }, { status: 409 });
+      }
+    }
     const result = await queryDatabase<{ id: string }>(
       `UPDATE public.media_assets
        SET alt_text = $2, caption = $3, credit = $4, status = $5, updated_at = now()
