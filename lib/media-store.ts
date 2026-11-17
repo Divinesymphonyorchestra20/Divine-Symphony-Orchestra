@@ -66,9 +66,9 @@ export async function syncContentMediaUsage(contentType: string, slug: string, r
         (blob_path, original_filename, content_type, byte_size, alt_text, caption, credit, status)
        VALUES ($1, $2, $3, 0, $4, $5, $6, $7)
        ON CONFLICT (blob_path) DO UPDATE
-       SET alt_text = CASE WHEN EXCLUDED.alt_text <> '' THEN EXCLUDED.alt_text ELSE media_assets.alt_text END,
-           caption = CASE WHEN EXCLUDED.caption <> '' THEN EXCLUDED.caption ELSE media_assets.caption END,
-           credit = CASE WHEN EXCLUDED.credit <> '' THEN EXCLUDED.credit ELSE media_assets.credit END,
+       SET alt_text = CASE WHEN media_assets.alt_text = '' AND EXCLUDED.alt_text <> '' THEN EXCLUDED.alt_text ELSE media_assets.alt_text END,
+           caption = CASE WHEN media_assets.caption = '' AND EXCLUDED.caption <> '' THEN EXCLUDED.caption ELSE media_assets.caption END,
+           credit = CASE WHEN media_assets.credit = '' AND EXCLUDED.credit <> '' THEN EXCLUDED.credit ELSE media_assets.credit END,
            status = CASE
              WHEN media_assets.status = 'archived' THEN 'archived'
              WHEN EXCLUDED.status = 'published' THEN 'published'
