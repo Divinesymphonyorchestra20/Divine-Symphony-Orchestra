@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 export default async function Page() {
   const page = await readInstitutionalPage("ministry");
-  return <InstitutionalPageView page={page} active="History"/>;
+  return <InstitutionalPageView page={page} active="Ministry & Impact"/>;
 }
