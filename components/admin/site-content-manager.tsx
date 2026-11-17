@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import type { ChangeEvent } from "react";
 import type { ContactContent, GalleryAlbum, ManagedEvent, ManagedNews, SiteContent } from "../../lib/site-content-cms";
 
 const initial: SiteContent = {
