@@ -67,7 +67,7 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: "You do not have permission to make this media change." }, { status: 403 });
   }
   if (body.status === "published" && !body.altText.trim()) {
-    return NextResponse.json({ error: "Add alternative text before publishing this image, or mark it as decorative in its page content." }, { status: 400 });
+    return NextResponse.json({ error: "Add alternative text before publishing this image." }, { status: 400 });
   }
   if (!isDatabaseContentStoreEnabled()) {
     return NextResponse.json({ error: "The shared media library is available on the development Preview only." }, { status: 503 });
