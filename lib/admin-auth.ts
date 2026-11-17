@@ -32,7 +32,7 @@ const safeEqual = (left: string, right: string) => {
 export async function hashAdminPassword(password: string) {
   const salt = randomBytes(16);
   const derived = await scrypt(password, salt, 64) as Buffer;
-  return \`scrypt:\${salt.toString("base64url")}:\${derived.toString("base64url")}\`;
+  return "scrypt:" + salt.toString("base64url") + ":" + derived.toString("base64url");
 }
 export async function verifyAdminPassword(password: string, encoded: string) {
   const [scheme, saltText, hashText] = encoded.split(":");
@@ -56,15 +56,14 @@ export async function createAdminSession(userId: string) {
 
 async function readDatabaseIdentity(token: string): Promise<AdminIdentity | null> {
   const result = await queryDatabase<{ id: string; email: string; full_name: string; role_key: string | null }>(
-    \`SELECT u.id, u.email, u.full_name, r.key AS role_key
-       FROM public.admin_sessions s
-       JOIN public.admin_users u ON u.id = s.user_id
-       LEFT JOIN public.user_roles ur ON ur.user_id = u.id
-       LEFT JOIN public.roles r ON r.id = ur.role_id
-      WHERE s.token_hash = $1
-        AND s.expires_at > now()
-        AND s.revoked_at IS NULL
-        AND u.status = 'active'\`,
+    [
+      "SELECT u.id, u.email, u.full_name, r.key AS role_key",
+      "FROM public.admin_sessions s",
+      "JOIN public.admin_users u ON u.id = s.user_id",
+      "LEFT JOIN public.user_roles ur ON ur.user_id = u.id",
+      "LEFT JOIN public.roles r ON r.id = ur.role_id",
+      "WHERE s.token_hash = $1 AND s.expires_at > now() AND s.revoked_at IS NULL AND u.status = 'active'"
+    ].join(" "),
     [hashToken(token)]
   );
   const row = result.rows[0];
@@ -93,20 +92,18 @@ export async function hasAdminPermission(request: NextRequest, permission: strin
   if (!process.env.DATABASE_URL && !process.env.POSTGRES_URL) return false;
   try {
     const result = await queryDatabase<{ allowed: boolean }>(
-      \`SELECT EXISTS (
-         SELECT 1
-           FROM public.admin_sessions s
-           JOIN public.admin_users u ON u.id = s.user_id
-           JOIN public.user_roles ur ON ur.user_id = u.id
-           JOIN public.roles r ON r.id = ur.role_id
-           JOIN public.role_permissions rp ON rp.role_id = r.id
-           JOIN public.permissions p ON p.id = rp.permission_id
-          WHERE s.token_hash = $1
-            AND s.expires_at > now()
-            AND s.revoked_at IS NULL
-            AND u.status = 'active'
-            AND (r.key = 'owner' OR p.key = $2)
-       ) AS allowed\`,
+      [
+        "SELECT EXISTS (",
+        "SELECT 1 FROM public.admin_sessions s",
+        "JOIN public.admin_users u ON u.id = s.user_id",
+        "JOIN public.user_roles ur ON ur.user_id = u.id",
+        "JOIN public.roles r ON r.id = ur.role_id",
+        "JOIN public.role_permissions rp ON rp.role_id = r.id",
+        "JOIN public.permissions p ON p.id = rp.permission_id",
+        "WHERE s.token_hash = $1 AND s.expires_at > now() AND s.revoked_at IS NULL",
+        "AND u.status = 'active' AND (r.key = 'owner' OR p.key = $2)",
+        ") AS allowed"
+      ].join(" "),
       [hashToken(token), permission]
     );
     return result.rows[0]?.allowed === true;
