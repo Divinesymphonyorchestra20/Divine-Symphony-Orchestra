@@ -20,5 +20,5 @@ export async function PUT(request:NextRequest){
   if(p.items.some(item=>!item||typeof item.title!=="string"||item.title.length>180||typeof item.description!=="string"||item.description.length>8000||!safeDestination(item.link)||!safeDestination(item.mediaUrl)||!safeDestination(item.image,true)))return NextResponse.json({error:"Featured records need valid titles, descriptions and safe media/link destinations."},{status:400});
  }
  const current=await readInstitutionalStore();const next:InstitutionalStore={...current,draft:body.content,published:body.action==="publish"?body.content:current.published};
- try{await writeInstitutionalStore(next);return NextResponse.json({ok:true,updatedAt:new Date().toISOString()})}catch(e){return NextResponse.json({error:e instanceof Error?e.message:"Could not save content."},{status:500})}
+ try{await writeInstitutionalStore(next,{publish:body.action==="publish"});return NextResponse.json({ok:true,updatedAt:new Date().toISOString()})}catch(e){return NextResponse.json({error:e instanceof Error?e.message:"Could not save content."},{status:500})}
 }
