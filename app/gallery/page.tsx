@@ -22,7 +22,9 @@ const pageContent: SectionPageProps = {
     {
       icon: "✦",
       title: "Concert Highlights",
-      description: "April 2026 · DSO 19th Anniversary. Celebrating Years of Musical Excellence."
+      description: "April 2026 · DSO 19th Anniversary. Celebrating Years of Musical Excellence.",
+      href: "/gallery#concert-highlights-title",
+      linkLabel: "View concert highlights"
     },
     {
       icon: "♟",
