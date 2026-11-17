@@ -48,6 +48,13 @@ DSO acknowledges with gratitude the vision, encouragement and institutional patr
 5. The `/history` page continues to display its existing historical section.
 6. DSO reviews the preview and confirms that the biography is restored correctly.
 
+## Preview verification
+
+- The deployed `/our-heritage` page returned HTTP 200 and visibly rendered the section **“Dr. Daniel Kolawole Olukoya and the Orchestra’s development”**.
+- The D.K.O. years, Growth in instrumentation, and Concerts and international participation sections remained present. The visible biography heading appeared once.
+- The separate `/history` page continued to contain its existing Dr. Olukoya section.
+- DSO review and confirmation are still required before any further implementation batch or release.
+
 ## Release control
 
 The development branch and preview remain separate from production. Do not merge the pull request, promote a deployment, or change production content until DSO has reviewed the preview and explicitly approved release.
