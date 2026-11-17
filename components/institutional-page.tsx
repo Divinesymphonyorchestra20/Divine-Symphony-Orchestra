@@ -6,8 +6,8 @@ import HistoryMedia from "./history-media";
 
 function InstitutionalItemCard({ item, index }: { item: InstitutionalPage["items"][number]; index: number }) {
  const content = <>{item.image&&<img className="institutional-item-image" src={item.image} alt={item.imageAlt||item.title}/ >}{item.year&&<p className="eyebrow dark">{item.year}</p>}<h3>{item.title}</h3>{item.subtitle&&<p>{item.subtitle}</p>}<p>{item.description}</p>{item.credit&&<small className="institutional-credit">{item.credit}</small>}</>;
- if(item.link&&!item.mediaUrl) return <Link className="founder-card founder-card-link" href={item.link} key={item.title+index}>{content}<span className="history-inline-link">Explore <span aria-hidden="true">→</span></span></Link>;
- return <article className="founder-card" key={item.title+index}>{content}{item.link&&<a className="history-inline-link" href={item.link}>Explore <span aria-hidden="true">→</span></a>}{item.mediaUrl&&<a className="history-inline-link" href={item.mediaUrl} target="_blank" rel="noreferrer">View media ↗</a>}</article>;
+ if(item.link&&!item.mediaUrl) return <Link className="founder-card founder-card-link" href={item.link}>{content}<span className="history-inline-link">Explore <span aria-hidden="true">→</span></span></Link>;
+ return <article className="founder-card">{content}{item.link&&<a className="history-inline-link" href={item.link}>Explore <span aria-hidden="true">→</span></a>}{item.mediaUrl&&<a className="history-inline-link" href={item.mediaUrl} target="_blank" rel="noreferrer">View media ↗</a>}</article>;
 }
 
 export default function InstitutionalPageView({page,active}:{page:InstitutionalPage;active:string}){
