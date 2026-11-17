@@ -29,7 +29,7 @@ Tasks 1–5 already provide the public page modules and their first administrato
 
 ## Preview verification still required
 
-1. Set `DSO_CMS_BACKEND=postgres` for this development branch Preview only.
+1. Completed: set `DSO_CMS_BACKEND=postgres` as a branch-specific Preview environment variable for `feat/remove-empty-media-and-clickable-cards`; it is not set for Production.
 2. Deploy the branch and confirm database TLS connection from the Vercel runtime.
 3. Visit the homepage, History, Our Heritage, Events, News, Gallery and Contact so each legacy content document is imported.
 4. Confirm exactly four expected CMS content records are present in PostgreSQL, with matching published content and revision history.
