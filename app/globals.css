@@ -336,3 +336,23 @@ body{color:var(--dso-ink);-webkit-font-smoothing:antialiased}
 .dso-media-empty{padding:32px;border:1px dashed #d8cbdc;border-radius:12px;color:#746878}
 .dso-media-library footer{margin-top:36px;font-size:10px;letter-spacing:.12em;color:#877a8b}
 @media(max-width:640px){.dso-media-library{padding:24px 16px 48px}.dso-media-library-header,.dso-media-library-tools{align-items:flex-start;flex-direction:column}.dso-media-upload{width:100%;justify-content:center}}
+
+
+/* Structured content editors shared by the institutional and site-content managers */
+.dso-structured-list{display:flex;flex-direction:column;gap:16px;margin:14px 0 24px}
+.dso-structured-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:18px 0 10px}
+.dso-structured-heading strong{color:#3c2543}
+.dso-structured-card{border:1px solid #e5dce8;border-radius:12px;background:#fff;padding:16px;margin:0 0 14px;display:flex;flex-direction:column;gap:12px}
+.dso-structured-card-top{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#51395a}
+.dso-structured-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.dso-add-button,.dso-remove-button{border:1px solid #d9c9df;border-radius:7px;padding:8px 12px;background:#f8f3fa;color:#4b0758;font-size:12px;font-weight:700;cursor:pointer}
+.dso-remove-button{background:#fff7f7;border-color:#ecd5d5;color:#8a3636}
+.dso-structured-card .dso-field input,.dso-structured-card .dso-field textarea,.dso-structured-card .dso-field select,.dso-site-content-admin .dso-field input,.dso-site-content-admin .dso-field textarea,.dso-site-content-admin .dso-field select{width:100%;min-width:0;border:1px solid #ddd2e1;border-radius:7px;padding:10px;background:#fff;color:#2d1b33;font:inherit;font-weight:400}
+.dso-structured-card .dso-field,.dso-site-content-admin .dso-field{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:700;color:#51395a}
+.dso-structured-card .dso-field small,.dso-site-content-admin .dso-field small{font-size:11px;font-weight:400;color:#817486}
+.dso-inline-check{display:flex;align-items:center;gap:8px;font-size:13px;color:#4c3a50}
+.dso-site-content-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:16px 0}
+.dso-site-content-toolbar button{border:0;border-radius:7px;padding:10px 14px;background:#4b0758;color:white;font-weight:700;cursor:pointer}
+.dso-site-content-toolbar a{color:#5a1765;font-size:13px;font-weight:700}
+.dso-social-row{align-items:end}
+@media(max-width:700px){.dso-structured-grid{grid-template-columns:1fr}.dso-structured-heading,.dso-site-content-toolbar{align-items:flex-start;flex-direction:column}.dso-site-content-toolbar button,.dso-site-content-toolbar a{width:100%}}
