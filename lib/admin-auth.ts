@@ -10,8 +10,19 @@ export type AdminIdentity = { id: string; email: string; fullName: string; roles
 
 export function adminCookieName() { return COOKIE_NAME; }
 function signLegacy(value: string) { return createHmac("sha256", process.env.DSO_SESSION_SECRET || "").update(value).digest("base64url"); }
-export function createLegacyAdminSession() { const payload=Buffer.from(JSON.stringify({exp:Math.floor(Date.now()/1000)+adminSessionSeconds})).toString("base64url"); return payload+"."+signLegacy(payload); }
-function verifyLegacyAdminSession(token:string) { if(!process.env.DSO_SESSION_SECRET)return false; const [payload,signature]=token.split("."); if(!payload||!signature||!safeEqual(signature,signLegacy(payload)))return false; try { const data=JSON.parse(Buffer.from(payload,"base64url").toString("utf8")) as {exp:number}; return Number.isFinite(data.exp)&&data.exp>Math.floor(Date.now()/1000); } catch{return false;} }
+export function createLegacyAdminSession() {
+  const payload = Buffer.from(JSON.stringify({ exp: Math.floor(Date.now() / 1000) + adminSessionSeconds })).toString("base64url");
+  return payload + "." + signLegacy(payload);
+}
+function verifyLegacyAdminSession(token: string) {
+  if (!process.env.DSO_SESSION_SECRET || !process.env.DSO_ADMIN_PASSWORD) return false;
+  const [payload, signature] = token.split(".");
+  if (!payload || !signature || !safeEqual(signature, signLegacy(payload))) return false;
+  try {
+    const data = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as { exp: number };
+    return Number.isFinite(data.exp) && data.exp > Math.floor(Date.now() / 1000);
+  } catch { return false; }
+}
 const hashToken = (token: string) => createHash("sha256").update(token).digest("hex");
 const safeEqual = (left: string, right: string) => {
   const a = Buffer.from(left); const b = Buffer.from(right);
@@ -21,7 +32,7 @@ const safeEqual = (left: string, right: string) => {
 export async function hashAdminPassword(password: string) {
   const salt = randomBytes(16);
   const derived = await scrypt(password, salt, 64) as Buffer;
-  return `scrypt:${salt.toString("base64url")}:${derived.toString("base64url")}`;
+  return \`scrypt:\${salt.toString("base64url")}:\${derived.toString("base64url")}\`;
 }
 export async function verifyAdminPassword(password: string, encoded: string) {
   const [scheme, saltText, hashText] = encoded.split(":");
@@ -43,30 +54,68 @@ export async function createAdminSession(userId: string) {
   return token;
 }
 
-// TEMPORARY DEVELOPMENT MODE: administrator access is intentionally open.
-// Restore the database-backed session and role checks before public launch.
-const temporaryOpenAdmin: AdminIdentity = {
-  id: "temporary-open-admin",
-  email: "open-admin@dso.local",
-  fullName: "Temporary DSO Administrator",
-  roles: ["owner"],
-};
-
-export async function getAdminSession(_request: NextRequest): Promise<AdminIdentity> {
-  return temporaryOpenAdmin;
+async function readDatabaseIdentity(token: string): Promise<AdminIdentity | null> {
+  const result = await queryDatabase<{ id: string; email: string; full_name: string; role_key: string | null }>(
+    \`SELECT u.id, u.email, u.full_name, r.key AS role_key
+       FROM public.admin_sessions s
+       JOIN public.admin_users u ON u.id = s.user_id
+       LEFT JOIN public.user_roles ur ON ur.user_id = u.id
+       LEFT JOIN public.roles r ON r.id = ur.role_id
+      WHERE s.token_hash = $1
+        AND s.expires_at > now()
+        AND s.revoked_at IS NULL
+        AND u.status = 'active'\`,
+    [hashToken(token)]
+  );
+  const row = result.rows[0];
+  if (!row) return null;
+  return { id: row.id, email: row.email, fullName: row.full_name, roles: result.rows.map(item => item.role_key).filter((role): role is string => Boolean(role)) };
 }
 
-export async function verifyAdminSession(_request: NextRequest): Promise<boolean> {
-  return true;
+export async function getAdminSession(request: NextRequest): Promise<AdminIdentity | null> {
+  const token = request.cookies.get(COOKIE_NAME)?.value;
+  if (!token) return null;
+  if (verifyLegacyAdminSession(token)) return {
+    id: "legacy-admin", email: "configured-admin@dso.local", fullName: "DSO Administrator", roles: ["owner"]
+  };
+  if (!process.env.DATABASE_URL && !process.env.POSTGRES_URL) return null;
+  try { return await readDatabaseIdentity(token); } catch { return null; }
 }
 
-export async function hasAdminPermission(_request: NextRequest, _permission: string): Promise<boolean> {
-  return true;
+export async function verifyAdminSession(request: NextRequest): Promise<boolean> {
+  return Boolean(await getAdminSession(request));
+}
+
+export async function hasAdminPermission(request: NextRequest, permission: string): Promise<boolean> {
+  const token = request.cookies.get(COOKIE_NAME)?.value;
+  if (!token) return false;
+  if (verifyLegacyAdminSession(token)) return true;
+  if (!process.env.DATABASE_URL && !process.env.POSTGRES_URL) return false;
+  try {
+    const result = await queryDatabase<{ allowed: boolean }>(
+      \`SELECT EXISTS (
+         SELECT 1
+           FROM public.admin_sessions s
+           JOIN public.admin_users u ON u.id = s.user_id
+           JOIN public.user_roles ur ON ur.user_id = u.id
+           JOIN public.roles r ON r.id = ur.role_id
+           JOIN public.role_permissions rp ON rp.role_id = r.id
+           JOIN public.permissions p ON p.id = rp.permission_id
+          WHERE s.token_hash = $1
+            AND s.expires_at > now()
+            AND s.revoked_at IS NULL
+            AND u.status = 'active'
+            AND (r.key = 'owner' OR p.key = $2)
+       ) AS allowed\`,
+      [hashToken(token), permission]
+    );
+    return result.rows[0]?.allowed === true;
+  } catch { return false; }
 }
 
 export async function revokeAdminSession(request: NextRequest) {
   const token = request.cookies.get(COOKIE_NAME)?.value;
-  if (!token) return;
+  if (!token || verifyLegacyAdminSession(token) || (!process.env.DATABASE_URL && !process.env.POSTGRES_URL)) return;
   await queryDatabase("UPDATE public.admin_sessions SET revoked_at=now() WHERE token_hash=$1 AND revoked_at IS NULL", [hashToken(token)]);
 }
 
