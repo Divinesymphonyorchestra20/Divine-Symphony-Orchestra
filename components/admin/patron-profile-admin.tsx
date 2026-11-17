@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import type { PatronPage, PatronSection, PatronStore } from "../../../lib/patron-cms";
+import type { PatronPage, PatronSection, PatronStore } from "../../lib/patron-cms";
 
 function imageUrl(pathname: string) {
   return "/api/media/" + pathname.split("/").map(encodeURIComponent).join("/");
