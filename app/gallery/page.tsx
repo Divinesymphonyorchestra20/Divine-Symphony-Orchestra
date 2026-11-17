@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import SectionPage, { type SectionPageProps } from "../../components/section-page";
 import HistoryMedia from "../../components/history-media";
 import {readPublishedSiteContent} from "../../lib/site-content-cms";
@@ -54,7 +55,7 @@ export default async function Page() {
           <p className="concert-highlights-theme">Celebrating Years of Musical Excellence</p>
           <p>Divine Symphony Is God's Presence.</p>
         </div>
-        {albums.length>0&&<div className="dso-managed-list">{albums.map(album=><article key={album.id}>{album.coverImage&&<img src={album.coverImage} alt={album.coverAlt||album.title}/>}<div><h2>{album.title}</h2><p>{album.description}</p></div></article>)}</div>}
+        {albums.length>0&&<div className="dso-managed-list">{albums.map(album=>{const card=<article key={album.id}>{album.coverImage&&<img src={album.coverImage} alt={album.coverAlt||album.title}/>}<div><h2>{album.title}</h2><p>{album.description}</p><span className="dso-managed-card-action">View album <span aria-hidden="true">→</span></span></div></article>;return album.collection?<Link className="dso-managed-card-link" href={"/gallery/"+album.collection.toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")} key={album.id}>{card}</Link>:card;})}</div>}
         <HistoryMedia
           page="gallery"
           galleryTitle="Concert Highlights"
