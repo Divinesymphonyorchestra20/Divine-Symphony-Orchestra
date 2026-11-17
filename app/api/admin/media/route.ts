@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { randomUUID } from "node:crypto";
 import { hasAdminPermission } from "../../../../lib/admin-auth";
+import { isDatabaseContentStoreEnabled } from "../../../../lib/content-store";
+import { queryDatabase } from "../../../../db/client";
 
 export const runtime = "nodejs";
 
@@ -23,7 +25,26 @@ export async function POST(request: NextRequest) {
       contentType: file.type,
       cacheControlMaxAge: 31536000
     });
-    return NextResponse.json({ id: randomUUID(), pathname: blob.pathname, filename: file.name, contentType: file.type, size: file.size });
+    let id = randomUUID();
+    if (isDatabaseContentStoreEnabled()) {
+      const asset = await queryDatabase<{ id: string }>(
+        `INSERT INTO public.media_assets
+          (blob_path, original_filename, content_type, byte_size, alt_text, caption, credit, status)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, 'draft')
+         ON CONFLICT (blob_path) DO UPDATE
+         SET original_filename = EXCLUDED.original_filename,
+             content_type = EXCLUDED.content_type,
+             byte_size = EXCLUDED.byte_size,
+             updated_at = now()
+         RETURNING id::text`,
+        [blob.pathname, file.name, file.type, file.size,
+          String(form.get("altText") || "").slice(0, 1000),
+          String(form.get("caption") || "").slice(0, 1000),
+          String(form.get("credit") || "").slice(0, 500)],
+      );
+      id = asset.rows[0].id;
+    }
+    return NextResponse.json({ id, pathname: blob.pathname, filename: file.name, contentType: file.type, size: file.size });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Image upload failed." }, { status: 500 });
   }
