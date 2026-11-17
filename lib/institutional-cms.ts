@@ -1,4 +1,5 @@
 import { get, put } from "@vercel/blob";
+import { isDatabaseContentStoreEnabled, readContentStoreWithLegacyImport, writeDatabaseContentStore } from "./content-store";
 
 export type InstitutionalKey = "about" | "heritage" | "story" | "legacy" | "orchestra" | "members" | "music";
 export type InstitutionalSection = { heading: string; body: string };
@@ -34,12 +35,41 @@ function ensureHeritageBiography(pages:Record<InstitutionalKey,InstitutionalPage
  const sections=[...page.sections.slice(0,insertAt),biography,...page.sections.slice(insertAt)];
  return {...pages,heritage:{...page,sections}};
 }
-export async function readInstitutionalStore():Promise<InstitutionalStore>{
- if(!process.env.BLOB_READ_WRITE_TOKEN)return fallback();
- try{const r=await get(PATH,{access:"private"});if(!r||r.statusCode!==200)return fallback();const data=JSON.parse(await new Response(r.stream).text()) as InstitutionalStore;if(data.version!==1||!data.draft||!data.published)return fallback();return {...data,draft:ensureHeritageBiography(data.draft),published:ensureHeritageBiography(data.published)};}catch{return fallback()}
+async function readLegacyInstitutionalStore(): Promise<InstitutionalStore | null> {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) return null;
+  const result = await get(PATH, { access: "private" });
+  if (!result || result.statusCode !== 200) return null;
+  const data = JSON.parse(await new Response(result.stream).text()) as InstitutionalStore;
+  if (data.version !== 1 || !data.draft || !data.published) throw new Error("Invalid institutional content store.");
+  return { ...data, draft: ensureHeritageBiography(data.draft), published: ensureHeritageBiography(data.published) };
 }
-export async function writeInstitutionalStore(store:InstitutionalStore):Promise<void>{
- if(!process.env.BLOB_READ_WRITE_TOKEN)throw new Error("Private DSO content storage is not configured.");
- await put(PATH,JSON.stringify({...store,version:1,updatedAt:new Date().toISOString()}),{access:"private",addRandomSuffix:false,allowOverwrite:true,contentType:"application/json",cacheControlMaxAge:0});
+
+export async function readInstitutionalStore(): Promise<InstitutionalStore> {
+  const store = await readContentStoreWithLegacyImport({
+    contentType: "institutional", slug: "institutional", title: "DSO Institutional Pages",
+    readLegacy: readLegacyInstitutionalStore, fallback,
+  });
+  return { ...store, draft: ensureHeritageBiography(store.draft), published: ensureHeritageBiography(store.published) };
 }
+
+export async function writeInstitutionalStore(store: InstitutionalStore, options: { publish?: boolean } = {}): Promise<void> {
+  const safe = {
+    ...store, version: 1 as const, updatedAt: new Date().toISOString(),
+    draft: ensureHeritageBiography(store.draft), published: ensureHeritageBiography(store.published),
+  };
+  if (isDatabaseContentStoreEnabled()) {
+    await writeDatabaseContentStore({
+      contentType: "institutional", slug: "institutional", title: "DSO Institutional Pages",
+      payload: safe, publish: options.publish ?? false,
+      changeNote: options.publish ? "Published institutional pages" : "Saved institutional page draft",
+    });
+    return;
+  }
+  if (!process.env.BLOB_READ_WRITE_TOKEN) throw new Error("Private DSO content storage is not configured.");
+  await put(PATH, JSON.stringify(safe), {
+    access: "private", addRandomSuffix: false, allowOverwrite: true,
+    contentType: "application/json", cacheControlMaxAge: 0,
+  });
+}
+
 export async function readInstitutionalPage(key:InstitutionalKey):Promise<InstitutionalPage>{return (await readInstitutionalStore()).published[key]||defaultInstitutionalPages[key]}
