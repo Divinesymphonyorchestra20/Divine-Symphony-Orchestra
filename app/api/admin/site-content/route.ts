@@ -19,8 +19,8 @@ function valid(value: unknown): value is SiteContent {
       !data.contact || typeof data.contact !== "object" ||
       data.events.length > 300 || data.news.length > 500 || data.albums.length > 200) return false;
 
-  const eventSlugs = data.events.filter(item => item.status === "published").map(item => item.slug);
-  const newsSlugs = data.news.filter(item => item.status === "published").map(item => item.slug);
+  const eventSlugs = data.events.filter(item => item && item.status === "published").map(item => item.slug);
+  const newsSlugs = data.news.filter(item => item && item.status === "published").map(item => item.slug);
   if (new Set(eventSlugs).size !== eventSlugs.length || new Set(newsSlugs).size !== newsSlugs.length) return false;
 
   const eventsValid = data.events.every(event =>
@@ -39,7 +39,7 @@ function valid(value: unknown): value is SiteContent {
   const newsValid = data.news.every(item =>
     item && typeof item.title === "string" && item.title.trim().length > 0 && item.title.length <= 180 &&
     typeof item.slug === "string" && item.slug.length <= 180 &&
-    validStatus(item.status) && (item.status !== "published" || (validSlug(item.slug) && validDate(item.publishedAt) && item.body.trim().length > 0)) &&
+    validStatus(item.status) && (item.status !== "published" || (validSlug(item.slug) && validDate(item.publishedAt) && typeof item.body === "string" && item.body.trim().length > 0)) &&
     typeof item.publishedAt === "string" && (!item.publishedAt || validDate(item.publishedAt)) &&
     typeof item.summary === "string" && item.summary.length <= 1200 &&
     typeof item.body === "string" && item.body.length <= 50000 &&
@@ -60,7 +60,7 @@ function valid(value: unknown): value is SiteContent {
     String((contact as unknown as Record<string, unknown>)[key]).length <= 4000
   ) && (!contact.generalEmail || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.generalEmail)) &&
   Array.isArray(contact.socialLinks) && contact.socialLinks.length <= 12 &&
-  contact.socialLinks.every(link => typeof link.label === "string" && link.label.trim().length > 0 &&
+  contact.socialLinks.every(link => link && typeof link.label === "string" && link.label.trim().length > 0 &&
     link.label.length <= 100 && safeUrl(link.url) && Boolean(link.url));
   return eventsValid && newsValid && albumsValid && contactValid && JSON.stringify(data).length <= 500_000;
 }
