@@ -1,5 +1,6 @@
 import { get, put } from "@vercel/blob";
 import { isDatabaseContentStoreEnabled, readContentStoreWithLegacyImport, writeDatabaseContentStore } from "./content-store";
+import { mediaBlobPathFromUrl, syncContentMediaUsage } from "./media-store";
 
 export type HomeLink = { title: string; description: string; href: string; icon: string };
 export type HomeImage = { src: string; alt: string; position: string; caption: string; credit: string };
@@ -70,11 +71,31 @@ async function readLegacyHomepageStore(): Promise<HomepageStore | null> {
   return parsed;
 }
 
+function homepageMediaReferences(content: HomepageContent, state: "draft" | "published") {
+  const images = [
+    { image: content.hero.image, fieldKey: "homepage.hero" },
+    { image: content.feature.image, fieldKey: "homepage.feature" },
+    ...content.media.items.map((item, index) => ({ image: item.image, fieldKey: `homepage.media.${index}` })),
+  ];
+  return images.flatMap((item, index) => {
+    const blobPath = mediaBlobPathFromUrl(item.image.src);
+    return blobPath ? [{
+      blobPath, fieldKey: item.fieldKey, placement: state,
+      sortOrder: index, altText: item.image.alt, caption: item.image.caption, credit: item.image.credit, state,
+    }] : [];
+  });
+}
+
 export async function readHomepageStore(): Promise<HomepageStore> {
-  return readContentStoreWithLegacyImport({
+  const store = await readContentStoreWithLegacyImport({
     contentType: "homepage", slug: "homepage", title: "DSO Homepage",
     readLegacy: readLegacyHomepageStore, fallback: fallbackHomepageStore,
   });
+  await syncContentMediaUsage("homepage", "homepage", [
+    ...homepageMediaReferences(store.published, "published"),
+    ...homepageMediaReferences(store.draft, "draft"),
+  ]);
+  return store;
 }
 
 export async function writeHomepageStore(store: HomepageStore, options: { publish?: boolean } = {}): Promise<void> {
@@ -85,6 +106,10 @@ export async function writeHomepageStore(store: HomepageStore, options: { publis
       payload: safe, publish: options.publish ?? false,
       changeNote: options.publish ? "Published homepage content" : "Saved homepage draft",
     });
+    await syncContentMediaUsage("homepage", "homepage", [
+      ...homepageMediaReferences(safe.published, "published"),
+      ...homepageMediaReferences(safe.draft, "draft"),
+    ]);
     return;
   }
   if (!process.env.BLOB_READ_WRITE_TOKEN) throw new Error("Private DSO content storage is not configured.");
