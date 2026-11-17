@@ -13,7 +13,8 @@ export async function GET(request:NextRequest,context:{params:Promise<{pathname:
  const [history,home,institutional,site]=await Promise.all([readHistoryContent(),readHomepageStore(),readInstitutionalStore(),readSiteContent()]);
  const url="/api/media/"+key.split("/").map(encodeURIComponent).join("/");
  const published=history.media.some(x=>x.pathname===key&&x.published)||[home.published.hero.image.src,home.published.feature.image.src,...home.published.media.items.map(x=>x.image.src)].includes(url)||Object.values(institutional.published).some(page=>page.items.some(item=>item.image===url))||site.events.some(item=>item.status==="published"&&item.image===url)||site.news.some(item=>item.status==="published"&&item.image===url)||site.albums.some(item=>item.status==="published"&&item.coverImage===url);
- if(isDatabaseContentStoreEnabled()){const asset=await queryDatabase<{status:string}>("SELECT status FROM public.media_assets WHERE blob_path = $1 LIMIT 1",[key]);if(asset.rows[0]?.status==="archived")return new NextResponse("Not found",{status:404});}
- if(!published&&!(await verifyAdminSession(request)))return new NextResponse("Not found",{status:404});
+ const isAdmin=await verifyAdminSession(request);
+ if(isDatabaseContentStoreEnabled()){const asset=await queryDatabase<{status:string}>("SELECT status FROM public.media_assets WHERE blob_path = $1 LIMIT 1",[key]);if(asset.rows[0]?.status==="archived"&&!isAdmin)return new NextResponse("Not found",{status:404});}
+ if(!published&&!isAdmin)return new NextResponse("Not found",{status:404});
  try{const result=await get(key,{access:"private"});if(!result||result.statusCode!==200)return new NextResponse("Not found",{status:404});return new NextResponse(result.stream,{headers:{"Content-Type":result.blob.contentType||"application/octet-stream","Cache-Control":published?"public, max-age=3600, s-maxage=86400":"private, no-store","X-Content-Type-Options":"nosniff"}})}catch{return new NextResponse("Not found",{status:404})}
 }
