@@ -1,4 +1,5 @@
 import { get, put } from "@vercel/blob";
+import { isDatabaseContentStoreEnabled, readContentStoreWithLegacyImport, writeDatabaseContentStore } from "./content-store";
 
 export type PageKey = "history" | "founding-members" | "milestones" | "about" | "music" | "events" | "people" | "gallery" | "contact" | "our-heritage" | "our-story" | "our-legacy" | "orchestra" | "meet-the-members";
 export type Milestone = { id: string; year: string; title: string; kind: string; text: string; published: boolean; editorialNote?: string };
@@ -39,29 +40,35 @@ export const defaultHistoryContent: HistoryContent = {
   videos: []
 };
 
+async function readLegacyHistoryContent(): Promise<HistoryContent | null> {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) return null;
+  const result = await get(CMS_PATH, { access: "private" });
+  if (!result || result.statusCode !== 200) return null;
+  const parsed = JSON.parse(await new Response(result.stream).text()) as HistoryContent;
+  if (parsed.version !== 1) throw new Error("Invalid DSO history content version.");
+  return parsed;
+}
+
 export async function readHistoryContent(): Promise<HistoryContent> {
-  if (!process.env.BLOB_READ_WRITE_TOKEN) return defaultHistoryContent;
-  try {
-    const result = await get(CMS_PATH, { access: "private" });
-    if (!result || result.statusCode !== 200) return defaultHistoryContent;
-    const raw = await new Response(result.stream).text();
-    const parsed = JSON.parse(raw) as HistoryContent;
-    if (parsed.version !== 1) return defaultHistoryContent;
-    return parsed;
-  } catch {
-    return defaultHistoryContent;
-  }
+  return readContentStoreWithLegacyImport({
+    contentType: "history", slug: "history", title: "DSO History and Media",
+    readLegacy: readLegacyHistoryContent, fallback: () => defaultHistoryContent,
+  });
 }
 
 export async function writeHistoryContent(content: HistoryContent): Promise<void> {
-  if (!process.env.BLOB_READ_WRITE_TOKEN) throw new Error("Private DSO content storage is not configured.");
   const safe: HistoryContent = { ...content, version: 1, updatedAt: new Date().toISOString() };
+  if (isDatabaseContentStoreEnabled()) {
+    await writeDatabaseContentStore({
+      contentType: "history", slug: "history", title: "DSO History and Media",
+      payload: safe, publish: true, changeNote: "Saved History, founding-member and media records",
+    });
+    return;
+  }
+  if (!process.env.BLOB_READ_WRITE_TOKEN) throw new Error("Private DSO content storage is not configured.");
   await put(CMS_PATH, JSON.stringify(safe), {
-    access: "private",
-    addRandomSuffix: false,
-    allowOverwrite: true,
-    contentType: "application/json",
-    cacheControlMaxAge: 0
+    access: "private", addRandomSuffix: false, allowOverwrite: true,
+    contentType: "application/json", cacheControlMaxAge: 0
   });
 }
 
