@@ -43,25 +43,71 @@ export async function createAdminSession(userId: string) {
   return token;
 }
 
-// TEMPORARY DEVELOPMENT MODE: administrator access is intentionally open.
-// Restore the database-backed session and role checks before public launch.
+// The temporary open mode is limited to local development and Vercel Preview.
+// Production deployments always require a valid database or legacy signed session.
 const temporaryOpenAdmin: AdminIdentity = {
   id: "temporary-open-admin",
   email: "open-admin@dso.local",
   fullName: "Temporary DSO Administrator",
   roles: ["owner"],
 };
+const temporaryOpenAdminEnabled =
+  process.env.NODE_ENV !== "production" || process.env.VERCEL_ENV === "preview";
 
-export async function getAdminSession(_request: NextRequest): Promise<AdminIdentity> {
-  return temporaryOpenAdmin;
+export async function getAdminSession(request: NextRequest): Promise<AdminIdentity | null> {
+  if (temporaryOpenAdminEnabled) return temporaryOpenAdmin;
+  const token = request.cookies.get(COOKIE_NAME)?.value;
+  if (!token) return null;
+
+  if (!process.env.DATABASE_URL && !process.env.POSTGRES_URL) {
+    return verifyLegacyAdminSession(token)
+      ? { id: "legacy-admin", email: "legacy-admin@dso.local", fullName: "DSO Administrator", roles: ["owner"] }
+      : null;
+  }
+
+  try {
+    const result = await queryDatabase<{ id: string; email: string; full_name: string; roles: string[] }>(
+      `SELECT u.id::text AS id, u.email, u.full_name,
+              COALESCE(array_agg(DISTINCT r.key) FILTER (WHERE r.key IS NOT NULL), ARRAY[]::text[]) AS roles
+       FROM public.admin_sessions s
+       JOIN public.admin_users u ON u.id = s.user_id
+       LEFT JOIN public.user_roles ur ON ur.user_id = u.id
+       LEFT JOIN public.roles r ON r.id = ur.role_id
+       WHERE s.token_hash = $1 AND s.revoked_at IS NULL
+         AND s.expires_at > now() AND u.status = 'active'
+       GROUP BY u.id, u.email, u.full_name
+       LIMIT 1`,
+      [hashToken(token)],
+    );
+    const user = result.rows[0];
+    return user ? { id: user.id, email: user.email, fullName: user.full_name, roles: user.roles ?? [] } : null;
+  } catch {
+    return null;
+  }
 }
 
-export async function verifyAdminSession(_request: NextRequest): Promise<boolean> {
-  return true;
+export async function verifyAdminSession(request: NextRequest): Promise<boolean> {
+  return Boolean(await getAdminSession(request));
 }
 
-export async function hasAdminPermission(_request: NextRequest, _permission: string): Promise<boolean> {
-  return true;
+export async function hasAdminPermission(request: NextRequest, permission: string): Promise<boolean> {
+  const identity = await getAdminSession(request);
+  if (!identity) return false;
+  if (identity.id === temporaryOpenAdmin.id || identity.id === "legacy-admin") return true;
+  try {
+    const result = await queryDatabase<{ allowed: boolean }>(
+      `SELECT EXISTS (
+         SELECT 1 FROM public.user_roles ur
+         JOIN public.role_permissions rp ON rp.role_id = ur.role_id
+         JOIN public.permissions p ON p.id = rp.permission_id
+         WHERE ur.user_id = $1 AND p.key = $2
+       ) AS allowed`,
+      [identity.id, permission],
+    );
+    return result.rows[0]?.allowed === true;
+  } catch {
+    return false;
+  }
 }
 
 export async function revokeAdminSession(request: NextRequest) {
