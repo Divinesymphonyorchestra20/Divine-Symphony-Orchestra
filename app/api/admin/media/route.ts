@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
       contentType: file.type,
       cacheControlMaxAge: 31536000
     });
-    let id = randomUUID();
+    let id: string = randomUUID();
     if (isDatabaseContentStoreEnabled()) {
       const asset = await queryDatabase<{ id: string }>(
         `INSERT INTO public.media_assets
