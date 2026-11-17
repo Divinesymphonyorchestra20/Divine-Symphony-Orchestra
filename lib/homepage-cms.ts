@@ -1,4 +1,5 @@
 import { get, put } from "@vercel/blob";
+import { isDatabaseContentStoreEnabled, readContentStoreWithLegacyImport, writeDatabaseContentStore } from "./content-store";
 
 export type HomeLink = { title: string; description: string; href: string; icon: string };
 export type HomeImage = { src: string; alt: string; position: string; caption: string; credit: string };
@@ -56,23 +57,40 @@ export const defaultHomepageContent: HomepageContent = {
 };
 
 const STORE_PATH = "cms/homepage-content.json";
-export async function readHomepageStore(): Promise<HomepageStore> {
-  if (!process.env.BLOB_READ_WRITE_TOKEN) return { version: 1, updatedAt: defaultHomepageContent.updatedAt, draft: defaultHomepageContent, published: defaultHomepageContent };
-  try {
-    const result = await get(STORE_PATH, { access: "private" });
-    if (!result || result.statusCode !== 200) return { version: 1, updatedAt: defaultHomepageContent.updatedAt, draft: defaultHomepageContent, published: defaultHomepageContent };
-    const parsed = JSON.parse(await new Response(result.stream).text()) as HomepageStore;
-    if (parsed.version !== 1 || !parsed.draft || !parsed.published) throw new Error("Invalid homepage content");
-    return parsed;
-  } catch {
-    return { version: 1, updatedAt: defaultHomepageContent.updatedAt, draft: defaultHomepageContent, published: defaultHomepageContent };
-  }
+function fallbackHomepageStore(): HomepageStore {
+  return { version: 1, updatedAt: defaultHomepageContent.updatedAt, draft: defaultHomepageContent, published: defaultHomepageContent };
 }
-export async function writeHomepageStore(store: HomepageStore): Promise<void> {
-  if (!process.env.BLOB_READ_WRITE_TOKEN) throw new Error("Private DSO content storage is not configured.");
+
+async function readLegacyHomepageStore(): Promise<HomepageStore | null> {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) return null;
+  const result = await get(STORE_PATH, { access: "private" });
+  if (!result || result.statusCode !== 200) return null;
+  const parsed = JSON.parse(await new Response(result.stream).text()) as HomepageStore;
+  if (parsed.version !== 1 || !parsed.draft || !parsed.published) throw new Error("Invalid homepage content.");
+  return parsed;
+}
+
+export async function readHomepageStore(): Promise<HomepageStore> {
+  return readContentStoreWithLegacyImport({
+    contentType: "homepage", slug: "homepage", title: "DSO Homepage",
+    readLegacy: readLegacyHomepageStore, fallback: fallbackHomepageStore,
+  });
+}
+
+export async function writeHomepageStore(store: HomepageStore, options: { publish?: boolean } = {}): Promise<void> {
   const safe = { ...store, version: 1 as const, updatedAt: new Date().toISOString() };
+  if (isDatabaseContentStoreEnabled()) {
+    await writeDatabaseContentStore({
+      contentType: "homepage", slug: "homepage", title: "DSO Homepage",
+      payload: safe, publish: options.publish ?? false,
+      changeNote: options.publish ? "Published homepage content" : "Saved homepage draft",
+    });
+    return;
+  }
+  if (!process.env.BLOB_READ_WRITE_TOKEN) throw new Error("Private DSO content storage is not configured.");
   await put(STORE_PATH, JSON.stringify(safe), { access: "private", addRandomSuffix: false, allowOverwrite: true, contentType: "application/json", cacheControlMaxAge: 0 });
 }
+
 export async function readPublishedHomepage(): Promise<HomepageContent> {
   return (await readHomepageStore()).published;
 }
