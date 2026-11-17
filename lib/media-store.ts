@@ -40,9 +40,26 @@ export async function syncContentMediaUsage(contentType: string, slug: string, r
   const entryId = entry.rows[0]?.id;
   if (!entryId) return;
 
+  const desired = references
+    .filter(reference => reference.blobPath.startsWith("media/"))
+    .map(reference => ({
+      ...reference,
+      placement: reference.placement.slice(0, 120),
+    }));
+  const current = await queryDatabase<{ blob_path: string; field_key: string; placement: string | null; sort_order: number }>(
+    `SELECT ma.blob_path, mu.field_key, mu.placement, mu.sort_order
+     FROM public.media_usage mu
+     JOIN public.media_assets ma ON ma.id = mu.media_asset_id
+     WHERE mu.content_entry_id = $1
+     ORDER BY mu.sort_order, ma.blob_path`,
+    [entryId],
+  );
+  const signature = (items: Array<{ blobPath?: string; blob_path?: string; fieldKey?: string; field_key?: string; placement: string | null; sortOrder?: number; sort_order?: number }>) =>
+    items.map(item => [item.blobPath ?? item.blob_path, item.fieldKey ?? item.field_key, item.placement || "", item.sortOrder ?? item.sort_order ?? 0].join("|")).sort().join("\n");
+  if (signature(desired) === signature(current.rows)) return;
+
   await queryDatabase("DELETE FROM public.media_usage WHERE content_entry_id = $1", [entryId]);
-  for (const reference of references) {
-    if (!reference.blobPath.startsWith("media/")) continue;
+  for (const reference of desired) {
     const filename = reference.blobPath.split("/").pop() || "dso-media";
     const asset = await queryDatabase<{ id: string }>(
       `INSERT INTO public.media_assets
