@@ -78,6 +78,17 @@ export default function PatronProfileAdmin() {
     patch({ sections: next });
   }
 
+  function moveParagraph(sectionId: string, index: number, direction: -1 | 1) {
+    if (!page) return;
+    const section = page.sections.find(item => item.id === sectionId);
+    if (!section) return;
+    const target = index + direction;
+    if (target < 0 || target >= section.paragraphs.length) return;
+    const paragraphs = [...section.paragraphs];
+    [paragraphs[index], paragraphs[target]] = [paragraphs[target], paragraphs[index]];
+    patchSection(sectionId, { paragraphs });
+  }
+
   function addSection() {
     if (!page) return;
     patch({ sections: [...page.sections, { id: "section-" + Date.now(), heading: "New section", paragraphs: [""] }] });
@@ -199,7 +210,11 @@ export default function PatronProfileAdmin() {
         {field("Section heading", section.heading, value => patchSection(section.id, { heading: value }))}
         {section.paragraphs.map((paragraph, paragraphIndex) => <div className="dso-cms-paragraph-editor" key={paragraphIndex}>
           <label className="dso-field">Paragraph {paragraphIndex + 1}<textarea rows={5} value={paragraph} onChange={event => patchParagraph(section.id, paragraphIndex, event.target.value)} /></label>
-          <button className="dso-cms-delete" onClick={() => patchSection(section.id, { paragraphs: section.paragraphs.filter((_, i) => i !== paragraphIndex) })}>Remove paragraph</button>
+          <div>
+            <button className="dso-cms-secondary" onClick={() => moveParagraph(section.id, paragraphIndex, -1)} disabled={paragraphIndex === 0}>↑ Move up</button>
+            <button className="dso-cms-secondary" onClick={() => moveParagraph(section.id, paragraphIndex, 1)} disabled={paragraphIndex === section.paragraphs.length - 1}>↓ Move down</button>
+            <button className="dso-cms-delete" onClick={() => patchSection(section.id, { paragraphs: section.paragraphs.filter((_, i) => i !== paragraphIndex) })}>Remove paragraph</button>
+          </div>
         </div>)}
         <button className="dso-cms-secondary" onClick={() => patchSection(section.id, { paragraphs: [...section.paragraphs, ""] })}>＋ Add paragraph</button>
       </article>)}
@@ -210,6 +225,20 @@ export default function PatronProfileAdmin() {
       <div className="dso-cms-grid">
         {field("Eyebrow", page.closingEyebrow, value => patch({ closingEyebrow: value }))}
         <div className="wide">{field("Closing text", page.closingText, value => patch({ closingText: value }), true)}</div>
+      </div>
+    </section>
+    <section className="dso-cms-panel">
+      <div className="dso-cms-panel-title"><div><p className="dso-cms-kicker">PREVIEW</p><h2>Public page draft preview</h2></div><a href="/dr-daniel-kolawole-olukoya" target="_blank" rel="noreferrer">Open currently published page ↗</a></div>
+      <div className="patron-profile-page">
+        <section className="patron-profile-hero">
+          <div className="patron-profile-copy"><p className="eyebrow">{page.eyebrow}</p><h1>{page.firstNameLine} <em>{page.surname}</em></h1><p className="patron-profile-subtitle">{page.subtitle}</p><div className="patron-profile-rule" /><p className="patron-profile-intro">{page.heroIntro}</p></div>
+          <figure className="patron-profile-portrait">{page.portrait.pathname ? <><img src={imageUrl(page.portrait.pathname)} alt={page.portrait.alt} /><figcaption>{page.portrait.caption}<small>{page.portrait.credit}</small></figcaption></> : <div className="patron-profile-portrait-placeholder"><strong>Portrait photograph</strong><p>No portrait selected</p></div>}</figure>
+        </section>
+        <article className="patron-profile-article">
+          <header className="patron-profile-opening"><p className="eyebrow dark">{page.openingEyebrow}</p><h2>{page.openingHeading}</h2><p>{page.openingText}</p></header>
+          <div className="patron-profile-sections">{page.sections.map((section, index) => <section className={index % 2 ? "patron-profile-section is-tinted" : "patron-profile-section"} key={section.id}><div className="patron-profile-number">{String(index + 1).padStart(2, "0")}</div><div className="patron-profile-section-copy"><h2>{section.heading}</h2>{section.paragraphs.map((paragraph, i) => <p key={i}>{paragraph}</p>)}</div></section>)}</div>
+          <footer className="patron-profile-closing"><p className="eyebrow">{page.closingEyebrow}</p><h2>{page.closingText}</h2></footer>
+        </article>
       </div>
     </section>
     <footer className="dso-cms-footer">DSO WEBSITE STUDIO · PRIVATE BIOGRAPHY STORE · {store.updatedAt ? new Date(store.updatedAt).toLocaleString() : "Not yet saved"}</footer>
