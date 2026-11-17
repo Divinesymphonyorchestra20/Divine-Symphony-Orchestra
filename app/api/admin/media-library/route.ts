@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { hasAdminPermission } from "../../../../lib/admin-auth";
 import { isDatabaseContentStoreEnabled } from "../../../../lib/content-store";
 import { queryDatabase } from "../../../../db/client";
+import { readHistoryContent } from "../../../../lib/history-cms";
+import { readHomepageStore } from "../../../../lib/homepage-cms";
+import { readInstitutionalStore } from "../../../../lib/institutional-cms";
+import { readSiteContent } from "../../../../lib/site-content-cms";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -28,6 +32,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "The shared media library is available on the development Preview only." }, { status: 503 });
   }
   try {
+    await Promise.all([readHistoryContent(), readHomepageStore(), readInstitutionalStore(), readSiteContent()]);
     const result = await queryDatabase<MediaAssetRow>(
       `SELECT ma.id::text, ma.blob_path, ma.original_filename, ma.content_type, ma.byte_size,
               ma.alt_text, ma.caption, ma.credit, ma.status, ma.created_at::text,
