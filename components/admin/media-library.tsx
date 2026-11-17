@@ -99,17 +99,18 @@ export default function MediaLibrary() {
     {loading ? <p>Loading media records…</p> : visible.length === 0 ? <p className="dso-media-empty">No files in this view yet. Uploaded media will appear here as private drafts.</p> :
       <div className="dso-media-grid">{visible.map(asset => {
         const preview = "/api/media/" + asset.blob_path.split("/").map(encodeURIComponent).join("/");
+        const hasPublishedUsage = asset.usages.some(usage => usage.placement === "published" || Boolean(usage.placement?.startsWith("published:")));
         return <article className="dso-media-card" key={asset.id}>
           <div className="dso-media-preview"><img src={preview} alt={asset.alt_text || asset.original_filename}/></div>
           <div className="dso-media-card-heading"><div><strong>{asset.original_filename}</strong><small>{(asset.byte_size / 1024).toFixed(0)} KB · {asset.content_type}</small></div><span className={"dso-media-status " + asset.status}>{asset.status}</span></div>
           <label>Alternative text<input value={asset.alt_text} maxLength={1000} onChange={e => patch(asset.id, { alt_text: e.target.value })}/></label>
           <label>Caption<textarea rows={2} value={asset.caption} maxLength={1000} onChange={e => patch(asset.id, { caption: e.target.value })}/></label>
           <label>Credit<input value={asset.credit} maxLength={500} onChange={e => patch(asset.id, { credit: e.target.value })}/></label>
-          <div className="dso-media-usage"><b>Page usage</b>{asset.usages.length ? asset.usages.map((usage, index) => <small key={index}>{usage.contentType} · {usage.placement || usage.fieldKey}</small>) : <small>Not linked to a page record yet.</small>}</div>
+          <div className="dso-media-usage"><b>Page usage</b>{asset.usages.length ? asset.usages.map((usage, index) => <small key={index}>{usage.contentType} · {usage.placement || usage.fieldKey}</small>) : <small>Not linked to a page record yet.</small>}{hasPublishedUsage && <small className="dso-media-warning">Remove or replace this file on published pages before archiving it.</small>}</div>
           <div className="dso-media-actions">
             <button type="button" onClick={() => void save(asset)} disabled={saving === asset.id}>Save details</button>
             {asset.status !== "published" && <button type="button" onClick={() => void save(asset, "published")} disabled={saving === asset.id}>Publish</button>}
-            {asset.status !== "archived" && <button type="button" className="archive" onClick={() => void save(asset, "archived")} disabled={saving === asset.id}>Archive</button>}
+            {asset.status !== "archived" && <button type="button" className="archive" onClick={() => void save(asset, "archived")} disabled={saving === asset.id || hasPublishedUsage}>Archive</button>}
           </div>
         </article>;
       })}</div>}
