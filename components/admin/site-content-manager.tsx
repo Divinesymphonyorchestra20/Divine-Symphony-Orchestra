@@ -63,17 +63,17 @@ export default function SiteContentManager() {
 
   function addEvent() {
     const title = "New DSO event";
-    const item: ManagedEvent = { id: newId(), title, slug: slugify(title), status: "draft", startAt: "", endAt: "", venue: "", description: "", programme: "", image: "", imageAlt: "", registrationUrl: "", featured: false };
+    const item: ManagedEvent = { id: newId(), title, slug: slugify(title) + "-" + Date.now().toString(36), status: "draft", startAt: "", endAt: "", venue: "", description: "", programme: "", image: "", imageAlt: "", registrationUrl: "", featured: false };
     setData(current => ({ ...current, events: [...current.events, item] }));
   }
   function addNews() {
     const title = "New DSO story";
-    const item: ManagedNews = { id: newId(), title, slug: slugify(title), status: "draft", publishedAt: "", summary: "", body: "", image: "", imageAlt: "", author: "", sourceUrl: "" };
+    const item: ManagedNews = { id: newId(), title, slug: slugify(title) + "-" + Date.now().toString(36), status: "draft", publishedAt: "", summary: "", body: "", image: "", imageAlt: "", author: "", sourceUrl: "" };
     setData(current => ({ ...current, news: [...current.news, item] }));
   }
   function addAlbum() {
     const title = "New gallery album";
-    const item: GalleryAlbum = { id: newId(), title, description: "", status: "draft", collection: "", coverImage: "", coverAlt: "", sortOrder: data.albums.length };
+    const item: GalleryAlbum = { id: newId(), title, description: "", status: "draft", collection: slugify(title) + "-" + Date.now().toString(36), coverImage: "", coverAlt: "", sortOrder: data.albums.length };
     setData(current => ({ ...current, albums: [...current.albums, item] }));
   }
 
