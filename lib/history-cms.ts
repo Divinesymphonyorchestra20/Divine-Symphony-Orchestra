@@ -1,5 +1,6 @@
 import { get, put } from "@vercel/blob";
 import { isDatabaseContentStoreEnabled, readContentStoreWithLegacyImport, writeDatabaseContentStore } from "./content-store";
+import { syncContentMediaUsage } from "./media-store";
 
 export type PageKey = "history" | "founding-members" | "milestones" | "about" | "music" | "events" | "people" | "gallery" | "contact" | "our-heritage" | "our-story" | "our-legacy" | "orchestra" | "meet-the-members";
 export type Milestone = { id: string; year: string; title: string; kind: string; text: string; published: boolean; editorialNote?: string };
@@ -50,10 +51,17 @@ async function readLegacyHistoryContent(): Promise<HistoryContent | null> {
 }
 
 export async function readHistoryContent(): Promise<HistoryContent> {
-  return readContentStoreWithLegacyImport({
+  const content = await readContentStoreWithLegacyImport({
     contentType: "history", slug: "history", title: "DSO History and Media",
     readLegacy: readLegacyHistoryContent, fallback: () => defaultHistoryContent,
   });
+  await syncContentMediaUsage("history", "history", content.media.map((item, index) => ({
+    blobPath: item.pathname, fieldKey: "history.media",
+    placement: `${item.published ? "published" : "draft"}:${item.page}:${item.collection}`,
+    sortOrder: index, altText: item.alt, caption: item.caption, credit: item.credit,
+    state: item.published ? "published" : "draft",
+  })));
+  return content;
 }
 
 export async function writeHistoryContent(content: HistoryContent): Promise<void> {
@@ -63,6 +71,12 @@ export async function writeHistoryContent(content: HistoryContent): Promise<void
       contentType: "history", slug: "history", title: "DSO History and Media",
       payload: safe, publish: true, changeNote: "Saved History, founding-member and media records",
     });
+    await syncContentMediaUsage("history", "history", safe.media.map((item, index) => ({
+      blobPath: item.pathname, fieldKey: "history.media",
+      placement: `${item.published ? "published" : "draft"}:${item.page}:${item.collection}`,
+      sortOrder: index, altText: item.alt, caption: item.caption, credit: item.credit,
+      state: item.published ? "published" : "draft",
+    })));
     return;
   }
   if (!process.env.BLOB_READ_WRITE_TOKEN) throw new Error("Private DSO content storage is not configured.");
