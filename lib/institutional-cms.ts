@@ -1,5 +1,6 @@
 import { get, put } from "@vercel/blob";
 import { isDatabaseContentStoreEnabled, readContentStoreWithLegacyImport, writeDatabaseContentStore } from "./content-store";
+import { mediaBlobPathFromUrl, syncContentMediaUsage } from "./media-store";
 
 export type InstitutionalKey = "about" | "heritage" | "story" | "legacy" | "orchestra" | "members" | "music";
 export type InstitutionalSection = { heading: string; body: string };
@@ -35,6 +36,17 @@ function ensureHeritageBiography(pages:Record<InstitutionalKey,InstitutionalPage
  const sections=[...page.sections.slice(0,insertAt),biography,...page.sections.slice(insertAt)];
  return {...pages,heritage:{...page,sections}};
 }
+function institutionalMediaReferences(pages: Record<InstitutionalKey, InstitutionalPage>, state: "draft" | "published") {
+  return institutionalKeys.flatMap(key => pages[key].items.flatMap((item, index) => {
+    const blobPath = mediaBlobPathFromUrl(item.image);
+    return blobPath ? [{
+      blobPath, fieldKey: `institutional.${key}.items.${index}`,
+      placement: `${state}:${key}`, sortOrder: index,
+      altText: item.imageAlt || "", caption: item.description || "", credit: item.credit || "", state,
+    }] : [];
+  }));
+}
+
 async function readLegacyInstitutionalStore(): Promise<InstitutionalStore | null> {
   if (!process.env.BLOB_READ_WRITE_TOKEN) return null;
   const result = await get(PATH, { access: "private" });
@@ -49,7 +61,12 @@ export async function readInstitutionalStore(): Promise<InstitutionalStore> {
     contentType: "institutional", slug: "institutional", title: "DSO Institutional Pages",
     readLegacy: readLegacyInstitutionalStore, fallback,
   });
-  return { ...store, draft: ensureHeritageBiography(store.draft), published: ensureHeritageBiography(store.published) };
+  const safe = { ...store, draft: ensureHeritageBiography(store.draft), published: ensureHeritageBiography(store.published) };
+  await syncContentMediaUsage("institutional", "institutional", [
+    ...institutionalMediaReferences(safe.published, "published"),
+    ...institutionalMediaReferences(safe.draft, "draft"),
+  ]);
+  return safe;
 }
 
 export async function writeInstitutionalStore(store: InstitutionalStore, options: { publish?: boolean } = {}): Promise<void> {
@@ -63,6 +80,10 @@ export async function writeInstitutionalStore(store: InstitutionalStore, options
       payload: safe, publish: options.publish ?? false,
       changeNote: options.publish ? "Published institutional pages" : "Saved institutional page draft",
     });
+    await syncContentMediaUsage("institutional", "institutional", [
+      ...institutionalMediaReferences(safe.published, "published"),
+      ...institutionalMediaReferences(safe.draft, "draft"),
+    ]);
     return;
   }
   if (!process.env.BLOB_READ_WRITE_TOKEN) throw new Error("Private DSO content storage is not configured.");
