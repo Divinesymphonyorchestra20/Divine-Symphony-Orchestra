@@ -1,8 +1,8 @@
 "use client";
 import {useEffect,useState} from "react";
 import type {InstitutionalItem,InstitutionalKey,InstitutionalPage,InstitutionalSection,InstitutionalStore} from "../../../lib/institutional-cms";
-const keys:InstitutionalKey[]=["about","heritage","story","legacy","orchestra","members","music"];
-const labels:Record<InstitutionalKey,string>={about:"About DSO",heritage:"Our Heritage",story:"Our Story",legacy:"Our Legacy",orchestra:"The Orchestra",members:"Meet the Members",music:"Music & Performances"};
+const keys:InstitutionalKey[]=["about","heritage","story","legacy","orchestra","members","music","ministry"];
+const labels:Record<InstitutionalKey,string>={about:"About DSO",heritage:"Our Heritage",story:"Our Story",legacy:"Our Legacy",orchestra:"The Orchestra",members:"Meet the Members",music:"Music & Performances",ministry:"Ministry & Impact"};
 export default function InstitutionalAdmin(){
  const [store,setStore]=useState<InstitutionalStore|null>(null),[key,setKey]=useState<InstitutionalKey>("about"),[signed,setSigned]=useState(false),[password,setPassword]=useState(""),[email,setEmail]=useState(""),[loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(""),[notice,setNotice]=useState("");
  const page=store?.draft[key];
