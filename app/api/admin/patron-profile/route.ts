@@ -30,11 +30,12 @@ export async function GET(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
-  if (!(await hasAdminPermission(request, "content.publish"))) return NextResponse.json({ error: "Your administrator account cannot publish this biography." }, { status: 403 });
   const body = await request.json().catch(() => null) as { action?: "draft" | "publish"; content?: PatronPage } | null;
   if (!body || !["draft","publish"].includes(body.action || "") || !body.content || !valid(body.content)) {
     return NextResponse.json({ error: "The biography content is incomplete or exceeds the allowed limits." }, { status: 400 });
   }
+  const permission = body.action === "publish" ? "content.publish" : "content.edit";
+  if (!(await hasAdminPermission(request, permission))) return NextResponse.json({ error: body.action === "publish" ? "Your administrator account cannot publish this biography." : "Your administrator account cannot edit this biography." }, { status: (await hasAdminPermission(request, "content.read_drafts")) ? 403 : 401 });
   const current = await readPatronStore();
   const next: PatronStore = {
     ...current,
