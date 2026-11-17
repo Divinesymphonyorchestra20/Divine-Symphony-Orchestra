@@ -27,6 +27,12 @@ Tasks 1–5 already provide the public page modules and their first administrato
 - RLS is enabled on the twelve public tables. Direct SELECT privileges for Supabase `anon` and `authenticated` roles are absent, and no browser-facing policies are configured. The website uses the protected server-side PostgreSQL connection.
 - One Owner invitation exists. It has not been activated and no password or session has been created.
 
+## TLS configuration correction
+
+- The first runtime test found that the Preview `SUPABASE_CA_CERT` value was not a valid PEM certificate.
+- Replaced the Preview and Development values with the Supabase Root 2021 CA certificate. Its SHA-256 fingerprint was verified as `807025ad50d4ed219d2c9c7d299c004f824eb00cf7f65afef607d07b72e6cafa`.
+- Production environment variables were not changed. A fresh Preview deployment is required because environment variable changes apply to new deployments.
+
 ## Preview verification still required
 
 1. Completed: set `DSO_CMS_BACKEND=postgres` as a branch-specific Preview environment variable for `feat/remove-empty-media-and-clickable-cards`; it is not set for Production.
