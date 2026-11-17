@@ -1,5 +1,5 @@
 import { NextRequest,NextResponse } from "next/server";
-import { hasAdminPermission } from "../../../../lib/admin-auth";
+import {hasAdminPermission, verifyAdminSession} from "../../../../lib/admin-auth";
 import { institutionalKeys,readInstitutionalStore,writeInstitutionalStore,type InstitutionalStore } from "../../../../lib/institutional-cms";
 export const runtime="nodejs";export const dynamic="force-dynamic";
 const safeDestination=(value:unknown,allowMedia=false):boolean=>{
@@ -8,9 +8,9 @@ const safeDestination=(value:unknown,allowMedia=false):boolean=>{
  if(value.startsWith("/")&&!value.startsWith("//"))return !allowMedia||value.startsWith("/api/media/");
  try{const u=new URL(value);return u.protocol==="https:"}catch{return false}
 };
-export async function GET(request:NextRequest){if(!(await hasAdminPermission(request,"content.read_drafts")))return NextResponse.json({error:"You do not have permission to manage institutional content."},{status:403});return NextResponse.json(await readInstitutionalStore(),{headers:{"Cache-Control":"no-store"}})}
+export async function GET(request:NextRequest){if(!(await hasAdminPermission(request,"content.read_drafts")))return NextResponse.json({error:"You do not have permission to manage institutional content."},{status:(await verifyAdminSession(request))?403:401});return NextResponse.json(await readInstitutionalStore(),{headers:{"Cache-Control":"no-store"}})}
 export async function PUT(request:NextRequest){
- if(!(await hasAdminPermission(request,"content.publish")))return NextResponse.json({error:"You do not have permission to publish institutional content."},{status:403});
+ if(!(await hasAdminPermission(request,"content.publish")))return NextResponse.json({error:"You do not have permission to publish institutional content."},{status:(await verifyAdminSession(request))?403:401});
  const body=await request.json().catch(()=>null) as {action?:"draft"|"publish";content?:InstitutionalStore["draft"]}|null;
  if(!body||!["draft","publish"].includes(body.action||"")||!body.content)return NextResponse.json({error:"The submitted content is not valid."},{status:400});
  for(const key of institutionalKeys){
