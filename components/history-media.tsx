@@ -9,8 +9,10 @@ export default async function HistoryMedia({ page, galleryTitle, galleryDescript
   const images = content.media.filter(item => item.page === page && item.published && (!collectionFilter || item.collection.trim() === collectionFilter));
   const videos = content.videos
     .filter(item => item.page === page && item.published)
-    .map(video => ({ ...video, embed: youtubeEmbedUrl(video.youtubeUrl) }))
-    .filter((video): video is typeof video & { embed: string } => Boolean(video.embed));
+    .flatMap(video => {
+      const embed = youtubeEmbedUrl(video.youtubeUrl);
+      return embed ? [{ ...video, embed }] : [];
+    });
 
   // Do not render a public media area until it contains approved, publishable media.
   if (!images.length && !videos.length) return null;
