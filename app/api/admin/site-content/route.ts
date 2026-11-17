@@ -1,8 +1,87 @@
-import {NextRequest,NextResponse} from "next/server";
-import {hasAdminPermission} from "../../../../lib/admin-auth";
-import {readSiteContent,writeSiteContent,type SiteContent} from "../../../../lib/site-content-cms";
-export const runtime="nodejs";
-const safeUrl=(v:string)=>!v||v.startsWith("/")||/^https:\/\//i.test(v);
-function valid(v:unknown):v is SiteContent{if(!v||typeof v!=="object")return false;const x=v as SiteContent;if(!Array.isArray(x.events)||!Array.isArray(x.news)||!Array.isArray(x.albums)||!x.contact||typeof x.contact!=="object"||x.events.length>300||x.news.length>500||x.albums.length>200)return false;return x.events.every(e=>e&&typeof e.title==="string"&&typeof e.slug==="string"&&["draft","published","archived"].includes(e.status)&&safeUrl(e.image)&&safeUrl(e.registrationUrl))&&x.news.every(n=>n&&typeof n.title==="string"&&typeof n.slug==="string"&&["draft","published","archived"].includes(n.status)&&safeUrl(n.image)&&safeUrl(n.sourceUrl))&&x.albums.every(a=>a&&typeof a.title==="string"&&["draft","published","archived"].includes(a.status)&&safeUrl(a.coverImage))&&Array.isArray(x.contact.socialLinks)&&x.contact.socialLinks.every(l=>typeof l.label==="string"&&safeUrl(l.url))&&["intro","generalEmail","telephone","address","enquiryNote"].every(k=>typeof (x.contact as unknown as Record<string,unknown>)[k]==="string");}
-export async function GET(req:NextRequest){if(!(await hasAdminPermission(req,"content.read_drafts")))return NextResponse.json({error:"You do not have permission to manage site content."},{status:403});return NextResponse.json(await readSiteContent());}
-export async function PUT(req:NextRequest){if(!(await hasAdminPermission(req,"content.publish")))return NextResponse.json({error:"You do not have permission to publish site content."},{status:403});try{const x=await req.json();if(!valid(x))return NextResponse.json({error:"The content format is invalid. Check the records and links."},{status:400});await writeSiteContent(x);return NextResponse.json({ok:true});}catch(e){return NextResponse.json({error:e instanceof Error?e.message:"Unable to save site content."},{status:500});}}
+import { NextRequest, NextResponse } from "next/server";
+import { hasAdminPermission } from "../../../../lib/admin-auth";
+import { readSiteContent, writeSiteContent, type SiteContent } from "../../../../lib/site-content-cms";
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+const safeUrl = (value: unknown): value is string =>
+  typeof value === "string" && value.length <= 2048 &&
+  (!value || (value.startsWith("/") && !value.startsWith("//")) || /^https:\/\//i.test(value));
+const validStatus = (value: unknown): value is "draft" | "published" | "archived" =>
+  value === "draft" || value === "published" || value === "archived";
+const validDate = (value: string) => Boolean(value && Number.isFinite(Date.parse(value)));
+const validSlug = (value: string) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value);
+
+function valid(value: unknown): value is SiteContent {
+  if (!value || typeof value !== "object") return false;
+  const data = value as SiteContent;
+  if (data.version !== 1 || !Array.isArray(data.events) || !Array.isArray(data.news) || !Array.isArray(data.albums) ||
+      !data.contact || typeof data.contact !== "object" ||
+      data.events.length > 300 || data.news.length > 500 || data.albums.length > 200) return false;
+
+  const eventSlugs = data.events.filter(item => item.status === "published").map(item => item.slug);
+  const newsSlugs = data.news.filter(item => item.status === "published").map(item => item.slug);
+  if (new Set(eventSlugs).size !== eventSlugs.length || new Set(newsSlugs).size !== newsSlugs.length) return false;
+
+  const eventsValid = data.events.every(event =>
+    event && typeof event.title === "string" && event.title.trim().length > 0 && event.title.length <= 180 &&
+    typeof event.slug === "string" && event.slug.length <= 180 &&
+    validStatus(event.status) && (event.status !== "published" || (validSlug(event.slug) && validDate(event.startAt))) &&
+    typeof event.startAt === "string" && (!event.endAt || validDate(event.endAt)) &&
+    (!event.startAt || validDate(event.startAt)) &&
+    (!event.endAt || !event.startAt || Date.parse(event.endAt) >= Date.parse(event.startAt)) &&
+    typeof event.venue === "string" && event.venue.length <= 300 &&
+    typeof event.description === "string" && event.description.length <= 8000 &&
+    typeof event.programme === "string" && event.programme.length <= 8000 &&
+    safeUrl(event.image) && typeof event.imageAlt === "string" && event.imageAlt.length <= 500 &&
+    safeUrl(event.registrationUrl) && typeof event.featured === "boolean"
+  );
+  const newsValid = data.news.every(item =>
+    item && typeof item.title === "string" && item.title.trim().length > 0 && item.title.length <= 180 &&
+    typeof item.slug === "string" && item.slug.length <= 180 &&
+    validStatus(item.status) && (item.status !== "published" || (validSlug(item.slug) && validDate(item.publishedAt) && item.body.trim().length > 0)) &&
+    typeof item.publishedAt === "string" && (!item.publishedAt || validDate(item.publishedAt)) &&
+    typeof item.summary === "string" && item.summary.length <= 1200 &&
+    typeof item.body === "string" && item.body.length <= 50000 &&
+    safeUrl(item.image) && typeof item.imageAlt === "string" && item.imageAlt.length <= 500 &&
+    typeof item.author === "string" && item.author.length <= 180 && safeUrl(item.sourceUrl)
+  );
+  const albumsValid = data.albums.every(album =>
+    album && typeof album.title === "string" && album.title.trim().length > 0 && album.title.length <= 180 &&
+    validStatus(album.status) && typeof album.description === "string" && album.description.length <= 4000 &&
+    typeof album.collection === "string" && album.collection.length <= 180 &&
+    (album.status !== "published" || album.collection.trim().length > 0) &&
+    safeUrl(album.coverImage) && typeof album.coverAlt === "string" && album.coverAlt.length <= 500 &&
+    Number.isInteger(album.sortOrder) && album.sortOrder >= 0
+  );
+  const contact = data.contact;
+  const contactValid = ["intro", "generalEmail", "telephone", "address", "enquiryNote"].every(key =>
+    typeof (contact as unknown as Record<string, unknown>)[key] === "string" &&
+    String((contact as unknown as Record<string, unknown>)[key]).length <= 4000
+  ) && (!contact.generalEmail || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.generalEmail)) &&
+  Array.isArray(contact.socialLinks) && contact.socialLinks.length <= 12 &&
+  contact.socialLinks.every(link => typeof link.label === "string" && link.label.trim().length > 0 &&
+    link.label.length <= 100 && safeUrl(link.url) && Boolean(link.url));
+  return eventsValid && newsValid && albumsValid && contactValid && JSON.stringify(data).length <= 500_000;
+}
+
+export async function GET(request: NextRequest) {
+  if (!(await hasAdminPermission(request, "content.read_drafts"))) {
+    return NextResponse.json({ error: "You do not have permission to manage site content." }, { status: 403 });
+  }
+  return NextResponse.json(await readSiteContent(), { headers: { "Cache-Control": "no-store" } });
+}
+
+export async function PUT(request: NextRequest) {
+  if (!(await hasAdminPermission(request, "content.publish"))) {
+    return NextResponse.json({ error: "You do not have permission to publish site content." }, { status: 403 });
+  }
+  try {
+    const content = await request.json();
+    if (!valid(content)) return NextResponse.json({ error: "The content format is invalid. Check required fields, dates, unique slugs and secure links." }, { status: 400 });
+    await writeSiteContent(content);
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    return NextResponse.json({ error: error instanceof Error ? error.message : "Unable to save site content." }, { status: 500 });
+  }
+}
