@@ -22,14 +22,14 @@ function ensureHeritageBiography(pages:Record<InstitutionalKey,InstitutionalPage
  const page=pages.heritage;
  if(!page||!Array.isArray(page.sections))return pages;
  const alreadyPresent=page.sections.some(section=>
-  /dr\\.?\\s+daniel\\s+kolawole\\s+olukoya/i.test(section.heading)||
+  /dr\.?\s+daniel\s+kolawole\s+olukoya/i.test(section.heading)||
   /vision and patronage/i.test(section.heading)||
   /principal visionary patron|institutional patronage/i.test(section.body)
  );
  if(alreadyPresent)return pages;
- const biography=defaultInstitutionalPages.heritage.sections.find(section=>/dr\\.?\\s+daniel\\s+kolawole\\s+olukoya/i.test(section.heading));
+ const biography=defaultInstitutionalPages.heritage.sections.find(section=>/dr\.?\s+daniel\s+kolawole\s+olukoya/i.test(section.heading));
  if(!biography)return pages;
- const dkoIndex=page.sections.findIndex(section=>/d\\.?k\\.?o\\.?/i.test(section.heading));
+ const dkoIndex=page.sections.findIndex(section=>/d\.?k\.?o\.?/i.test(section.heading));
  const insertAt=dkoIndex>=0?dkoIndex+1:Math.min(2,page.sections.length);
  const sections=[...page.sections.slice(0,insertAt),biography,...page.sections.slice(insertAt)];
  return {...pages,heritage:{...page,sections}};
