@@ -4,9 +4,9 @@ function mediaUrl(pathname: string) {
   return `/api/media/${pathname.split("/").map(encodeURIComponent).join("/")}`;
 }
 
-export default async function HistoryMedia({ page, galleryTitle, galleryDescription, collectionFilter }: { page: PageKey; galleryTitle?: string; galleryDescription?: string; collectionFilter?: string }) {
+export default async function HistoryMedia({ page, galleryTitle, galleryDescription, collectionFilter, excludeCollection }: { page: PageKey; galleryTitle?: string; galleryDescription?: string; collectionFilter?: string; excludeCollection?: string }) {
   const content = await readHistoryContent();
-  const images = content.media.filter(item => item.page === page && item.published && (!collectionFilter || item.collection.trim() === collectionFilter));
+  const images = content.media.filter(item => item.page === page && item.published && (!collectionFilter || item.collection.trim() === collectionFilter) && (!excludeCollection || item.collection.trim() !== excludeCollection));
   const videos = content.videos.filter(item => item.page === page && item.published);
   const collections = Array.from(new Set(images.map(item => item.collection.trim() || "DSO Gallery")));
   const title = galleryTitle || (page === "milestones" ? "South Africa: in pictures" : "Photographs and memories");
