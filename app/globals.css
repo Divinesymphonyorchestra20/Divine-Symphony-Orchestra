@@ -356,3 +356,16 @@ body{color:var(--dso-ink);-webkit-font-smoothing:antialiased}
 .dso-site-content-toolbar a{color:#5a1765;font-size:13px;font-weight:700}
 .dso-social-row{align-items:end}
 @media(max-width:700px){.dso-structured-grid{grid-template-columns:1fr}.dso-structured-heading,.dso-site-content-toolbar{align-items:flex-start;flex-direction:column}.dso-site-content-toolbar button,.dso-site-content-toolbar a{width:100%}}
+
+
+/* Individual event and gallery collection pages */
+.dso-detail-back{display:inline-block;margin:0 0 22px;color:#5a1765;font-weight:700}
+.dso-event-detail,.dso-gallery-album{max-width:1000px;margin:0 auto;padding:48px 24px 72px;color:#2c1b31}
+.dso-event-detail>img,.dso-gallery-album-cover{display:block;width:100%;max-height:560px;object-fit:cover;border-radius:14px;margin:20px 0 30px}
+.dso-event-detail h1,.dso-gallery-album-heading h1{font-size:clamp(34px,5vw,58px);line-height:1.08;margin:10px 0 16px}
+.dso-event-detail .dso-news-summary{font-size:18px;font-weight:700;color:#61456a}
+.dso-event-end{font-size:13px;color:#786d7c}
+.dso-event-registration{display:inline-block;padding:13px 18px;background:#4b0758;color:#fff;border-radius:8px;font-weight:700}
+.dso-gallery-album-heading{margin:12px 0 26px}
+.dso-gallery-album-heading>p:last-child{max-width:760px;color:#746878;line-height:1.7}
+.dso-gallery-album .history-media-section{padding:20px 0 0}
