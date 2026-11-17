@@ -25,9 +25,10 @@ function siteContentMediaReferences(content: SiteContent) {
 }
 
 async function readLegacySiteContent(): Promise<SiteContent | null> {
-  if (!process.env.BLOB_READ_WRITE_TOKEN) return null;
+  if (!process.env.BLOB_READ_WRITE_TOKEN) { if (isDatabaseContentStoreEnabled()) throw new Error("Private Blob access is not configured; refusing to seed defaults over legacy content."); return null; }
   const result = await get(path, { access: "private" });
-  if (!result || result.statusCode !== 200) return null;
+  if (!result) return null;
+  if (result.statusCode !== 200) throw new Error("Unable to read the retained private Blob content (HTTP " + result.statusCode + ").");
   const content = JSON.parse(await new Response(result.stream).text()) as SiteContent;
   if (content.version !== 1 || !Array.isArray(content.events) || !Array.isArray(content.news) || !Array.isArray(content.albums) || !content.contact) {
     throw new Error("Invalid site content.");

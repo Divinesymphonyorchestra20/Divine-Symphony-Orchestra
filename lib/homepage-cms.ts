@@ -63,9 +63,10 @@ function fallbackHomepageStore(): HomepageStore {
 }
 
 async function readLegacyHomepageStore(): Promise<HomepageStore | null> {
-  if (!process.env.BLOB_READ_WRITE_TOKEN) return null;
+  if (!process.env.BLOB_READ_WRITE_TOKEN) { if (isDatabaseContentStoreEnabled()) throw new Error("Private Blob access is not configured; refusing to seed defaults over legacy content."); return null; }
   const result = await get(STORE_PATH, { access: "private" });
-  if (!result || result.statusCode !== 200) return null;
+  if (!result) return null;
+  if (result.statusCode !== 200) throw new Error("Unable to read the retained private Blob content (HTTP " + result.statusCode + ").");
   const parsed = JSON.parse(await new Response(result.stream).text()) as HomepageStore;
   if (parsed.version !== 1 || !parsed.draft || !parsed.published) throw new Error("Invalid homepage content.");
   return parsed;

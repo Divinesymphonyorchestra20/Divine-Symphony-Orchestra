@@ -111,16 +111,18 @@ export async function readContentStoreWithLegacyImport<T>(input: {
 
   // Read the retained private Blob record before writing anything to the database.
   const legacy = await input.readLegacy();
-  if (legacy === null) return input.fallback();
+  const payload = legacy ?? input.fallback();
 
   await writeDatabaseContentStore({
     contentType: input.contentType,
     slug: input.slug,
     title: input.title,
-    payload: legacy,
+    payload,
     publish: true,
-    changeNote: "Initial import from the retained private Vercel Blob record",
+    changeNote: legacy
+      ? "Initial import from the retained private Vercel Blob record"
+      : "Initial seed from the source-controlled DSO content defaults",
   });
 
-  return (await readDatabaseContentStore<T>(input.contentType, input.slug)) ?? legacy;
+  return (await readDatabaseContentStore<T>(input.contentType, input.slug)) ?? payload;
 }

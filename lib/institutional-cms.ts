@@ -48,9 +48,10 @@ function institutionalMediaReferences(pages: Record<InstitutionalKey, Institutio
 }
 
 async function readLegacyInstitutionalStore(): Promise<InstitutionalStore | null> {
-  if (!process.env.BLOB_READ_WRITE_TOKEN) return null;
+  if (!process.env.BLOB_READ_WRITE_TOKEN) { if (isDatabaseContentStoreEnabled()) throw new Error("Private Blob access is not configured; refusing to seed defaults over legacy content."); return null; }
   const result = await get(PATH, { access: "private" });
-  if (!result || result.statusCode !== 200) return null;
+  if (!result) return null;
+  if (result.statusCode !== 200) throw new Error("Unable to read the retained private Blob content (HTTP " + result.statusCode + ").");
   const data = JSON.parse(await new Response(result.stream).text()) as InstitutionalStore;
   if (data.version !== 1 || !data.draft || !data.published) throw new Error("Invalid institutional content store.");
   return { ...data, draft: ensureHeritageBiography(data.draft), published: ensureHeritageBiography(data.published) };
