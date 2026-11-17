@@ -31,7 +31,7 @@ export async function PUT(request: NextRequest) {
       draft: body.content,
       published: body.action === "publish" ? body.content : current.published
     };
-    await writeHomepageStore(next);
+    await writeHomepageStore(next, { publish: body.action === "publish" });
     return NextResponse.json({ ok: true, action: body.action === "publish" ? "publish" : "draft", updatedAt: next.updatedAt });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Could not save homepage content." }, { status: 500 });
