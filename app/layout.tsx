@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./music-school/music-school.css";
 
 export const metadata: Metadata = {
   title: "Divine Symphony Orchestra",

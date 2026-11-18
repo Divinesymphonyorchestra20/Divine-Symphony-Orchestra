@@ -1,0 +1,39 @@
+.dso-school-hero{position:relative;min-height:510px;display:flex;align-items:center;padding:90px max(7vw,24px);background:linear-gradient(115deg,#31083d,#6b176f 58%,#a42b83);color:#fff;overflow:hidden}
+.dso-school-hero:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 82% 25%,rgba(239,202,91,.2),transparent 34%),linear-gradient(90deg,rgba(24,5,30,.22),transparent)}
+.dso-school-hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(30,5,35,.42),transparent 85%)}
+.dso-school-hero-copy{position:relative;z-index:1;max-width:760px}
+.dso-school-hero h1{font:700 clamp(46px,7vw,82px)/1.03 'Playfair Display',serif;margin:12px 0 20px}
+.dso-school-hero h1 em{color:#f0d26b;font-weight:500}
+.dso-school-hero-copy>p:not(.eyebrow){font-size:16px;line-height:1.8;max-width:570px;color:#f4eaf5}
+.dso-school-primary-link{display:inline-flex;align-items:center;gap:18px;margin-top:18px;padding:13px 20px;border-radius:28px;background:#e9c85c;color:#35113c;font-size:12px;font-weight:800;text-decoration:none}
+.dso-school-primary-link span{font-size:18px}
+.dso-school-intro,.dso-school-learning,.dso-school-instruments,.dso-school-team,.dso-school-application{padding:76px max(7vw,24px)}
+.dso-school-intro{display:grid;grid-template-columns:minmax(220px,.85fr) minmax(0,1.15fr);gap:50px;background:#fff}
+.dso-school-intro h2,.dso-school-learning h2,.dso-school-instruments h2,.dso-school-team h2,.dso-school-application h2{font:600 clamp(28px,4vw,43px)/1.16 'Playfair Display',serif;color:#352638;margin:8px 0 16px}
+.dso-school-intro-copy p,.dso-school-learning header>p:last-child,.dso-school-instruments p,.dso-school-team header>p:last-child,.dso-school-application p{font-size:13px;line-height:1.85;color:#6c606e}
+.dso-school-learning{background:#f8f4f9}
+.dso-school-learning>header,.dso-school-team>header{max-width:690px;margin-bottom:28px}
+.dso-school-learning-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.dso-school-learning-grid article{padding:23px;background:#fff;border:1px solid #eee4ef;border-radius:12px;min-height:190px}
+.dso-school-learning-grid article>span{font-size:10px;font-weight:800;letter-spacing:.15em;color:#9a6c21}
+.dso-school-learning-grid h3{font:600 20px 'Playfair Display',serif;color:#39283d;margin:18px 0 8px}
+.dso-school-learning-grid p{font-size:12px;line-height:1.75;color:#726675;margin:0}
+.dso-school-instruments{background:#fff}
+.dso-school-instruments>div{max-width:760px;padding:34px;background:#f6eff7;border-left:4px solid #b38a36;border-radius:10px}
+.dso-school-instruments a{display:inline-block;margin-top:12px;color:#64116a;font-size:12px;font-weight:800;text-decoration:none}
+.dso-school-team{background:#fff}
+.dso-school-instructor-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.dso-school-instructor{display:flex;flex-direction:column;min-width:0;overflow:hidden;border:1px solid #eee5ef;border-radius:11px;background:#fff;text-decoration:none}
+.dso-school-instructor>img,.dso-school-initials{display:grid;width:100%;height:190px;object-fit:cover;background:linear-gradient(140deg,#4b0754,#a32683);color:#fff;place-items:center;font:600 38px 'Playfair Display',serif}
+.dso-school-instructor-copy{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:15px}
+.dso-school-instructor-copy strong{font:600 18px 'Playfair Display',serif;color:#38283d}
+.dso-school-instructor-copy small{font-size:10px;line-height:1.5;color:#766a7a}
+.dso-school-profile-link{margin-top:7px;color:#64116a;font-size:10px;font-weight:800}
+.dso-school-empty{padding:18px;background:#f8f4f9;border-radius:9px;color:#6c606e;font-size:12px}
+.dso-school-application{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(220px,.6fr);gap:35px;align-items:center;background:#3b0b43;color:#fff}
+.dso-school-application h2{color:#fff}
+.dso-school-application p{color:#e7dce9}
+.dso-school-application .eyebrow{color:#e6c85e}
+.dso-school-portal-note{padding:18px;border:1px solid rgba(255,255,255,.22);border-radius:9px}
+@media(max-width:900px){.dso-school-learning-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dso-school-instructor-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:650px){.dso-school-hero{min-height:420px;padding-top:70px;padding-bottom:70px}.dso-school-intro,.dso-school-learning,.dso-school-instruments,.dso-school-team,.dso-school-application{padding:52px 22px}.dso-school-intro,.dso-school-application{grid-template-columns:1fr;gap:20px}.dso-school-learning-grid{grid-template-columns:1fr}.dso-school-instructor-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dso-school-instructor>img,.dso-school-initials{height:150px}}
