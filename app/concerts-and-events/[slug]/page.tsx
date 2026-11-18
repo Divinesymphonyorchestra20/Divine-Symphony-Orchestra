@@ -20,7 +20,7 @@ export default async function EventDetailPage({params}:{params:Promise<{slug:str
   {event.conductor&&<section className="dso-event-detail-section"><h2>Conductor</h2><p>{event.conductor}</p></section>}
   {event.performers&&<section className="dso-event-detail-section"><h2>Featuring</h2><p>{event.performers}</p></section>}
   {event.programme&&<section className="dso-event-detail-section"><h2>Programme</h2>{event.programme.split("\n").map((line,index)=><p key={index}>{line}</p>)}</section>}
-  {event.scheduleText&&<section className="dso-event-detail-section"><h2>Anniversary week</h2><p>{event.scheduleText.split("\\n").map((line,index)=><span key={index} className="dso-event-schedule-line">{line}<br/></span>)}</p></section>}
+  {event.scheduleText&&<section className="dso-event-detail-section"><h2>Anniversary week</h2><p>{event.scheduleText.split("\n").map((line,index)=><span key={index} className="dso-event-schedule-line">{line}<br/></span>)}</p></section>}
   {event.registrationUrl&&<p><a className="dso-event-registration" href={event.registrationUrl} target={external?"_blank":undefined} rel={external?"noreferrer":undefined}>Event information / registration ↗</a></p>}
  </main>;
 }
