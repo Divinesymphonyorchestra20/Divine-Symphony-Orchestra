@@ -352,7 +352,7 @@ export async function listPeopleRecords(resource: PeopleResource, publicOnly = f
        LEFT JOIN public.people_instrument_groups g ON g.id = i.group_id ${publicOnly ? "AND g.active = true" : ""}
        LEFT JOIN public.people_leadership_assignments l ON l.musician_id = m.id ${publicOnly ? "AND l.status = 'published' AND l.active = true" : ""}
        ${where}
-       GROUP BY m.id ORDER BY m.display_order, m.first_name, m.last_name`,
+       GROUP BY m.id, ma.id ORDER BY m.display_order, m.first_name, m.last_name`,
     )).rows;
   }
   if (resource === "leadership") {
