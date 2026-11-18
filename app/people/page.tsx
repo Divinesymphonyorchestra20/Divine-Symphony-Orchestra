@@ -41,12 +41,12 @@ export default function Page() {
             <p>Meet the musicians entrusted with guiding and shaping DSO.</p>
             <span className="people-entry-action">Explore leadership <span aria-hidden="true">→</span></span>
           </Link>
-          <article className="people-entry-card people-entry-upcoming" aria-label="Alumni, upcoming section">
+          <Link className="people-entry-card" href="/people/alumni">
             <span className="people-entry-number">03</span>
             <h3>Alumni</h3>
-            <p>Former members and their place in DSO&apos;s history</p>
-            <span className="people-entry-status">Upcoming section</span>
-          </article>
+            <p>Recognising former members and their contribution to DSO.</p>
+            <span className="people-entry-action">Explore alumni <span aria-hidden="true">→</span></span>
+          </Link>
           <article className="people-entry-card people-entry-upcoming" aria-label="Contributors, upcoming section">
             <span className="people-entry-number">04</span>
             <h3>Contributors</h3>
