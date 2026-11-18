@@ -52,6 +52,21 @@ SELECT name, slug, display_order, active
 FROM public.people_instruments
 ORDER BY group_id, display_order, name;
 
+WITH expected(slug, group_slug) AS (
+  VALUES
+    ('violin', 'violins'), ('viola', 'violas'), ('cello', 'cellos'),
+    ('clarinet', 'woodwinds'), ('flute', 'woodwinds'), ('oboe', 'woodwinds'),
+    ('bassoon', 'woodwinds'), ('trumpet', 'brass'), ('trombone', 'brass'),
+    ('euphonium', 'brass'), ('percussion', 'percussion'), ('harp', 'harp')
+)
+SELECT expected.slug, expected.group_slug,
+       (i.id IS NOT NULL AND i.active AND g.active) AS configured
+FROM expected
+LEFT JOIN public.people_instruments i ON i.slug = expected.slug
+LEFT JOIN public.people_instrument_groups g
+  ON g.id = i.group_id AND g.slug = expected.group_slug
+ORDER BY expected.group_slug, expected.slug;
+
 SELECT table_name, column_name, data_type, column_default
 FROM information_schema.columns
 WHERE table_schema = 'public'
@@ -59,7 +74,8 @@ WHERE table_schema = 'public'
     ('people_musicians', 'review_required'),
     ('people_musicians', 'review_reason'),
     ('people_leadership_assignments', 'review_required'),
-    ('people_leadership_assignments', 'review_reason')
+    ('people_leadership_assignments', 'review_reason'),
+    ('people_leadership_assignments', 'musical_role')
   )
 ORDER BY table_name, column_name;
 

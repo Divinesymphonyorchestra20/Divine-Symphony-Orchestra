@@ -4,7 +4,7 @@ import { ChangeEvent, useEffect, useMemo, useState } from "react";
 
 type PageKey = "history" | "founding-members" | "milestones" | "about" | "music" | "events" | "people" | "gallery" | "contact" | "our-heritage" | "our-story" | "our-legacy" | "orchestra" | "meet-the-members";
 type Milestone = { id: string; year: string; title: string; kind: string; text: string; published: boolean; editorialNote?: string };
-type Founder = { id: string; name: string; instrument: string; section: string; biography: string; published: boolean };
+type Founder = { id: string; name: string; instrument: string; section: string; biography: string; profileLink?: string; published: boolean };
 type Media = { id: string; page: PageKey; collection: string; pathname: string; alt: string; caption: string; credit: string; published: boolean };
 type Video = { id: string; page: PageKey; title: string; description: string; youtubeUrl: string; published: boolean };
 type Content = { version: 1; updatedAt: string; milestones: Milestone[]; founders: Founder[]; media: Media[]; videos: Video[] };
@@ -67,6 +67,20 @@ export default function HistoryAdmin() {
   }
   function patchMilestone(id:string,values:Partial<Milestone>){if(!content)return;setContent({...content,milestones:content.milestones.map(x=>x.id===id?{...x,...values}:x)});}
   function patchFounder(id:string,values:Partial<Founder>){if(!content)return;setContent({...content,founders:content.founders.map(x=>x.id===id?{...x,...values}:x)});}
+  function addFounder(){
+    if(!content)return;
+    setContent({...content,founders:[...content.founders,{id:`f-${Date.now()}`,name:"",instrument:"",section:"Strings",biography:"",profileLink:"",published:false}]});
+    setNotice("Founder added as a draft. Complete the approved details, then save.");
+  }
+  function moveFounder(id:string,direction:-1|1){
+    if(!content)return;
+    const currentIndex=content.founders.findIndex(item=>item.id===id);
+    const nextIndex=currentIndex+direction;
+    if(currentIndex<0||nextIndex<0||nextIndex>=content.founders.length)return;
+    const founders=[...content.founders];
+    [founders[currentIndex],founders[nextIndex]]=[founders[nextIndex],founders[currentIndex]];
+    setContent({...content,founders});
+  }
   function patchMedia(id:string,values:Partial<Media>){if(!content)return;setContent({...content,media:content.media.map(x=>x.id===id?{...x,...values}:x)});}
   function patchVideo(id:string,values:Partial<Video>){if(!content)return;setContent({...content,videos:content.videos.map(x=>x.id===id?{...x,...values}:x)});}
   function addMilestone(e:React.FormEvent){
@@ -118,7 +132,8 @@ export default function HistoryAdmin() {
       <form className="dso-cms-add-form" onSubmit={addMilestone}><h3>Add a milestone</h3><div className="dso-cms-grid"><label>Year<input value={newMilestone.year} onChange={e=>setNewMilestone({...newMilestone,year:e.target.value})} placeholder="e.g. 2020" required/></label><label>Category<input value={newMilestone.kind} onChange={e=>setNewMilestone({...newMilestone,kind:e.target.value})}/></label><label className="wide">Title<input value={newMilestone.title} onChange={e=>setNewMilestone({...newMilestone,title:e.target.value})} required/></label><label className="wide">Description<textarea rows={3} value={newMilestone.text} onChange={e=>setNewMilestone({...newMilestone,text:e.target.value})} required/></label></div><button className="dso-cms-secondary">Add as draft</button></form>
     </section>}
     {tab==="founders"&&<section className="dso-cms-panel"><div className="dso-cms-panel-title"><div><p className="dso-cms-kicker">THE ORIGINAL STRING ENSEMBLE</p><h2>Founding-member profiles</h2></div><span>Biographies remain blank until approved information is supplied.</span></div>
-      {content.founders.map(item=><article className="dso-cms-record" key={item.id}><div className="dso-cms-record-top"><strong>{item.name}</strong><label className="dso-cms-toggle"><input type="checkbox" checked={item.published} onChange={e=>patchFounder(item.id,{published:e.target.checked})}/> Published</label></div><div className="dso-cms-grid"><label>Name<input value={item.name} onChange={e=>patchFounder(item.id,{name:e.target.value})}/></label><label>Original instrument<input value={item.instrument} onChange={e=>patchFounder(item.id,{instrument:e.target.value})}/></label><label className="wide">Biography<textarea rows={3} value={item.biography} onChange={e=>patchFounder(item.id,{biography:e.target.value})} placeholder="Add an approved biography when available."/></label></div></article>)}
+      {content.founders.map((item,index)=><article className="dso-cms-record" key={item.id}><div className="dso-cms-record-top"><strong>{item.name||"Unnamed founder"}</strong><label className="dso-cms-toggle"><input type="checkbox" checked={item.published} onChange={e=>patchFounder(item.id,{published:e.target.checked})}/> Published</label></div><div className="dso-cms-grid"><label>Name<input value={item.name} onChange={e=>patchFounder(item.id,{name:e.target.value})}/></label><label>Original instrument<input value={item.instrument} onChange={e=>patchFounder(item.id,{instrument:e.target.value})}/></label><label>Section<input value={item.section} onChange={e=>patchFounder(item.id,{section:e.target.value})}/></label><label>Profile link<input value={item.profileLink||""} onChange={e=>patchFounder(item.id,{profileLink:e.target.value})} placeholder="/people/profiles/name"/></label><label className="wide">Biography<textarea rows={3} value={item.biography} onChange={e=>patchFounder(item.id,{biography:e.target.value})} placeholder="Add an approved biography when available."/></label></div><div className="dso-cms-record-actions"><button type="button" className="dso-cms-secondary" disabled={index===0} onClick={()=>moveFounder(item.id,-1)}>Move up</button><button type="button" className="dso-cms-secondary" disabled={index===content.founders.length-1} onClick={()=>moveFounder(item.id,1)}>Move down</button><button type="button" className="dso-cms-delete" onClick={()=>setContent({...content,founders:content.founders.filter(founder=>founder.id!==item.id)})}>Remove record</button></div></article>)}
+      <button type="button" className="dso-cms-secondary" onClick={addFounder}>Add founder</button>
     </section>}
     {tab==="media"&&<section className="dso-cms-panel"><div className="dso-cms-panel-title"><div><p className="dso-cms-kicker">IMAGE LIBRARY</p><h2>Upload photographs</h2></div><span>Images are stored privately until published.</span></div>
       <div className="dso-cms-upload-form">

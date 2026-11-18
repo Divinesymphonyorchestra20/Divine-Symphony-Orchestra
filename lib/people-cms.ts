@@ -52,12 +52,57 @@ export type PublicMusicianProfile = {
   leadership: Array<{
     id: string;
     title: string;
+    musicalRole: string;
     description: string;
     displayOrder: number;
     status?: PeopleStatus;
     reviewRequired?: boolean;
     reviewReason?: string;
   }>;
+};
+
+export type PublicLeadershipDirectoryEntry = {
+  id: string;
+  displayName: string;
+  profileSlug: string;
+  biography: string;
+  portraitAltText: string;
+  portraitPath: string | null;
+  imageCredit: string;
+  assignments: Array<{
+    id: string;
+    title: string;
+    musicalRole: string;
+    description: string;
+    displayOrder: number;
+  }>;
+};
+
+export type AdminLeadershipPreviewRecord = {
+  id: string;
+  musicianId: string;
+  musicianName: string;
+  profileSlug: string;
+  title: string;
+  musicalRole: string;
+  description: string;
+  active: boolean;
+  status: PeopleStatus;
+  reviewRequired: boolean;
+  reviewReason: string;
+  displayOrder: number;
+  instruments: string;
+  musicianStatus: PeopleStatus;
+  musicianActive: boolean;
+  musicianReviewRequired: boolean;
+  musicianReviewReason: string;
+  musicianBiography: string;
+  musicianPortraitPath: string | null;
+  musicianPortraitAltText: string;
+  musicianImageCredit: string;
+  portraitSelected: boolean;
+  portraitStatus: string | null;
+  portraitPermissionStatus: string | null;
 };
 
 export function isPeopleResource(value: string): value is PeopleResource {
@@ -296,6 +341,7 @@ export async function listPeopleRecords(resource: PeopleResource, publicOnly = f
               )) FILTER (WHERE i.id IS NOT NULL), '[]'::json) AS instruments,
               COALESCE(json_agg(DISTINCT jsonb_build_object(
                 'id', l.id::text, 'title', l.title, 'description', l.description,
+                'musicalRole', l.musical_role,
                 'displayOrder', l.display_order, 'status', l.status,
                 'reviewRequired', l.review_required, 'reviewReason', l.review_reason
               )) FILTER (WHERE l.id IS NOT NULL), '[]'::json) AS leadership
@@ -313,7 +359,7 @@ export async function listPeopleRecords(resource: PeopleResource, publicOnly = f
     const where = publicOnly ? "WHERE l.status = 'published' AND l.active = true AND m.status = 'published' AND m.active = true" : "";
     return (await queryDatabase(
       `SELECT l.id::text, l.musician_id::text AS "musicianId", m.display_name AS "musicianName",
-              m.profile_slug AS "profileSlug", l.title, l.description, l.active, l.status,
+             m.profile_slug AS "profileSlug", l.title, l.musical_role AS "musicalRole", l.description, l.active, l.status,
               l.review_required AS "reviewRequired", l.review_reason AS "reviewReason",
               l.display_order AS "displayOrder", l.created_at AS "createdAt", l.updated_at AS "updatedAt",
               COALESCE(string_agg(DISTINCT i.name, ', ' ORDER BY i.name), '') AS instruments
@@ -347,6 +393,64 @@ export async function listPeopleRecords(resource: PeopleResource, publicOnly = f
   )).rows;
 }
 
+export async function listPublicLeadershipDirectory(): Promise<PublicLeadershipDirectoryEntry[]> {
+  const result = await queryDatabase<PublicLeadershipDirectoryEntry>(
+    `SELECT m.id::text, m.display_name AS "displayName", m.profile_slug AS "profileSlug",
+            m.biography,
+            CASE WHEN ma.id IS NOT NULL THEN m.portrait_alt_text ELSE '' END AS "portraitAltText",
+            CASE WHEN ma.id IS NOT NULL THEN ma.blob_path ELSE NULL END AS "portraitPath",
+            CASE WHEN ma.id IS NOT NULL THEN m.image_credit ELSE '' END AS "imageCredit",
+            json_agg(jsonb_build_object(
+              'id', l.id::text, 'title', l.title, 'musicalRole', l.musical_role,
+              'description', l.description, 'displayOrder', l.display_order
+            ) ORDER BY l.display_order, l.title) AS assignments
+     FROM public.people_leadership_assignments l
+     JOIN public.people_musicians m ON m.id = l.musician_id
+     LEFT JOIN public.media_assets ma ON ma.id = m.portrait_media_id
+       AND ma.status = 'published'
+       AND ma.permission_status IN ('approved', 'not_required')
+     WHERE l.active = true AND l.status = 'published' AND l.review_required = false
+       AND m.active = true AND m.status = 'published' AND m.review_required = false
+     GROUP BY m.id, ma.id
+     ORDER BY MIN(l.display_order), m.first_name, m.last_name`,
+  );
+  return result.rows;
+}
+
+export async function getAdminLeadershipPreviewRecord(id: string): Promise<AdminLeadershipPreviewRecord | null> {
+  if (!uuidPattern.test(id)) throw new PeopleCmsError("The record ID is invalid.");
+  const result = await queryDatabase<AdminLeadershipPreviewRecord>(
+    `SELECT l.id::text, l.musician_id::text AS "musicianId", m.display_name AS "musicianName",
+            m.profile_slug AS "profileSlug", l.title, l.musical_role AS "musicalRole", l.description,
+            l.active, l.status, l.review_required AS "reviewRequired", l.review_reason AS "reviewReason",
+            l.display_order AS "displayOrder",
+            COALESCE(string_agg(DISTINCT i.name, ', ' ORDER BY i.name), '') AS instruments,
+            m.status AS "musicianStatus", m.active AS "musicianActive",
+            m.review_required AS "musicianReviewRequired", m.review_reason AS "musicianReviewReason",
+            m.biography AS "musicianBiography",
+            (m.portrait_media_id IS NOT NULL) AS "portraitSelected",
+            CASE WHEN ma.id IS NOT NULL AND ma.status = 'published'
+              AND ma.permission_status IN ('approved', 'not_required')
+              THEN ma.blob_path ELSE NULL END AS "musicianPortraitPath",
+            CASE WHEN ma.id IS NOT NULL AND ma.status = 'published'
+              AND ma.permission_status IN ('approved', 'not_required')
+              THEN m.portrait_alt_text ELSE '' END AS "musicianPortraitAltText",
+            CASE WHEN ma.id IS NOT NULL AND ma.status = 'published'
+              AND ma.permission_status IN ('approved', 'not_required')
+              THEN m.image_credit ELSE '' END AS "musicianImageCredit",
+            ma.status AS "portraitStatus", ma.permission_status AS "portraitPermissionStatus"
+     FROM public.people_leadership_assignments l
+     JOIN public.people_musicians m ON m.id = l.musician_id
+     LEFT JOIN public.media_assets ma ON ma.id = m.portrait_media_id
+     LEFT JOIN public.people_musician_instruments mi ON mi.musician_id = m.id
+     LEFT JOIN public.people_instruments i ON i.id = mi.instrument_id
+     WHERE l.id = $1
+     GROUP BY l.id, m.id, ma.id`,
+    [id],
+  );
+  return result.rows[0] ?? null;
+}
+
 export async function getPublicMusicianProfile(profileSlug: string): Promise<PublicMusicianProfile | null> {
   if (!slugPattern.test(profileSlug)) return null;
 
@@ -374,7 +478,8 @@ export async function getPublicMusicianProfile(profileSlug: string): Promise<Pub
             COALESCE((
               SELECT json_agg(leadership_row ORDER BY leadership_row."displayOrder", leadership_row.title)
               FROM (
-                SELECT l.id::text, l.title, l.description, l.display_order AS "displayOrder"
+                SELECT l.id::text, l.title, l.musical_role AS "musicalRole",
+                       l.description, l.display_order AS "displayOrder"
                 FROM public.people_leadership_assignments l
                 WHERE l.musician_id = m.id
                   AND l.active = true
@@ -509,6 +614,7 @@ export async function savePeopleRecord(
       const musicianId = optionalUuid(input.musicianId, "Musician");
       if (!musicianId) throw new PeopleCmsError("Select an existing musician. Leadership assignments cannot create musicians.");
       const title = text(input.title, "Leadership responsibility", 180, true);
+      const musicalRole = text(input.musicalRole, "Musical role", 180);
       const description = text(input.description, "Description", 8000);
       const assignmentActive = active(input.active);
       const musician = await client.query<{ status: PeopleStatus; active: boolean }>(
@@ -522,11 +628,11 @@ export async function savePeopleRecord(
       if (id) await ensurePeopleRevisionBaseline(client, resource, id, actorId);
       const result = await client.query<{ id: string }>(
         id
-          ? `UPDATE public.people_leadership_assignments SET musician_id=$2,title=$3,description=$4,active=$5,status=$6,review_required=$7,review_reason=$8,display_order=$9,updated_at=now() WHERE id=$1 RETURNING id::text`
-          : `INSERT INTO public.people_leadership_assignments (musician_id,title,description,active,status,review_required,review_reason,display_order) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id::text`,
+          ? `UPDATE public.people_leadership_assignments SET musician_id=$2,title=$3,musical_role=$4,description=$5,active=$6,status=$7,review_required=$8,review_reason=$9,display_order=$10,updated_at=now() WHERE id=$1 RETURNING id::text`
+          : `INSERT INTO public.people_leadership_assignments (musician_id,title,musical_role,description,active,status,review_required,review_reason,display_order) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING id::text`,
         id
-          ? [id, musicianId, title, description, assignmentActive, recordStatus, review.required, review.reason, displayOrder]
-          : [musicianId, title, description, assignmentActive, recordStatus, review.required, review.reason, displayOrder],
+          ? [id, musicianId, title, musicalRole, description, assignmentActive, recordStatus, review.required, review.reason, displayOrder]
+          : [musicianId, title, musicalRole, description, assignmentActive, recordStatus, review.required, review.reason, displayOrder],
       );
       if (!result.rows[0]) throw new PeopleCmsError("Leadership assignment not found.", 404);
       savedId = result.rows[0].id;

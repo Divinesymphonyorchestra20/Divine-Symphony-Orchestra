@@ -22,7 +22,7 @@ export default function InstitutionalPageView({page,active}:{page:InstitutionalP
  <div className="institutional-section-grid">{page.sections.map((s,i)=><section className={"history-section "+(i%2?"history-section-tinted":"")} key={s.heading}><div className="history-section-number">{String(i+1).padStart(2,"0")}</div><div><p className="eyebrow dark">{page.eyebrow}</p><h2>{s.heading}</h2><p>{s.body}</p></div></section>)}</div>
  {page.key==="members"&&<nav className="meet-members-navigation" aria-label="People section navigation">
    <Link className="meet-members-navigation-card" href="/people/our-musicians"><span>01</span><h2>Our Musicians</h2><p>Browse published musician profiles.</p><strong>Explore musicians →</strong></Link>
-   <article className="meet-members-navigation-card upcoming" aria-label="Leadership and Direction, being prepared"><span>02</span><h2>Leadership &amp; Direction</h2><p>This section is being prepared.</p><small>Upcoming section</small></article>
+   <Link className="meet-members-navigation-card" href="/people/leadership"><span>02</span><h2>Leadership &amp; Direction</h2><p>Explore published DSO leadership assignments and musician profiles.</p><strong>Explore leadership →</strong></Link>
    <article className="meet-members-navigation-card upcoming" aria-label="Alumni, being prepared"><span>03</span><h2>Alumni</h2><p>This section is being prepared.</p><small>Upcoming section</small></article>
    <article className="meet-members-navigation-card upcoming" aria-label="Contributors, being prepared"><span>04</span><h2>Contributors</h2><p>This section is being prepared.</p><small>Upcoming section</small></article>
  </nav>}

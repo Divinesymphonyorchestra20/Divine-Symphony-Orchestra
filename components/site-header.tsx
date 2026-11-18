@@ -2,7 +2,7 @@
 import Image from "next/image";
 import {useEffect,useRef,useState} from "react";
 const historyLinks=[{href:"/history",label:"History of DSO"},{href:"/history/founding-members",label:"Founding Members"},{href:"/history/milestones",label:"Milestones"},{href:"/our-heritage",label:"Our Heritage"},{href:"/our-story",label:"Our Story"},{href:"/our-legacy",label:"Our Legacy"},{href:"/dr-daniel-kolawole-olukoya",label:"Dr. Daniel K. Olukoya"}];
-const peopleLinks=[{href:"/people",label:"People overview"},{href:"/people/our-musicians",label:"Our Musicians"},{href:"/orchestra",label:"The Orchestra"},{href:"/meet-the-members",label:"Meet the Members"}];
+const peopleLinks=[{href:"/people",label:"People overview"},{href:"/people/our-musicians",label:"Our Musicians"},{href:"/people/leadership",label:"Leadership & Direction"},{href:"/people/alumni",label:"Alumni"},{href:"/orchestra",label:"The Orchestra"},{href:"/meet-the-members",label:"Meet the Members"}];
 const mainLinks=[{href:"/",label:"Home"},{href:"/about",label:"About"},{href:"/music",label:"Music & Performances"},{href:"/ministry-and-impact",label:"Ministry & Impact"},{href:"/concerts-and-events",label:"Concerts & Events"},{href:"/gallery",label:"Gallery"},{href:"/contact",label:"Contact"},{href:"/news",label:"News"}];
 export default function SiteHeader({active}:{active?:string}){
  const [menuOpen,setMenuOpen]=useState(false),[historyOpen,setHistoryOpen]=useState(false),[peopleOpen,setPeopleOpen]=useState(false);const headerRef=useRef<HTMLElement>(null);

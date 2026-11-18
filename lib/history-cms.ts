@@ -4,7 +4,7 @@ import { syncContentMediaUsage } from "./media-store";
 
 export type PageKey = "history" | "founding-members" | "milestones" | "about" | "music" | "events" | "people" | "gallery" | "contact" | "our-heritage" | "our-story" | "our-legacy" | "orchestra" | "meet-the-members";
 export type Milestone = { id: string; year: string; title: string; kind: string; text: string; published: boolean; editorialNote?: string };
-export type Founder = { id: string; name: string; instrument: string; section: string; biography: string; published: boolean };
+export type Founder = { id: string; name: string; instrument: string; section: string; biography: string; profileLink?: string; published: boolean };
 export type HistoryMediaItem = { id: string; page: PageKey; collection: string; pathname: string; alt: string; caption: string; credit: string; published: boolean };
 export type HistoryVideo = { id: string; page: PageKey; title: string; description: string; youtubeUrl: string; published: boolean };
 export type HistoryContent = { version: 1; updatedAt: string; milestones: Milestone[]; founders: Founder[]; media: HistoryMediaItem[]; videos: HistoryVideo[] };
@@ -31,10 +31,10 @@ export const defaultHistoryContent: HistoryContent = {
     { id: "f-seun-oluwaloju", name: "Seun Oluwaloju", instrument: "Cello", section: "Strings", biography: "", published: true },
     { id: "f-ernest-bisong", name: "Ernest Bisong", instrument: "Violin", section: "Strings", biography: "", published: true },
     { id: "f-aderayo-oyegbade", name: "Aderayo Oyegbade", instrument: "Violin", section: "Strings", biography: "", published: true },
-    { id: "f-aduragbemi-oloyede", name: "Aduragbemi Oloyede", instrument: "Violin", section: "Strings", biography: "", published: true },
+    { id: "f-aduragbemi-oloyede", name: "Aduragbemi Oloyede", instrument: "Violin", section: "Strings", biography: "", profileLink: "/people/musicians/aduragbemi-oloyede", published: true },
     { id: "f-joshua-afolabi", name: "Joshua Afolabi", instrument: "Viola", section: "Strings", biography: "", published: true },
-    { id: "f-olutade-dele", name: "Olutade Dele", instrument: "Violin", section: "Strings", biography: "", published: true },
-    { id: "f-demola-adejayan", name: "Demola Adejayan", instrument: "Violin", section: "Strings", biography: "", published: true },
+    { id: "f-olutade-dele", name: "Olutade Dele", instrument: "Violin", section: "Strings", biography: "", profileLink: "/people/profiles/olutade-dele", published: true },
+    { id: "f-demola-adejayan", name: "Demola Adejayan", instrument: "Violin", section: "Strings", biography: "", profileLink: "/people/profiles/demola-adejayan", published: true },
     { id: "f-john-bello", name: "John Bello", instrument: "Viola", section: "Strings", biography: "", published: true }
   ],
   media: [],

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import SiteHeader from "../../../components/site-header";
 import SiteFooter from "../../../components/site-footer";
 import HistoryMedia from "../../../components/history-media";
@@ -41,7 +42,7 @@ export default async function FoundingMembersPage() {
             <article className="founder-card" key={founder.id}>
               <div className="founder-card-top"><span>{String(index + 1).padStart(2, "0")}</span><span>{founder.section}</span></div>
               <div className="founder-monogram" aria-hidden="true">{founder.name.split(" ").map((part) => part[0]).join("").slice(0, 2)}</div>
-              <h3>{founder.name}</h3>
+              {founder.profileLink ? <h3><Link href={founder.profileLink}>{founder.name}</Link></h3> : <h3>{founder.name}</h3>}
               <p className="founder-instrument">{founder.instrument}</p>
               {founder.biography ? <p className="founder-note">{founder.biography}</p> : <p className="founder-note">Founding musician of the original D.K.O. string ensemble.</p>}
             </article>

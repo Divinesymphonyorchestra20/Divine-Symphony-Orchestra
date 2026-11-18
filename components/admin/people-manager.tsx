@@ -32,7 +32,7 @@ const emptyForms: Record<Resource, FormData> = {
   musicians: { firstName: "", lastName: "", displayName: "", musicalRole: "", profileSlug: "", biography: "", instrumentIds: [], portraitMediaId: "", portraitAltText: "", imageCredit: "", active: true, status: "draft", reviewRequired: false, reviewReason: "", displayOrder: 0 },
   "instrument-groups": { name: "", slug: "", active: true, displayOrder: 0 },
   instruments: { groupId: "", name: "", slug: "", active: true, displayOrder: 0 },
-  leadership: { musicianId: "", title: "", description: "", active: true, status: "draft", reviewRequired: false, reviewReason: "", displayOrder: 0 },
+  leadership: { musicianId: "", title: "", musicalRole: "", description: "", active: true, status: "draft", reviewRequired: false, reviewReason: "", displayOrder: 0 },
   alumni: { name: "", formerLeadershipResponsibility: "", instrument: "", biography: "", portraitMediaId: "", portraitAltText: "", imageCredit: "", profileLink: "", status: "draft", displayOrder: 0 },
   contributors: { name: "", contributorType: "individual", description: "", imageMediaId: "", imageAltText: "", imageCredit: "", externalLink: "", status: "draft", displayOrder: 0 },
 };
@@ -302,6 +302,7 @@ export default function PeopleManager() {
     if (resource === "leadership") return <>
       <label className="dso-field">Existing musician<select required value={valueAsText(form.musicianId)} onChange={event => setField("musicianId", event.target.value)}><option value="">Select a canonical musician</option>{(records.musicians as Array<RecordData>).map(musician => <option value={valueAsText(musician.id)} key={valueAsText(musician.id)}>{titleOf(musician)} · {valueAsText(musician.status)}</option>)}</select></label>
       {textField("Leadership responsibility", "title", { required: true, max: 180 })}
+      {textField("Musical role as listed for this assignment", "musicalRole", { max: 180 })}
       {textField("Description", "description", { multiline: true, max: 8000 })}
       {reviewFields()}
       {activeField()}{statusField()}{orderField()}

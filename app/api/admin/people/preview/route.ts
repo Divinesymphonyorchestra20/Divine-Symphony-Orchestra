@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { hasAdminPermission, verifyAdminSession } from "../../../../../lib/admin-auth";
 import {
+  getAdminLeadershipPreviewRecord,
   isPeopleResource,
   listPeopleRecordRevisions,
   listPeopleRecords,
@@ -23,8 +24,10 @@ export async function GET(request: NextRequest) {
   const id = params.get("id") || "";
   if (!isPeopleResource(resource) || !id) return NextResponse.json({ error: "Select a valid record to preview." }, { status: 400 });
   try {
-    const records = await listPeopleRecords(resource as PeopleResource);
-    const record = records.find(item => item && typeof item === "object" && "id" in item && item.id === id);
+    const record = resource === "leadership"
+      ? await getAdminLeadershipPreviewRecord(id)
+      : (await listPeopleRecords(resource as PeopleResource))
+        .find(item => item && typeof item === "object" && "id" in item && item.id === id);
     if (!record) return NextResponse.json({ error: "That People record was not found." }, { status: 404 });
     const revisions = await listPeopleRecordRevisions(resource as PeopleResource, id);
     return NextResponse.json({ resource, record, revisions }, { headers: { "Cache-Control": "private, no-store" } });

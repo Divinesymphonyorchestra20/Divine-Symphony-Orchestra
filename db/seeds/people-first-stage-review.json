@@ -38,7 +38,9 @@
       "legacyFounderRef": "f-aduragbemi-oloyede",
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Dominic",
@@ -49,7 +51,9 @@
       "instrumentSlugs": ["clarinet"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Ikpo",
@@ -60,7 +64,9 @@
       "instrumentSlugs": ["clarinet"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Shogunle",
@@ -71,7 +77,9 @@
       "instrumentSlugs": ["percussion"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Jif",
@@ -82,7 +90,9 @@
       "instrumentSlugs": ["violin"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Adetiba",
@@ -93,7 +103,9 @@
       "instrumentSlugs": ["violin"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Victor",
@@ -104,7 +116,9 @@
       "instrumentSlugs": ["flute"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Daniel",
@@ -115,7 +129,9 @@
       "instrumentSlugs": ["viola"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Oladipo",
@@ -126,7 +142,9 @@
       "instrumentSlugs": ["viola"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Oluyide",
@@ -137,7 +155,9 @@
       "instrumentSlugs": ["cello"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Anaje",
@@ -148,7 +168,9 @@
       "instrumentSlugs": ["violin"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Samuel",
@@ -159,7 +181,9 @@
       "instrumentSlugs": ["viola"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Seun",
@@ -170,7 +194,9 @@
       "instrumentSlugs": ["violin"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Oluwafunmileyi",
@@ -181,7 +207,9 @@
       "instrumentSlugs": ["cello"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Bello",
@@ -192,7 +220,9 @@
       "instrumentSlugs": ["violin"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Olawale",
@@ -203,7 +233,9 @@
       "instrumentSlugs": ["violin"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Adebanjo",
@@ -214,7 +246,9 @@
       "instrumentSlugs": ["viola"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Abayomi",
@@ -225,7 +259,9 @@
       "instrumentSlugs": ["violin"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Oluwafunmileyi",
@@ -236,7 +272,9 @@
       "instrumentSlugs": ["cello"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Abayomi",
@@ -247,7 +285,9 @@
       "instrumentSlugs": ["violin", "harp"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Abayomi",
@@ -258,7 +298,9 @@
       "instrumentSlugs": ["viola"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Morenikeji",
@@ -269,7 +311,9 @@
       "instrumentSlugs": ["trombone"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Emmanuel",
@@ -280,7 +324,9 @@
       "instrumentSlugs": ["euphonium"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Ojo",
@@ -291,7 +337,9 @@
       "instrumentSlugs": ["percussion"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Philip",
@@ -302,7 +350,9 @@
       "instrumentSlugs": ["trumpet"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Victor",
@@ -313,7 +363,9 @@
       "instrumentSlugs": ["oboe"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Oluwaseun",
@@ -324,7 +376,9 @@
       "instrumentSlugs": ["bassoon"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     },
     {
       "firstName": "Ayoleke",
@@ -335,7 +389,9 @@
       "instrumentSlugs": ["cello"],
       "active": true,
       "status": "draft",
-      "biography": ""
+      "biography": "",
+      "reviewRequired": true,
+      "reviewReason": "DSO review required: verify the supplied name and role, and confirm whether to publish a profile without the missing approved biography."
     }
   ],
   "reviewRequiredMusicians": [
@@ -354,18 +410,18 @@
     }
   ],
   "leadershipAssignments": [
-    { "musicianProfileSlug": "aduragbemi-oloyede", "title": "Overall Leader (Main)", "musicalRole": "Violin / Concertmaster", "active": true, "status": "draft" },
-    { "musicianProfileSlug": "daniel-abayomi", "title": "Head of DSO Schools", "musicalRole": "Viola", "active": true, "status": "draft" },
-    { "musicianProfileSlug": "anaje-paul", "title": "PRO", "musicalRole": "Violin", "active": true, "status": "draft" },
-    { "musicianProfileSlug": "samuel-eluwah", "title": "Artistic Director", "musicalRole": "Viola", "active": true, "status": "draft" },
-    { "musicianProfileSlug": "seun-adekanbi", "title": "Strings Sectional Head", "musicalRole": "Conductor / Violin / Assistant Concertmaster", "active": true, "status": "draft", "reviewRequired": true, "reviewReason": "Musician and leadership lists use different musical-role wording; preserve both pending DSO review." },
-    { "musicianProfileSlug": "abayomi-prosper", "title": "Media", "musicalRole": "Violin", "active": true, "status": "draft" },
-    { "musicianProfileSlug": "abayomi-peace", "title": "Welfare", "musicalRole": "Violin / Harp", "active": true, "status": "draft" },
-    { "musicianProfileSlug": "adegoke-wuyi", "title": "Section Leader, Percussion", "musicalRole": "Percussion", "active": true, "status": "draft", "reviewRequired": true, "reviewReason": "Adegoke Wuyi is not among the 28 supplied musicians and requires DSO confirmation." },
-    { "musicianProfileSlug": "philip", "title": "Logistics", "musicalRole": "Trumpet", "active": true, "status": "draft" },
-    { "musicianProfileSlug": "victor-egbegbuna", "title": "Admin Office", "musicalRole": "Oboe / Conductor", "active": true, "status": "draft" },
-    { "musicianProfileSlug": "oluwaseun-oluwade", "title": "Artistic Director", "musicalRole": "Bassoon / Conductor", "active": true, "status": "draft" },
-    { "musicianProfileSlug": "ayoleke-olaifa", "title": "Programme Coordinator", "musicalRole": "Cello", "active": true, "status": "draft" }
+    {"musicianProfileSlug": "aduragbemi-oloyede", "title": "Overall Leader (Main)", "musicalRole": "Violin / Concertmaster", "active": true, "status": "draft", "reviewRequired": true, "reviewReason": "DSO review required: confirm the appointment and supplied musical-role wording, and decide publication readiness."},
+    {"musicianProfileSlug": "daniel-abayomi", "title": "Head of DSO Schools", "musicalRole": "Viola", "active": true, "status": "draft", "reviewRequired": true, "reviewReason": "DSO review required: confirm the appointment and supplied musical-role wording, and decide publication readiness."},
+    {"musicianProfileSlug": "anaje-paul", "title": "PRO", "musicalRole": "Violin", "active": true, "status": "draft", "reviewRequired": true, "reviewReason": "DSO review required: confirm the appointment and supplied musical-role wording, and decide publication readiness."},
+    {"musicianProfileSlug": "samuel-eluwah", "title": "Artistic Director", "musicalRole": "Viola", "active": true, "status": "draft", "reviewRequired": true, "reviewReason": "DSO review required: confirm the appointment and supplied musical-role wording, and decide publication readiness."},
+    {"musicianProfileSlug": "seun-adekanbi", "title": "Strings Sectional Head", "musicalRole": "Conductor / Violin / Assistant Concertmaster", "active": true, "status": "draft", "reviewRequired": true, "reviewReason": "The musician and leadership tables use different supplied musical-role wording; preserve both values pending DSO review."},
+    {"musicianProfileSlug": "abayomi-prosper", "title": "Media", "musicalRole": "Violin", "active": true, "status": "draft", "reviewRequired": true, "reviewReason": "DSO review required: confirm the appointment and supplied musical-role wording, and decide publication readiness."},
+    {"musicianProfileSlug": "abayomi-peace", "title": "Welfare", "musicalRole": "Violin / Harp", "active": true, "status": "draft", "reviewRequired": true, "reviewReason": "DSO review required: confirm the appointment and supplied musical-role wording, and decide publication readiness."},
+    {"musicianProfileSlug": "adegoke-wuyi", "title": "Section Leader, Percussion", "musicalRole": "Percussion", "active": true, "status": "draft", "reviewRequired": true, "reviewReason": "Adegoke Wuyi is absent from the 28-person musician roster; DSO must confirm this linked record and assignment."},
+    {"musicianProfileSlug": "philip", "title": "Logistics", "musicalRole": "Trumpet", "active": true, "status": "draft", "reviewRequired": true, "reviewReason": "DSO review required: confirm the appointment and supplied musical-role wording, and decide publication readiness."},
+    {"musicianProfileSlug": "victor-egbegbuna", "title": "Admin Office", "musicalRole": "Oboe / Conductor", "active": true, "status": "draft", "reviewRequired": true, "reviewReason": "DSO review required: confirm the appointment and supplied musical-role wording, and decide publication readiness."},
+    {"musicianProfileSlug": "oluwaseun-oluwade", "title": "Artistic Director", "musicalRole": "Bassoon / Conductor", "active": true, "status": "draft", "reviewRequired": true, "reviewReason": "DSO review required: confirm the appointment and supplied musical-role wording, and decide publication readiness."},
+    {"musicianProfileSlug": "ayoleke-olaifa", "title": "Programme Coordinator", "musicalRole": "Cello", "active": true, "status": "draft", "reviewRequired": true, "reviewReason": "DSO review required: confirm the appointment and supplied musical-role wording, and decide publication readiness."}
   ],
   "alumni": [
     {
@@ -468,5 +524,9 @@
     "Seun Adekanbi is listed as “Violin / Assistant Concertmaster” in the musician roster and “Conductor / Violin / Assistant Concertmaster” in leadership; preserve both values pending DSO review.",
     "Biographies, portraits, image credits and media permissions were not supplied; obtain DSO-approved material before publication.",
     "Names and spellings should be checked by DSO before publication, as required by the source brief."
+,
+    "Approved individual biographies and portraits were not supplied for any of the 28 roster musicians or the separately flagged Adegoke Wuyi record; leave biography fields empty until DSO provides approved text.",
+    "The source materials reference Biography One and Comprehensive History Updated, but those original files are not present in this repository; do not infer member biographies from the consolidated history summaries.",
+    "Demola Adejayan appears in both the first-stage musician roster and founding-member archive, while the brief forbids unconfirmed identity merges; keep the records separate pending DSO confirmation."
   ]
 }

@@ -199,6 +199,7 @@ export const peopleLeadershipAssignments = pgTable("people_leadership_assignment
   id: uuid("id").defaultRandom().primaryKey(),
   musicianId: uuid("musician_id").notNull().references(() => peopleMusicians.id, { onDelete: "restrict" }),
   title: varchar("title", { length: 180 }).notNull(),
+  musicalRole: varchar("musical_role", { length: 180 }).notNull().default(""),
   description: text("description").notNull().default(""),
   active: boolean("active").notNull().default(true),
   status: varchar("status", { length: 24 }).notNull().default("draft"),

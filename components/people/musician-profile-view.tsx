@@ -101,6 +101,7 @@ export default function MusicianProfileView({
               {leadership.map(position => (
                 <article key={position.id}>
                   <h3>{position.title}</h3>
+                  {position.musicalRole.trim() && <p className="musician-profile-role">{position.musicalRole}</p>}
                   {position.description.trim() && <p>{position.description}</p>}
                   {preview && (position.status !== "published" || position.reviewRequired) && (
                     <small className="people-preview-review">

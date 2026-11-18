@@ -22,6 +22,13 @@
       "when": 1794990669668,
       "tag": "0002_people_review_revisions_and_registry",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794992859142,
+      "tag": "0003_people_leadership_musical_roles",
+      "breakpoints": true
     }
   ]
 }

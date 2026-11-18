@@ -35,12 +35,12 @@ export default function Page() {
             <p>Browse published musicians by their approved instrumental assignments.</p>
             <span className="people-entry-action">Explore musicians <span aria-hidden="true">→</span></span>
           </Link>
-          <article className="people-entry-card people-entry-upcoming" aria-label="Leadership and Direction, upcoming section">
+          <Link className="people-entry-card" href="/people/leadership">
             <span className="people-entry-number">02</span>
             <h3>Leadership &amp; Direction</h3>
-            <p>Conductors and organisational leadership</p>
-            <span className="people-entry-status">Upcoming section</span>
-          </article>
+            <p>Meet the musicians entrusted with guiding and shaping DSO.</p>
+            <span className="people-entry-action">Explore leadership <span aria-hidden="true">→</span></span>
+          </Link>
           <article className="people-entry-card people-entry-upcoming" aria-label="Alumni, upcoming section">
             <span className="people-entry-number">03</span>
             <h3>Alumni</h3>
