@@ -15,6 +15,11 @@ export default function LeadershipDirectory({
 }: {
   entries: PublicLeadershipDirectoryEntry[];
 }) {
+  const sortedEntries = [...entries].sort((a, b) => a.displayName.localeCompare(b.displayName, undefined, { sensitivity: "base" }));
+  const availableLetters = Array.from(new Set(sortedEntries.map(entry => entry.displayName.trim().charAt(0).toUpperCase())))
+    .filter(letter => /^[A-Z]$/.test(letter))
+    .sort();
+
   return (
     <section className="musicians-directory" aria-labelledby="leadership-directory-heading">
       <div className="musicians-directory-heading">
@@ -23,17 +28,28 @@ export default function LeadershipDirectory({
         <p>{entries.length} {entries.length === 1 ? "leader" : "leaders"} shown</p>
       </div>
 
-      {entries.length === 0 ? (
+      {sortedEntries.length > 0 && (
+        <nav className="people-alphabet-nav" aria-label="Jump to leadership by first letter">
+          <span className="people-alphabet-label">Jump to</span>
+          {availableLetters.map(letter => (
+            <a href={`#leader-letter-${letter}`} key={letter} aria-label={`Leaders starting with ${letter}`}>{letter}</a>
+          ))}
+        </nav>
+      )}
+
+      {sortedEntries.length === 0 ? (
         <div className="musicians-empty" role="status">
           <h3>No published leadership profiles are available yet.</h3>
           <p>Approved DSO leadership profiles will appear here when they are ready to share.</p>
         </div>
       ) : (
         <div className="leadership-directory-grid">
-          {entries.map(entry => {
+          {sortedEntries.map((entry, index) => {
             const biography = biographyExcerpt(entry.biography);
+            const letter = entry.displayName.trim().charAt(0).toUpperCase();
+            const previousLetter = index > 0 ? sortedEntries[index - 1].displayName.trim().charAt(0).toUpperCase() : "";
             return (
-              <article className="musician-card leadership-directory-card" key={entry.id}>
+              <article id={letter !== previousLetter && /^[A-Z]$/.test(letter) ? `leader-letter-${letter}` : undefined} className="musician-card leadership-directory-card" key={entry.id}>
                 {entry.portraitPath ? (
                   <img
                     className="musician-portrait"
