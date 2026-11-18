@@ -15,6 +15,7 @@ const categories=["All Events","Concerts","Chamber Performances","Outreach","Spe
 const fmt=(value:string,options:Intl.DateTimeFormatOptions)=>new Intl.DateTimeFormat("en-NG",{timeZone:"Africa/Lagos",...options}).format(new Date(value));
 const sameDay=(a:Date,b:Date)=>a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate();
 const dateKey=(d:Date)=>[d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-");
+const eventDateKey=(value:string)=>{const parts=new Intl.DateTimeFormat("en-CA",{timeZone:"Africa/Lagos",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date(value));const get=(type:string)=>parts.find(part=>part.type===type)?.value||"";return get("year")+"-"+get("month")+"-"+get("day");};
 export default function EventsCalendar({events}:Props){
   const now=new Date();
   const [month,setMonth]=useState(()=>new Date(now.getFullYear(),now.getMonth(),1));
@@ -27,7 +28,7 @@ export default function EventsCalendar({events}:Props){
     if(mode==="Upcoming"&&past)return false;
     if(mode==="Past Events"&&!past)return false;
     if(category!=="All Events"&&e.category!==category)return false;
-    if(selectedDate&&dateKey(new Date(d.getFullYear(),d.getMonth(),d.getDate()))!==selectedDate)return false;
+    if(selectedDate&&eventDateKey(e.startAt)!==selectedDate)return false;
     return true;
   }).sort((a,b)=>Date.parse(a.startAt)-Date.parse(b.startAt)),[dated,mode,category,selectedDate]);
   const featured=filtered.find(e=>e.featured&&!selectedDate&&mode!=="Past Events")||filtered.find(e=>!selectedDate&&mode!=="Past Events");
@@ -37,7 +38,7 @@ export default function EventsCalendar({events}:Props){
   const offset=(first.getDay()+6)%7;
   const days=new Date(month.getFullYear(),month.getMonth()+1,0).getDate();
   const eventDays=new Map<string,EventItem[]>();
-  for(const e of dated){const d=new Date(e.startAt);const key=dateKey(new Date(d.getFullYear(),d.getMonth(),d.getDate()));eventDays.set(key,[...(eventDays.get(key)||[]),e]);}
+  for(const e of dated){const key=eventDateKey(e.startAt);eventDays.set(key,[...(eventDays.get(key)||[]),e]);}
   const hasFilters=mode!=="All Events"||category!=="All Events"||Boolean(selectedDate);
   function reset(){setMode("All Events");setCategory("All Events");setSelectedDate("");}
   function card(e:EventItem,pastEvent=false){
