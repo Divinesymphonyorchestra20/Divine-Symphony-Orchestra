@@ -109,6 +109,9 @@ export default function OurMusiciansDirectory({
                       .map(instrument => <li key={instrument.id}>{instrument.name}</li>)}
                   </ul>
                 )}
+                <span className="leadership-profile-link">
+                  Read full profile <span aria-hidden="true">→</span>
+                </span>
               </div>
             </Link>
           ))}
