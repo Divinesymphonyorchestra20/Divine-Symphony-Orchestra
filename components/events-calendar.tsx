@@ -21,7 +21,8 @@ export default function EventsCalendar({events}:Props){
   const [month,setMonth]=useState(()=>new Date(now.getFullYear(),now.getMonth(),1));
   const [mode,setMode]=useState<"All Events"|"Upcoming"|"Past Events">("All Events");
   const [category,setCategory]=useState("All Events");
-  const [selectedDate,setSelectedDate]=useState("");\n  const monthValue=`${month.getFullYear()}-${String(month.getMonth()+1).padStart(2,"0")}`;
+  const [selectedDate,setSelectedDate]=useState("");
+  const monthValue=`${month.getFullYear()}-${String(month.getMonth()+1).padStart(2,"0")}`;
   const dated=useMemo(()=>events.filter(e=>e.status==="published"&&e.startAt&&Number.isFinite(Date.parse(e.startAt))),[events]);
   const filtered=useMemo(()=>dated.filter(e=>{
     const d=new Date(e.startAt); const past=d.getTime()<now.getTime();
