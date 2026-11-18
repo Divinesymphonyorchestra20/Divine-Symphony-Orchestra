@@ -34,7 +34,7 @@ function valid(value: unknown): value is SiteContent {
     typeof event.description === "string" && event.description.length <= 8000 &&
     typeof event.programme === "string" && event.programme.length <= 8000 &&
     safeUrl(event.image) && typeof event.imageAlt === "string" && event.imageAlt.length <= 500 &&
-    safeUrl(event.registrationUrl) && typeof event.featured === "boolean"
+    safeUrl(event.registrationUrl) && typeof event.featured === "boolean" &&\n    ["category","timezone","admission","performers","conductor","archiveSummary","planningMonth","scheduleText"].every(key => (event as unknown as Record<string, unknown>)[key] === undefined || (typeof (event as unknown as Record<string, unknown>)[key] === "string" && String((event as unknown as Record<string, unknown>)[key]).length <= 8000)) &&\n    (event.dateStatus === undefined || event.dateStatus === "provisional" || event.dateStatus === "confirmed")
   );
   const newsValid = data.news.every(item =>
     item && typeof item.title === "string" && item.title.trim().length > 0 && item.title.length <= 180 &&
