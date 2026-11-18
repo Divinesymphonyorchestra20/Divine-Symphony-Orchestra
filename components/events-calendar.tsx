@@ -41,7 +41,8 @@ export default function EventsCalendar({events}:Props){
   const eventDays=new Map<string,EventItem[]>();
   for(const e of dated){const key=eventDateKey(e.startAt);eventDays.set(key,[...(eventDays.get(key)||[]),e]);}
   const hasFilters=mode!=="All Events"||category!=="All Events"||Boolean(selectedDate);
-  function reset(){setMode("All Events");setCategory("All Events");setSelectedDate("");}\n  function selectDate(key:string){setSelectedDate(current=>current===key?"":key);requestAnimationFrame(()=>document.getElementById("event-results")?.scrollIntoView({behavior:"smooth",block:"start"}));}
+  function reset(){setMode("All Events");setCategory("All Events");setSelectedDate("");}
+  function selectDate(key:string){setSelectedDate(current=>current===key?"":key);requestAnimationFrame(()=>document.getElementById("event-results")?.scrollIntoView({behavior:"smooth",block:"start"}));}
   function card(e:EventItem,pastEvent=false){
     return <article className="dso-event-row" key={e.id}>
       <div className="dso-event-row-date"><span>{fmt(e.startAt,{weekday:"short"})}</span><strong>{fmt(e.startAt,{day:"2-digit"})}</strong><span>{fmt(e.startAt,{month:"short",year:"numeric"})}</span><small>{fmt(e.startAt,{hour:"numeric",minute:"2-digit"})} WAT</small></div>
