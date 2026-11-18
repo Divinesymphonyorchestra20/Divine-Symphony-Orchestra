@@ -128,13 +128,22 @@ export default function SiteContentManager() {
             <label className="dso-field">Event title<input value={item.title} onChange={e=>updateEvent(index,{title:e.target.value})}/></label>
             <label className="dso-field">URL slug<input value={item.slug} onChange={e=>updateEvent(index,{slug:e.target.value})}/></label>
             {statusField(item.status,value=>updateEvent(index,{status:value}))}
+            <label className="dso-field">Event category<select value={item.category||"Concerts"} onChange={e=>updateEvent(index,{category:e.target.value})}><option>Concerts</option><option>Chamber Performances</option><option>Outreach</option><option>Special Programmes</option></select></label>
+            <label className="dso-field">Planning month<input value={item.planningMonth||""} placeholder="e.g. July 2027 (provisional)" onChange={e=>updateEvent(index,{planningMonth:e.target.value})}/></label>
+            <label className="dso-field">Date status<select value={item.dateStatus||"provisional"} onChange={e=>updateEvent(index,{dateStatus:e.target.value as "provisional"|"confirmed"})}><option value="provisional">Provisional / to be confirmed</option><option value="confirmed">Confirmed</option></select></label>
+            <label className="dso-field">Timezone<input value={item.timezone||"Africa/Lagos"} onChange={e=>updateEvent(index,{timezone:e.target.value})}/></label>
+            <label className="dso-field">Admission<input value={item.admission||""} onChange={e=>updateEvent(index,{admission:e.target.value})}/></label>
+            <label className="dso-field">Conductor(s)<input value={item.conductor||""} onChange={e=>updateEvent(index,{conductor:e.target.value})}/></label>
+            <label className="dso-field">Performers / featured artists<input value={item.performers||""} onChange={e=>updateEvent(index,{performers:e.target.value})}/></label>
             <label className="dso-field">Venue<input value={item.venue} onChange={e=>updateEvent(index,{venue:e.target.value})}/></label>
             <label className="dso-field">Start date and time<input type="datetime-local" value={dateInput(item.startAt)} onChange={e=>updateEvent(index,{startAt:isoDate(e.target.value)})}/></label>
             <label className="dso-field">End date and time<input type="datetime-local" value={dateInput(item.endAt)} onChange={e=>updateEvent(index,{endAt:isoDate(e.target.value)})}/></label>
             <label className="dso-field">Registration URL<input type="url" value={item.registrationUrl} onChange={e=>updateEvent(index,{registrationUrl:e.target.value})}/></label>
           </div>
           <label className="dso-field">Description<textarea rows={4} value={item.description} onChange={e=>updateEvent(index,{description:e.target.value})}/></label>
-          <label className="dso-field">Programme details<textarea rows={3} value={item.programme} onChange={e=>updateEvent(index,{programme:e.target.value})}/></label>
+          <label className="dso-field">Programme details<textarea rows={5} value={item.programme} onChange={e=>updateEvent(index,{programme:e.target.value})}/></label>
+          <label className="dso-field">Anniversary-week schedule / date notes<textarea rows={3} value={item.scheduleText||""} onChange={e=>updateEvent(index,{scheduleText:e.target.value})}/><small>Keep provisional dates clearly marked until the Orchestra confirms them.</small></label>
+          <label className="dso-field">Archive summary<textarea rows={3} value={item.archiveSummary||""} onChange={e=>updateEvent(index,{archiveSummary:e.target.value})}/></label>
           {imageField("Poster / event image",item.image,value=>updateEvent(index,{image:value}),item.imageAlt,value=>updateEvent(index,{imageAlt:value}))}
           <label className="dso-inline-check"><input type="checkbox" checked={item.featured} onChange={e=>updateEvent(index,{featured:e.target.checked})}/> Feature this event on the events page</label>
         </article>)}</div>}
@@ -178,7 +187,7 @@ export default function SiteContentManager() {
             <button type="button" className="dso-remove-button" onClick={()=>updateContact({socialLinks:data.contact.socialLinks.filter((_,i)=>i!==index)})}>Remove</button>
           </div>)}
         </div>}
-        <p className="dso-site-content-tip">Use Draft until the details are approved. Event, article and album images should be selected from the Shared Media Library. All records are saved together.</p>
+        <p className="dso-site-content-tip">Use Draft until details are approved. Event dates may remain blank while the planning month and provisional programme are recorded. Set Date status to Confirmed only after DSO approval. Event images should be selected from the Shared Media Library.</p>
         <div className="dso-site-content-actions"><button onClick={save} disabled={saving}>{saving ? "Saving…" : "Save changes"}</button></div>
       </>}
       {error && <p className="dso-site-content-error" role="alert">{error}</p>}
