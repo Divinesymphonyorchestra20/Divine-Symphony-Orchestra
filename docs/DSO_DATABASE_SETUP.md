@@ -95,6 +95,12 @@ It does **not** create an administrator account, set a password, create a sessio
 
 The migration is designed for a new, empty DSO database. It is not a migration to run against the current Blob-backed History data.
 
+## 6A. People CMS foundation
+
+The repository includes `db/migrations/0001_people_cms_foundation.sql` and `db/migrations/0002_people_review_revisions_and_registry.sql`, with the read-only verification script `db/verification/0001_verify_people_cms_foundation.sql`. The migrations extend shared media metadata and create the typed People records, instrument registry and musician/instrument relationship tables. They also add explicit review-required flags, a private People revision log and the full supplied 12-instrument registry. People tables have RLS enabled and revoke direct grants from Supabase `anon` and `authenticated` roles when present; trusted server-side database access is required. Neither migration imports or publishes musician records.
+
+This migration was prepared but not executed as part of the code change. Before applying it, confirm the target is the DSO development database, inspect the SQL and current migration history, and then run the normal Drizzle migration flow and verification script. It does not alter institutional content or the existing founding-member archive.
+
 ## 7. Data protection and production sequence
 
 - Keep the existing private Blob JSON at `cms/history-content.json` unchanged.

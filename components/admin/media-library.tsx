@@ -7,7 +7,9 @@ import Link from "next/link";
 type Usage = { contentType: string; slug: string; fieldKey: string; placement: string | null };
 type MediaAsset = {
   id: string; blob_path: string; original_filename: string; content_type: string; byte_size: number;
-  alt_text: string; caption: string; credit: string; status: "draft" | "published" | "archived";
+  alt_text: string; caption: string; credit: string;
+  permission_status: "not_recorded" | "pending" | "approved" | "denied" | "not_required";
+  permission_notes: string; status: "draft" | "published" | "archived";
   created_at: string; usages: Usage[];
 };
 type Filter = "all" | "draft" | "published" | "archived";
@@ -45,7 +47,10 @@ export default function MediaLibrary() {
     try {
       const response = await fetch("/api/admin/media-library", {
         method: "PUT", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: asset.id, altText: asset.alt_text, caption: asset.caption, credit: asset.credit, status }),
+        body: JSON.stringify({
+          id: asset.id, altText: asset.alt_text, caption: asset.caption, credit: asset.credit,
+          permissionStatus: asset.permission_status, permissionNotes: asset.permission_notes, status,
+        }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Could not save media details.");
@@ -106,6 +111,11 @@ export default function MediaLibrary() {
           <label>Alternative text<input value={asset.alt_text} maxLength={1000} onChange={e => patch(asset.id, { alt_text: e.target.value })}/></label>
           <label>Caption<textarea rows={2} value={asset.caption} maxLength={1000} onChange={e => patch(asset.id, { caption: e.target.value })}/></label>
           <label>Credit<input value={asset.credit} maxLength={500} onChange={e => patch(asset.id, { credit: e.target.value })}/></label>
+          <label>Image permission<select value={asset.permission_status} onChange={e => patch(asset.id, { permission_status: e.target.value as MediaAsset["permission_status"] })}>
+            <option value="not_recorded">Not recorded</option><option value="pending">Pending</option>
+            <option value="approved">Approved</option><option value="denied">Denied</option><option value="not_required">Not required</option>
+          </select></label>
+          <label>Permission notes<textarea rows={2} value={asset.permission_notes} maxLength={2000} onChange={e => patch(asset.id, { permission_notes: e.target.value })}/></label>
           <div className="dso-media-usage"><b>Page usage</b>{asset.usages.length ? asset.usages.map((usage, index) => <small key={index}>{usage.contentType} · {usage.placement || usage.fieldKey}</small>) : <small>Not linked to a page record yet.</small>}{hasPublishedUsage && <small className="dso-media-warning">Remove or replace this file on published pages before archiving it.</small>}</div>
           <div className="dso-media-actions">
             <button type="button" onClick={() => void save(asset)} disabled={saving === asset.id}>Save details</button>

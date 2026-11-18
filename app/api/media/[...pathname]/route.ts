@@ -5,11 +5,12 @@ import { readHistoryContent } from "../../../../lib/history-cms";
 import { readHomepageStore } from "../../../../lib/homepage-cms";
 import { readInstitutionalStore } from "../../../../lib/institutional-cms";
 import { readSiteContent } from "../../../../lib/site-content-cms";
-import { isDatabaseContentStoreEnabled } from "../../../../lib/content-store";
 import { queryDatabase } from "../../../../db/client";
 import { readPatronStore } from "../../../../lib/patron-cms";
+import { isDatabaseContentStoreEnabled } from "../../../../lib/content-store";
 
 export const runtime="nodejs";export const dynamic="force-dynamic";
+const peopleDatabaseAvailable = isDatabaseContentStoreEnabled();
 
 export async function GET(request: NextRequest, context: { params: Promise<{ pathname: string[] }> }) {
   const { pathname } = await context.params;
@@ -32,17 +33,45 @@ export async function GET(request: NextRequest, context: { params: Promise<{ pat
     site.news.some(item => item.status === "published" && item.image === url) ||
     site.albums.some(item => item.status === "published" && item.coverImage === url) ||
     (patron.published.portrait.published && patron.published.portrait.pathname === key);
+  let publishedPeopleImage = false;
+  if (peopleDatabaseAvailable) {
+    try {
+      const peopleMedia = await queryDatabase<{ published: boolean }>(
+        `SELECT EXISTS (
+           SELECT 1 FROM public.people_musicians p
+           JOIN public.media_assets ma ON ma.id = p.portrait_media_id
+           WHERE ma.blob_path = $1 AND ma.status = 'published'
+             AND ma.permission_status IN ('approved', 'not_required')
+             AND p.status = 'published' AND p.active = true
+           UNION ALL
+           SELECT 1 FROM public.people_alumni p
+           JOIN public.media_assets ma ON ma.id = p.portrait_media_id
+           WHERE ma.blob_path = $1 AND ma.status = 'published'
+             AND ma.permission_status IN ('approved', 'not_required') AND p.status = 'published'
+           UNION ALL
+           SELECT 1 FROM public.people_contributors p
+           JOIN public.media_assets ma ON ma.id = p.image_media_id
+           WHERE ma.blob_path = $1 AND ma.status = 'published'
+             AND ma.permission_status IN ('approved', 'not_required') AND p.status = 'published'
+         ) AS published`,
+        [key],
+      );
+      publishedPeopleImage = peopleMedia.rows[0]?.published === true;
+    } catch (error) {
+      console.error("People media visibility lookup failed; existing published media checks remain in effect.", error);
+    }
+  }
   const isAdmin = await verifyAdminSession(request);
 
   let archived = false;
-  if (isDatabaseContentStoreEnabled()) {
+  if (peopleDatabaseAvailable) {
     const asset = await queryDatabase<{ status: string }>(
       "SELECT status FROM public.media_assets WHERE blob_path = $1 LIMIT 1",
       [key],
     );
     archived = asset.rows[0]?.status === "archived";
   }
-  const publiclyAvailable = published && !archived;
+  const publiclyAvailable = (published || publishedPeopleImage) && !archived;
   if (!publiclyAvailable && !isAdmin) return new NextResponse("Not found", { status: 404 });
 
   try {

@@ -8,6 +8,20 @@
       "when": 1794741000000,
       "tag": "0000_shared_admin_foundation",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794941746431,
+      "tag": "0001_people_cms_foundation",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794990669668,
+      "tag": "0002_people_review_revisions_and_registry",
+      "breakpoints": true
     }
   ]
 }

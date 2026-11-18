@@ -28,6 +28,117 @@
 @media(max-width:950px){.dso-editor-layout{grid-template-columns:190px minmax(260px,1fr)}.dso-preview-column{grid-column:1/-1}.dso-home-preview .site-header nav{gap:clamp(8px,2vw,20px);font-size:10px}.dso-home-preview .hero{min-height:440px}.dso-home-preview .hero h1{font-size:clamp(42px,7vw,68px)}.dso-home-preview .hero-copy{max-width:55%}}
 @media(max-width:620px){.dso-admin-topbar{height:64px;padding:0 14px}.dso-admin-top-actions{gap:10px}.dso-draft-state{display:none}.dso-admin-heading{padding:22px 14px 16px;display:block;margin:0}.dso-admin-heading h1{font-size:27px}.dso-admin-buttons{margin-top:14px}.dso-prototype-warning{margin:0 14px 14px;display:block}.dso-prototype-warning b{display:block;margin-bottom:4px}.dso-editor-layout{display:flex;flex-direction:column;padding:0 12px;gap:12px}.dso-editor-sidebar,.dso-control-panel,.dso-preview-column{width:100%;position:static}.dso-editor-sidebar{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:12px}.dso-sidebar-title{grid-column:1/-1;padding:5px 7px}.dso-sidebar-tabs-title{margin-top:8px}.dso-element-button{font-size:10px;padding:10px 7px}.dso-control-panel{padding:15px}.dso-preview-column{order:3}.dso-home-preview .site-header{height:auto;min-height:60px;flex-wrap:wrap;padding:8px 4%}.dso-home-preview .site-header nav{order:3;width:100%;overflow:auto;padding-bottom:7px;gap:15px;font-size:9px}.dso-home-preview .menu-link{margin-left:auto}.dso-home-preview .hero{min-height:430px;align-items:flex-end}.dso-home-preview .hero-copy{max-width:88%;margin:0;padding:145px 7% 45px}.dso-home-preview .hero h1{font-size:45px}.dso-home-preview .hero-photo{inset:0;background-position:58% center;mask-image:linear-gradient(180deg,transparent 0%,#000 24%)}.dso-home-preview .hero-shade{background:linear-gradient(0deg,rgba(48,3,52,.98) 0%,rgba(67,5,69,.82) 56%,rgba(66,5,69,.15) 100%)}.dso-home-preview .quick-links{grid-template-columns:repeat(2,1fr)}.dso-home-preview .feature,.dso-home-preview .strings-feature{grid-template-columns:1fr}.dso-home-preview .feature-copy{padding:35px 8% 20px}.dso-home-preview .feature-photo{min-height:220px}.dso-home-preview .strings-photo{min-height:220px;order:2}.dso-home-preview .strings-copy{order:1;padding:32px 8%}.dso-home-preview .updates{display:block}.dso-home-preview .updates .solid-cta{display:inline-flex;margin-top:15px}.dso-preview-toolbar{position:sticky;top:0;background:#fff;z-index:1}}
 
+/* People landing page and published musicians directory */
+.people-landing-hero{background-image:url('/images/hero-strings-section.jpg')}
+.people-landing{max-width:1120px;margin:0 auto;padding:72px 28px 82px}
+.people-landing-intro{max-width:720px;margin:0 auto 38px;text-align:center}
+.people-landing-intro h2{font:700 clamp(34px,4vw,48px)/1.12 'Playfair Display',serif;margin:0 0 14px;color:#302436}
+.people-landing-intro h2 em{color:var(--purple)}
+.people-landing-intro>p:last-child{max-width:620px;margin:0 auto;color:var(--muted);font-size:14px;line-height:1.75}
+.people-entry-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.people-entry-card{min-height:250px;display:flex;flex-direction:column;padding:24px;border:1px solid #e7dfe8;border-radius:12px;background:#fff;box-shadow:0 8px 26px rgba(45,15,49,.045);color:inherit;text-decoration:none}
+.people-entry-card:not(.people-entry-upcoming):hover{transform:translateY(-3px);border-color:#d1bcd4;box-shadow:0 14px 30px rgba(45,15,49,.09)}
+.people-entry-number{font-size:10px;font-weight:700;letter-spacing:.14em;color:#a28343}
+.people-entry-card h3{font:700 22px/1.15 'Playfair Display',serif;margin:24px 0 12px;color:#352139}
+.people-entry-card p{font-size:12px;line-height:1.7;color:var(--muted);margin:0}
+.people-entry-action,.people-entry-status{margin-top:auto;padding-top:20px;font-size:11px;font-weight:700;color:var(--purple)}
+.people-entry-upcoming{background:#faf8fb}
+.people-entry-status{color:#756c78;text-transform:uppercase;letter-spacing:.08em;font-size:9px}
+.people-archive-link{text-align:center;margin-top:34px}
+.people-archive-link a{font-size:12px;font-weight:700;color:var(--purple)}
+.people-archive-link span{margin-left:8px}
+.musicians-directory-hero{background-image:url('/images/hero-main-stage.jpg')}
+.musicians-directory{max-width:1120px;margin:0 auto;padding:64px 28px 82px}
+.musicians-directory-heading{text-align:center;margin-bottom:28px}
+.musicians-directory-heading h2{font:700 clamp(34px,4vw,48px)/1.12 'Playfair Display',serif;margin:0 0 8px;color:#302436}
+.musicians-directory-heading>p:last-child{margin:0;color:var(--muted);font-size:12px}
+.musician-group-nav{display:flex;gap:8px;overflow-x:auto;padding:8px 2px 20px;scrollbar-width:thin}
+.musician-group-nav button{flex:0 0 auto;border:1px solid #dfd3e1;border-radius:24px;background:#fff;color:#615766;padding:10px 15px;font:700 11px 'DM Sans',sans-serif;cursor:pointer;white-space:nowrap}
+.musician-group-nav button:hover,.musician-group-nav button:focus-visible,.musician-group-nav button.selected{background:var(--purple);border-color:var(--purple);color:#fff}
+.musician-group-nav button:focus-visible{outline:3px solid #c8a6ce;outline-offset:2px}
+.musician-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.musician-card{overflow:hidden;border:1px solid #e7dfe8;border-radius:12px;background:#fff;box-shadow:0 8px 26px rgba(45,15,49,.04)}
+.musician-card-link{display:block;color:inherit;text-decoration:none;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.musician-card-link:hover{transform:translateY(-3px);border-color:#d1bcd4;box-shadow:0 14px 30px rgba(45,15,49,.09)}
+.musician-card-link:focus-visible{outline:3px solid #b58bce;outline-offset:3px}
+.musician-portrait,.musician-placeholder{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;background:#f3edf4}
+.musician-placeholder{display:grid;place-items:center;background:linear-gradient(145deg,#f5eff6,#eee5f0)}
+.musician-placeholder span{width:86px;height:86px;border-radius:50%;display:grid;place-items:center;border:1px solid #d9c9dc;background:#fff;color:var(--purple);font:700 25px 'Playfair Display',serif}
+.musician-card-copy{min-height:112px;padding:18px}
+.musician-card-copy h3{font:700 19px/1.2 'Playfair Display',serif;margin:0 0 10px;color:#302436}
+.musician-instruments{display:flex;flex-wrap:wrap;gap:5px;list-style:none;padding:0;margin:0}
+.musician-instruments li{border-radius:20px;background:#f6f1f7;padding:5px 8px;color:#725f75;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.musicians-empty{max-width:760px;margin:64px auto;padding:38px 28px;text-align:center;background:#faf8fb;border:1px solid #ebe3ed;border-radius:12px;color:#4f4552}
+.musicians-empty h2,.musicians-empty h3{font:700 25px 'Playfair Display',serif;margin:0 0 10px}
+.musicians-empty p{font-size:13px;line-height:1.7;margin:0;color:var(--muted)}
+.people-loading{min-height:55vh;display:grid;place-items:center;color:var(--purple);font-weight:700}
+@media(max-width:900px){.people-entry-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.musician-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:620px){.people-landing{padding:48px 16px 58px}.people-landing-intro{margin-bottom:28px}.people-landing-intro h2{font-size:32px}.people-entry-grid{grid-template-columns:1fr}.people-entry-card{min-height:210px;padding:22px}.musicians-directory{padding:48px 16px 58px}.musicians-directory-heading h2{font-size:32px}.musician-group-nav{margin-right:-16px;padding-right:16px}.musician-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.musician-card-copy{min-height:104px;padding:14px}.musician-card-copy h3{font-size:16px}.musician-placeholder span{width:68px;height:68px;font-size:21px}.musician-instruments li{font-size:8px}.musicians-empty{margin:48px 16px;padding:30px 18px}}
+
+/* Individual published musician profiles */
+.musician-profile{max-width:1060px;margin:0 auto;padding:42px 28px 82px}
+.musician-profile-breadcrumb{display:flex;align-items:center;gap:10px;margin-bottom:32px;font-size:11px;font-weight:700;color:#756a79}
+.musician-profile-breadcrumb a{color:var(--purple)}
+.musician-profile-breadcrumb a:hover{text-decoration:underline}
+.musician-profile-layout{display:grid;grid-template-columns:minmax(260px,390px) 1fr;gap:54px;align-items:start}
+.musician-profile-portrait-column{min-width:0}
+.musician-profile-portrait,.musician-profile-placeholder{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;border-radius:14px;background:#f3edf4}
+.musician-profile-placeholder{display:grid;place-items:center;background:linear-gradient(145deg,#f5eff6,#eae1ed);border:1px solid #e1d4e3}
+.musician-profile-placeholder span{width:112px;height:112px;border-radius:50%;display:grid;place-items:center;border:1px solid #d1bed4;background:#fff;color:var(--purple);font:700 34px 'Playfair Display',serif}
+.musician-profile-credit{display:block;margin-top:10px;color:#776d79;font-size:10px;line-height:1.5}
+.musician-profile-heading{padding-top:34px}
+.musician-profile-heading h1{font:700 clamp(42px,6vw,68px)/1.02 'Playfair Display',serif;letter-spacing:-.035em;margin:0 0 14px;color:#302436}
+.musician-profile-role{max-width:560px;margin:0;color:#76547a;font:600 18px/1.45 'Playfair Display',serif}
+.musician-profile-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:34px}
+.musician-profile-facts section{padding:18px;border:1px solid #e7dfe8;border-radius:10px;background:#faf8fb}
+.musician-profile-facts h2{font:700 10px 'DM Sans',sans-serif;letter-spacing:.09em;text-transform:uppercase;margin:0 0 10px;color:#88738a}
+.musician-profile-facts ul{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+.musician-profile-facts li{border-radius:20px;background:#fff;border:1px solid #e7dfe8;padding:6px 9px;color:#4d414f;font-size:11px;font-weight:700}
+.musician-profile-leadership{margin-top:64px;padding:38px 42px;background:linear-gradient(135deg,#f8f5f8,#fbf9fc);border-radius:12px;border:1px solid #ebe3ed}
+.musician-profile-leadership>h2,.musician-profile-biography>h2{font:700 30px 'Playfair Display',serif;margin:0 0 22px;color:#302436}
+.musician-profile-leadership-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.musician-profile-leadership-grid article{padding:20px;border-left:3px solid #a47aa5;background:#fff;border-radius:8px}
+.musician-profile-leadership-grid h3{font:700 18px 'Playfair Display',serif;margin:0 0 8px;color:#402d45}
+.musician-profile-leadership-grid p{font-size:12px;line-height:1.75;margin:0;color:#6d6270}
+.musician-profile-biography{max-width:760px;margin:62px auto 0}
+.musician-profile-biography>p:not(.eyebrow){font-size:14px;line-height:1.9;color:#554a58;margin:0 0 18px}
+.musician-profile-footer-nav{margin-top:52px;padding-top:22px;border-top:1px solid #ebe4ed}
+.musician-profile-footer-nav a,.musician-profile-back{display:inline-block;color:var(--purple);font-size:12px;font-weight:700}
+.musician-profile-back{margin-top:18px}
+@media(max-width:900px){.musician-profile-layout{grid-template-columns:minmax(220px,320px) 1fr;gap:36px}.musician-profile-heading{padding-top:18px}.musician-profile-heading h1{font-size:46px}}
+@media(max-width:620px){.musician-profile{padding:28px 16px 58px}.musician-profile-breadcrumb{margin-bottom:24px}.musician-profile-layout{grid-template-columns:1fr;gap:28px}.musician-profile-portrait-column{max-width:360px;margin:0 auto}.musician-profile-heading{padding-top:0}.musician-profile-heading h1{font-size:42px}.musician-profile-role{font-size:16px}.musician-profile-facts{grid-template-columns:1fr;gap:10px;margin-top:26px}.musician-profile-leadership{margin-top:42px;padding:28px 18px}.musician-profile-leadership-grid{grid-template-columns:1fr}.musician-profile-leadership>h2,.musician-profile-biography>h2{font-size:27px}.musician-profile-biography{margin-top:42px}.musician-profile-biography>p:not(.eyebrow){font-size:13px}.musician-profile-footer-nav{margin-top:38px}}
+@media(prefers-reduced-motion:reduce){.musician-card-link:hover{transform:none}}
+
+/* Private People previews and revision history */
+.people-preview-status{padding:10px 14px;border:1px solid #e4d7a8;border-radius:8px;background:#fff9e8;color:#5a4816;font-size:11px;font-weight:700}
+.people-preview-review{display:block;margin-top:12px;padding:10px 12px;border-left:3px solid #a28343;background:#fff9e8;color:#5a4816;font-size:11px;line-height:1.55}
+.people-record-public-preview{margin-top:18px;padding:28px;border:1px solid #e7dfe8;border-radius:12px;background:#fff}
+.people-record-public-preview h2{margin:8px 0 16px;font:700 30px/1.2 'Playfair Display',serif;color:#302436}
+.people-record-public-preview h3{font:600 16px 'Playfair Display',serif;color:#402d45}
+.people-record-public-preview>p:not(.eyebrow):not(.people-preview-status){font-size:13px;line-height:1.7;color:#554a58}
+.people-revision-history{margin-top:24px;padding-top:18px;border-top:1px solid #ebe4ed}
+.people-revision-history h4{font:700 17px 'Playfair Display',serif;color:#302436}
+.people-revision-history details{margin:8px 0;border:1px solid #e7dfe8;border-radius:8px;background:#fff}
+.people-revision-history summary{padding:12px;font-size:11px;font-weight:700;cursor:pointer}
+.people-revision-history dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0;padding:0 12px 12px}
+.people-revision-history dl div{min-width:0;padding:8px;background:#faf8fb;border-radius:5px}
+.people-revision-history dt{font-size:9px;text-transform:capitalize;color:#776d79}
+.people-revision-history dd{margin:4px 0 0;font-size:11px;overflow-wrap:anywhere}
+@media(max-width:620px){.people-record-public-preview{padding:18px}.people-revision-history dl{grid-template-columns:1fr}}
+
+/* Meet the Members People-section navigation */
+.meet-members-navigation{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:48px 0}
+.meet-members-navigation-card{min-height:210px;display:flex;flex-direction:column;padding:22px;border:1px solid #e7dfe8;border-radius:12px;background:#fff;color:inherit;text-decoration:none;box-shadow:0 8px 24px rgba(45,15,49,.035)}
+.meet-members-navigation-card>span{font-size:9px;font-weight:700;letter-spacing:.12em;color:#a28343}
+.meet-members-navigation-card h2{font:700 20px/1.2 'Playfair Display',serif;margin:22px 0 10px;color:#352139}
+.meet-members-navigation-card p{font-size:12px;line-height:1.7;color:var(--muted);margin:0}
+.meet-members-navigation-card strong,.meet-members-navigation-card small{margin-top:auto;padding-top:18px;font-size:10px;color:var(--purple)}
+.meet-members-navigation-card.upcoming{background:#faf8fb}
+.meet-members-navigation-card.upcoming small{text-transform:uppercase;letter-spacing:.08em;color:#756c78}
+.meet-members-navigation-card:not(.upcoming):hover{border-color:#d1bcd4;transform:translateY(-2px);box-shadow:0 12px 26px rgba(45,15,49,.08)}
+@media(max-width:900px){.meet-members-navigation{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.meet-members-navigation{grid-template-columns:1fr;margin:38px 0}.meet-members-navigation-card{min-height:190px}}
+
 
 /* History navigation uses the click-controlled button in SiteHeader. */
 /* Public history pages */
@@ -394,3 +505,49 @@ body{color:var(--dso-ink);-webkit-font-smoothing:antialiased}
 .patron-profile-closing{margin:0 -28px;padding:55px 28px 62px;text-align:center;background:linear-gradient(120deg,#39043e,#650d63);color:#fff}.patron-profile-closing .eyebrow{color:var(--gold);letter-spacing:.15em}.patron-profile-closing h2{max-width:790px;margin:0 auto;font:600 clamp(25px,3.8vw,38px)/1.25 'Playfair Display',serif;color:#fff}
 @media(max-width:760px){.patron-profile-hero{grid-template-columns:1fr;padding:52px 7%;gap:30px}.patron-profile-copy h1{font-size:45px}.patron-profile-portrait{justify-self:center;width:min(100%,360px)}.patron-profile-article{padding:48px 16px 0}.patron-profile-opening{margin-bottom:35px}.patron-profile-section{grid-template-columns:42px minmax(0,1fr);gap:13px;padding:30px 14px}.patron-profile-number{width:36px;height:36px;font-size:12px}.patron-profile-section-copy>p:not(.eyebrow){font-size:13px}.patron-profile-closing{margin:0 -16px;padding:42px 18px 48px}}
 @media(prefers-reduced-motion:reduce){.patron-profile-page *{scroll-behavior:auto;animation:none!important;transition:none!important}}
+
+/* People content management */
+.dso-people-admin{max-width:1480px;margin:0 auto;padding:36px 5vw 58px;color:#302536}
+.dso-people-admin-header{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:26px}
+.dso-people-admin-header p{font-size:10px;letter-spacing:.16em;font-weight:800;color:#80558a}
+.dso-people-admin-header h1{font:700 clamp(30px,4vw,46px) 'Playfair Display',serif;margin:8px 0}
+.dso-people-admin-header span{font-size:13px;color:#756a79}
+.dso-people-admin-header>a{color:#5a1765;font-weight:700;font-size:12px}
+.dso-people-tabs,.dso-people-subtabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+.dso-people-tabs button,.dso-people-subtabs button{border:1px solid #dfd3e1;border-radius:999px;background:#fff;color:#56385b;padding:10px 15px;font:700 12px 'DM Sans',sans-serif;cursor:pointer}
+.dso-people-tabs button.active,.dso-people-subtabs button.active{background:#4b0758;color:#fff;border-color:#4b0758}
+.dso-people-admin-layout{display:grid;grid-template-columns:minmax(260px,.78fr) minmax(0,1.5fr);gap:18px;align-items:start}
+.dso-people-records,.dso-people-editor{background:#fff;border:1px solid #e9e1ea;border-radius:12px;padding:20px;box-shadow:0 8px 26px rgba(45,15,49,.04);min-width:0}
+.dso-people-section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.dso-people-section-heading h2{font:600 23px 'Playfair Display',serif;margin:3px 0;color:#392b3e}
+.dso-people-section-heading .dso-kicker{font-size:9px;letter-spacing:.14em}
+.dso-people-section-heading button{white-space:nowrap}
+.dso-people-list{display:grid;gap:8px}
+.dso-people-list-row{display:flex;align-items:center;gap:8px;border:1px solid #eee8ef;border-radius:8px;padding:9px}
+.dso-people-list-row>button:first-child{flex:1;min-width:0;border:0;background:transparent;text-align:left;color:#392b3e;cursor:pointer;padding:5px}
+.dso-people-list-row strong,.dso-people-list-row small{display:block;overflow-wrap:anywhere}
+.dso-people-list-row strong{font-size:13px}
+.dso-people-list-row small{font-size:10px;color:#827887;margin-top:4px}
+.dso-people-empty{font-size:12px;color:#756a79;line-height:1.7;padding:15px;background:#f8f5f8;border-radius:8px}
+.dso-people-form{display:grid;gap:3px}
+.dso-people-instrument-picker{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;border:1px solid #ded5e0;border-radius:8px;padding:12px;margin:0 0 14px}
+.dso-people-instrument-picker legend{font-size:11px;font-weight:700;color:#554a59;padding:0 5px}
+.dso-people-instrument-picker label,.dso-people-admin .dso-inline-check{display:flex;align-items:center;gap:7px;font-size:11px;color:#554a59}
+.dso-people-instrument-picker p{grid-column:1/-1;color:#756a79;font-size:11px}
+.dso-people-media-fields{padding:14px;border:1px solid #eee7ef;border-radius:9px;margin-bottom:14px}
+.dso-people-media-fields>a{display:inline-block;color:#5a1765;font-size:11px;font-weight:700;margin:4px 0 8px}
+.dso-people-media-notice{font-size:11px;color:#80672d;line-height:1.6}
+.dso-people-actions{display:flex;gap:8px;flex-wrap:wrap;padding-top:10px;border-top:1px solid #eee8ef}
+.dso-people-actions button{border:0;border-radius:7px;padding:10px 13px;font:700 11px 'DM Sans',sans-serif;cursor:pointer}
+.dso-people-actions .dso-secondary{border:1px solid #ddd1e0!important}
+.dso-people-actions button:disabled{opacity:.55;cursor:wait}
+.dso-people-notice{padding:11px 13px;border-radius:7px;font-size:11px;line-height:1.6}
+.dso-people-notice.success{background:#eef8f1;color:#286642}
+.dso-people-notice.error{background:#fff1f2;color:#9a3c4c}
+.dso-people-preview{margin-top:18px;padding:14px;background:#f8f5f8;border-radius:9px}
+.dso-people-preview h3{margin:0 0 5px;font:600 17px 'Playfair Display',serif}
+.dso-people-preview p{font-size:11px;color:#706775;line-height:1.6}
+.dso-people-preview pre{max-height:360px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:10px;line-height:1.5}
+.dso-people-admin>footer{padding:24px 0;color:#998d9b;font-size:9px;letter-spacing:.1em}
+@media(max-width:850px){.dso-people-admin-layout{grid-template-columns:1fr}.dso-people-records{order:1}.dso-people-editor{order:2}}
+@media(max-width:600px){.dso-people-admin{padding:24px 12px 40px}.dso-people-admin-header{display:block}.dso-people-admin-header>a{display:inline-block;margin-top:12px}.dso-people-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.dso-people-tabs button{font-size:10px;padding:9px 6px}.dso-people-records,.dso-people-editor{padding:14px}.dso-people-section-heading{align-items:flex-start;flex-direction:column}.dso-people-instrument-picker{grid-template-columns:1fr}.dso-people-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.dso-people-actions button{width:100%}}

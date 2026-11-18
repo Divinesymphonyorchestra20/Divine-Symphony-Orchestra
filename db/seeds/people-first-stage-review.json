@@ -1,0 +1,472 @@
+{
+  "version": 1,
+  "source": "DSO_People_First_Stage_Roster_and_Copilot_Implementation_Brief.docx",
+  "completeness": "complete-first-stage",
+  "applicationStatus": "not-applied",
+  "contentStatus": "draft",
+  "instrumentGroups": [
+    { "name": "Violins", "slug": "violins", "displayOrder": 0 },
+    { "name": "Violas", "slug": "violas", "displayOrder": 1 },
+    { "name": "Cellos", "slug": "cellos", "displayOrder": 2 },
+    { "name": "Woodwinds", "slug": "woodwinds", "displayOrder": 3 },
+    { "name": "Brass", "slug": "brass", "displayOrder": 4 },
+    { "name": "Percussion", "slug": "percussion", "displayOrder": 5 },
+    { "name": "Harp", "slug": "harp", "displayOrder": 6 }
+  ],
+  "instruments": [
+    { "name": "Violin", "slug": "violin", "groupSlug": "violins" },
+    { "name": "Viola", "slug": "viola", "groupSlug": "violas" },
+    { "name": "Cello", "slug": "cello", "groupSlug": "cellos" },
+    { "name": "Clarinet", "slug": "clarinet", "groupSlug": "woodwinds" },
+    { "name": "Flute", "slug": "flute", "groupSlug": "woodwinds" },
+    { "name": "Oboe", "slug": "oboe", "groupSlug": "woodwinds" },
+    { "name": "Bassoon", "slug": "bassoon", "groupSlug": "woodwinds" },
+    { "name": "Trumpet", "slug": "trumpet", "groupSlug": "brass" },
+    { "name": "Trombone", "slug": "trombone", "groupSlug": "brass" },
+    { "name": "Euphonium", "slug": "euphonium", "groupSlug": "brass" },
+    { "name": "Percussion", "slug": "percussion", "groupSlug": "percussion" },
+    { "name": "Harp", "slug": "harp", "groupSlug": "harp" }
+  ],
+  "musicians": [
+    {
+      "firstName": "Aduragbemi",
+      "lastName": "Oloyede",
+      "displayName": "Aduragbemi Oloyede",
+      "profileSlug": "aduragbemi-oloyede",
+      "musicalRole": "Violin / Concertmaster",
+      "instrumentSlugs": ["violin"],
+      "legacyFounderRef": "f-aduragbemi-oloyede",
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Dominic",
+      "lastName": "Ogwudile",
+      "displayName": "Dominic Ogwudile",
+      "profileSlug": "dominic-ogwudile",
+      "musicalRole": "Clarinet",
+      "instrumentSlugs": ["clarinet"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Ikpo",
+      "lastName": "Benjamin",
+      "displayName": "Ikpo Benjamin",
+      "profileSlug": "ikpo-benjamin",
+      "musicalRole": "Clarinet",
+      "instrumentSlugs": ["clarinet"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Shogunle",
+      "lastName": "Titilayo",
+      "displayName": "Shogunle Titilayo",
+      "profileSlug": "shogunle-titilayo",
+      "musicalRole": "Percussion",
+      "instrumentSlugs": ["percussion"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Jif",
+      "lastName": "",
+      "displayName": "Jif",
+      "profileSlug": "jif",
+      "musicalRole": "Violin",
+      "instrumentSlugs": ["violin"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Adetiba",
+      "lastName": "Alex",
+      "displayName": "Adetiba Alex",
+      "profileSlug": "adetiba-alex",
+      "musicalRole": "Violin",
+      "instrumentSlugs": ["violin"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Victor",
+      "lastName": "Ajiroye",
+      "displayName": "Victor Ajiroye",
+      "profileSlug": "victor-ajiroye",
+      "musicalRole": "Flute",
+      "instrumentSlugs": ["flute"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Daniel",
+      "lastName": "Abayomi",
+      "displayName": "Daniel Abayomi",
+      "profileSlug": "daniel-abayomi",
+      "musicalRole": "Viola",
+      "instrumentSlugs": ["viola"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Oladipo",
+      "lastName": "Emmanuel",
+      "displayName": "Oladipo Emmanuel",
+      "profileSlug": "oladipo-emmanuel",
+      "musicalRole": "Viola",
+      "instrumentSlugs": ["viola"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Oluyide",
+      "lastName": "Ayotomiwa",
+      "displayName": "Oluyide Ayotomiwa",
+      "profileSlug": "oluyide-ayotomiwa",
+      "musicalRole": "Cello",
+      "instrumentSlugs": ["cello"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Anaje",
+      "lastName": "Paul",
+      "displayName": "Anaje Paul",
+      "profileSlug": "anaje-paul",
+      "musicalRole": "Violin",
+      "instrumentSlugs": ["violin"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Samuel",
+      "lastName": "Eluwah",
+      "displayName": "Samuel Eluwah",
+      "profileSlug": "samuel-eluwah",
+      "musicalRole": "Viola",
+      "instrumentSlugs": ["viola"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Seun",
+      "lastName": "Adekanbi",
+      "displayName": "Seun Adekanbi",
+      "profileSlug": "seun-adekanbi",
+      "musicalRole": "Violin / Assistant Concertmaster",
+      "instrumentSlugs": ["violin"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Oluwafunmileyi",
+      "lastName": "Similoluwa",
+      "displayName": "Oluwafunmileyi Similoluwa",
+      "profileSlug": "oluwafunmileyi-similoluwa",
+      "musicalRole": "Cello",
+      "instrumentSlugs": ["cello"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Bello",
+      "lastName": "Taiwo",
+      "displayName": "Bello Taiwo",
+      "profileSlug": "bello-taiwo",
+      "musicalRole": "Violin",
+      "instrumentSlugs": ["violin"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Olawale",
+      "lastName": "Samuel",
+      "displayName": "Olawale Samuel",
+      "profileSlug": "olawale-samuel",
+      "musicalRole": "Violin",
+      "instrumentSlugs": ["violin"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Adebanjo",
+      "lastName": "Emmanuel",
+      "displayName": "Adebanjo Emmanuel",
+      "profileSlug": "adebanjo-emmanuel",
+      "musicalRole": "Viola",
+      "instrumentSlugs": ["viola"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Abayomi",
+      "lastName": "Prosper",
+      "displayName": "Abayomi Prosper",
+      "profileSlug": "abayomi-prosper",
+      "musicalRole": "Violin",
+      "instrumentSlugs": ["violin"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Oluwafunmileyi",
+      "lastName": "Oluwatunmise Michael",
+      "displayName": "Oluwafunmileyi Oluwatunmise Michael",
+      "profileSlug": "oluwafunmileyi-oluwatunmise-michael",
+      "musicalRole": "Cello",
+      "instrumentSlugs": ["cello"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Abayomi",
+      "lastName": "Peace",
+      "displayName": "Abayomi Peace",
+      "profileSlug": "abayomi-peace",
+      "musicalRole": "Violin / Harp",
+      "instrumentSlugs": ["violin", "harp"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Abayomi",
+      "lastName": "Daniel",
+      "displayName": "Abayomi Daniel",
+      "profileSlug": "abayomi-daniel",
+      "musicalRole": "Viola",
+      "instrumentSlugs": ["viola"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Morenikeji",
+      "lastName": "Micheal",
+      "displayName": "Morenikeji Micheal",
+      "profileSlug": "morenikeji-micheal",
+      "musicalRole": "Trombone",
+      "instrumentSlugs": ["trombone"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Emmanuel",
+      "lastName": "Eniola",
+      "displayName": "Emmanuel Eniola",
+      "profileSlug": "emmanuel-eniola",
+      "musicalRole": "Euphonium",
+      "instrumentSlugs": ["euphonium"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Ojo",
+      "lastName": "Oyenike",
+      "displayName": "Ojo Oyenike",
+      "profileSlug": "ojo-oyenike",
+      "musicalRole": "Percussion",
+      "instrumentSlugs": ["percussion"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Philip",
+      "lastName": "",
+      "displayName": "Philip",
+      "profileSlug": "philip",
+      "musicalRole": "Trumpet",
+      "instrumentSlugs": ["trumpet"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Victor",
+      "lastName": "Egbegbuna",
+      "displayName": "Victor Egbegbuna",
+      "profileSlug": "victor-egbegbuna",
+      "musicalRole": "Oboe / Conductor",
+      "instrumentSlugs": ["oboe"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Oluwaseun",
+      "lastName": "Oluwade",
+      "displayName": "Oluwaseun Oluwade",
+      "profileSlug": "oluwaseun-oluwade",
+      "musicalRole": "Bassoon / Conductor",
+      "instrumentSlugs": ["bassoon"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    },
+    {
+      "firstName": "Ayoleke",
+      "lastName": "Olaifa",
+      "displayName": "Ayoleke Olaifa",
+      "profileSlug": "ayoleke-olaifa",
+      "musicalRole": "Cello",
+      "instrumentSlugs": ["cello"],
+      "active": true,
+      "status": "draft",
+      "biography": ""
+    }
+  ],
+  "reviewRequiredMusicians": [
+    {
+      "firstName": "Adegoke",
+      "lastName": "Wuyi",
+      "displayName": "Adegoke Wuyi",
+      "profileSlug": "adegoke-wuyi",
+      "musicalRole": "Percussion",
+      "instrumentSlugs": ["percussion"],
+      "active": true,
+      "status": "draft",
+      "reviewRequired": true,
+      "reviewReason": "Leadership-listed musician absent from the 28-person roster; DSO confirmation required.",
+      "biography": ""
+    }
+  ],
+  "leadershipAssignments": [
+    { "musicianProfileSlug": "aduragbemi-oloyede", "title": "Overall Leader (Main)", "musicalRole": "Violin / Concertmaster", "active": true, "status": "draft" },
+    { "musicianProfileSlug": "daniel-abayomi", "title": "Head of DSO Schools", "musicalRole": "Viola", "active": true, "status": "draft" },
+    { "musicianProfileSlug": "anaje-paul", "title": "PRO", "musicalRole": "Violin", "active": true, "status": "draft" },
+    { "musicianProfileSlug": "samuel-eluwah", "title": "Artistic Director", "musicalRole": "Viola", "active": true, "status": "draft" },
+    { "musicianProfileSlug": "seun-adekanbi", "title": "Strings Sectional Head", "musicalRole": "Conductor / Violin / Assistant Concertmaster", "active": true, "status": "draft", "reviewRequired": true, "reviewReason": "Musician and leadership lists use different musical-role wording; preserve both pending DSO review." },
+    { "musicianProfileSlug": "abayomi-prosper", "title": "Media", "musicalRole": "Violin", "active": true, "status": "draft" },
+    { "musicianProfileSlug": "abayomi-peace", "title": "Welfare", "musicalRole": "Violin / Harp", "active": true, "status": "draft" },
+    { "musicianProfileSlug": "adegoke-wuyi", "title": "Section Leader, Percussion", "musicalRole": "Percussion", "active": true, "status": "draft", "reviewRequired": true, "reviewReason": "Adegoke Wuyi is not among the 28 supplied musicians and requires DSO confirmation." },
+    { "musicianProfileSlug": "philip", "title": "Logistics", "musicalRole": "Trumpet", "active": true, "status": "draft" },
+    { "musicianProfileSlug": "victor-egbegbuna", "title": "Admin Office", "musicalRole": "Oboe / Conductor", "active": true, "status": "draft" },
+    { "musicianProfileSlug": "oluwaseun-oluwade", "title": "Artistic Director", "musicalRole": "Bassoon / Conductor", "active": true, "status": "draft" },
+    { "musicianProfileSlug": "ayoleke-olaifa", "title": "Programme Coordinator", "musicalRole": "Cello", "active": true, "status": "draft" }
+  ],
+  "alumni": [
+    {
+      "name": "Dele Olutade",
+      "formerRole": "Former General Leader / Violinist",
+      "formerLeadershipResponsibility": "Former General Leader",
+      "instrument": "Violinist",
+      "biography": "",
+      "portraitMediaId": null,
+      "imageCredit": "",
+      "profileLink": "",
+      "status": "draft"
+    },
+    {
+      "name": "Olalekan Adebayo",
+      "formerRole": "Double Bass",
+      "formerLeadershipResponsibility": "",
+      "instrument": "Double Bass",
+      "biography": "",
+      "portraitMediaId": null,
+      "imageCredit": "",
+      "profileLink": "",
+      "status": "draft"
+    },
+    {
+      "name": "Oluwaseun Adebayo",
+      "formerRole": "Double Bass",
+      "formerLeadershipResponsibility": "",
+      "instrument": "Double Bass",
+      "biography": "",
+      "portraitMediaId": null,
+      "imageCredit": "",
+      "profileLink": "",
+      "status": "draft"
+    },
+    {
+      "name": "Dare Olubare",
+      "formerRole": "Flute",
+      "formerLeadershipResponsibility": "",
+      "instrument": "Flute",
+      "biography": "",
+      "portraitMediaId": null,
+      "imageCredit": "",
+      "profileLink": "",
+      "status": "draft"
+    },
+    {
+      "name": "Emmanuel Dabere",
+      "formerRole": "Violin",
+      "formerLeadershipResponsibility": "",
+      "instrument": "Violin",
+      "biography": "",
+      "portraitMediaId": null,
+      "imageCredit": "",
+      "profileLink": "",
+      "status": "draft"
+    },
+    {
+      "name": "Segun Akinduro",
+      "formerRole": "Violin",
+      "formerLeadershipResponsibility": "",
+      "instrument": "Violin",
+      "biography": "",
+      "portraitMediaId": null,
+      "imageCredit": "",
+      "profileLink": "",
+      "status": "draft"
+    },
+    {
+      "name": "Vincent Hasstrup",
+      "formerRole": "Violin",
+      "formerLeadershipResponsibility": "",
+      "instrument": "Violin",
+      "biography": "",
+      "portraitMediaId": null,
+      "imageCredit": "",
+      "profileLink": "",
+      "status": "draft"
+    },
+    {
+      "name": "Demola Adejayan",
+      "formerRole": "Violin",
+      "formerLeadershipResponsibility": "",
+      "instrument": "Violin",
+      "biography": "",
+      "portraitMediaId": null,
+      "imageCredit": "",
+      "profileLink": "",
+      "status": "draft"
+    }
+  ],
+  "contributors": [],
+  "cmsRequirements": {
+    "futureAdditionsThroughAdministratorDashboard": true,
+    "authorisedAdministratorsCanAddEditReorderDraftPreviewPublishUnpublishAndArchive": true,
+    "futureMusiciansAndInstrumentGroupsDoNotRequireApplicationCodeChanges": true
+  },
+  "sourceGaps": [
+    "Adegoke Wuyi is listed in leadership but absent from the 28-person musician roster; the separate draft musician record and leadership assignment require DSO confirmation.",
+    "Seun Adekanbi is listed as “Violin / Assistant Concertmaster” in the musician roster and “Conductor / Violin / Assistant Concertmaster” in leadership; preserve both values pending DSO review.",
+    "Biographies, portraits, image credits and media permissions were not supplied; obtain DSO-approved material before publication.",
+    "Names and spellings should be checked by DSO before publication, as required by the source brief."
+  ]
+}
