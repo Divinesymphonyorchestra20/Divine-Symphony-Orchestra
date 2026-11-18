@@ -7,9 +7,9 @@
 
 - `John Israel Faith` is canonical. `JIF` and `John Israel faith` are alternate/reference spellings.
 - `Oluwaseun Adekanbi` is canonical. `Seun Adekanbi` is an alternate/reference spelling.
-- `Philip Onyih` is canonical instead of the earlier `Philip` reference.
-- `Adekogbe Adewuyi` is canonical; reconcile `Adewuyi Adegoke` and `Adegoke Wuyi` to this identity without a duplicate profile.
-- `Olutade Dele` is canonical instead of `Dele Olutade`.
+- `Philip Hunliho` is canonical for both musician roster and Logistics leadership; owner confirmed that the roster and leadership references identify the same person.
+- `Adegoke Adewuyi` is canonical for both musician roster and Percussion leadership; owner confirmed that `Adewuyi Adegoke` and `Adegoke Wuyi` are source typos for the same person.
+- `Olutade Dele` is canonical; owner confirmed the Founder and Alumni entries refer to the same person. Preserve separate Founder and Alumni category records.
 - `Demola Adejayan` is canonical. Founder and Alumni relationships must reference one canonical profile and must not create duplicate biographies or profiles.
 
 ## Source package verification
@@ -43,13 +43,13 @@ Roster instrument assignment counts: Violin 10; Viola 5; Cello 4; Clarinet 2; Ba
 |---|---|---|
 | `John Israel faith` (roster 5) | `Jif` in the current review seed | No reliable match is established. Treat the source roster row as a distinct proposed identity until DSO confirms whether `Jif` is an abbreviation, mistaken value or different person. Preserve lowercase `faith` meanwhile. |
 | `Oluwaseun Adekanbi` (roster 13 and leadership 5) | `Seun Adekanbi` in the current review seed | Plausible name/nickname variation, not safe to merge automatically. The source explicitly says to preserve `Oluwaseun Adekanbi`; resolve the existing row and its profile slug after confirmation. |
-| `Philip Hunliho` (roster 25) | `Philip` in leadership 9 and the current seed | Candidate match only. The leadership source itself says not to assume the identity; do not attach the Logistics assignment until confirmed. |
-| `Adewuyi Adegoke` (roster 29) | `Adegoke Wuyi` in leadership 8 and a separate review-required seed record | Possible name-order/spelling variation, explicitly flagged by the source as not safe to merge automatically. Keep the roster entry as supplied and leave the leadership musician link unresolved pending DSO confirmation. |
-| `Olutade Dele` (founder 6 and alumni 1) | `Dele Olutade` in the current alumni seed and historical narrative | Name-order variation. The v1.1 founder table and alumni list both use `Olutade Dele`; the source notes an older history account uses `Dele Olutade`. Confirm identity and preferred display order; founder and alumni are separate relationships even if confirmed as one person. |
+| `Philip Hunliho` (roster 25) | `Philip` in leadership 9 | Owner-confirmed same person. Use `Philip Hunliho` as the canonical name in both the musician and Logistics leadership records. |
+| `Adegoke Adewuyi` (owner correction for roster 29) | `Adegoke Wuyi` in leadership 8 | Owner-confirmed same person. Use `Adegoke Adewuyi` as canonical name in both musician and Percussion leadership records. |
+| `Olutade Dele` (founder 6 and alumni 1) | `Dele Olutade` in an older historical narrative | Owner-confirmed same person. Keep the canonical name `Olutade Dele` in both Founder and Alumni sections, with separate category entries. |
 | `Demola Adejayan` (founder 7 and alumni 8) | Exact match across the v1.1 founders and alumni lists | Strong duplicate-person candidate across two categories, but not a current musician in the v1.1 roster. Keep the two category records separate and link only after confirmation. The existing seed's assertion that Demola is in the first-stage musician roster is stale against this v1.1 roster. |
 | `Aduragbemi Oloyede` (roster 1, leadership 1, founder 4) | Exact name across all three lists | One likely person with musician, leadership and founder relationships. Create one musician identity; link the leadership assignment to it. Keep founder recognition distinct and confirm the historical identity before linking it. |
 
-The remaining ten leadership assignments have exact-name candidates in the musician roster. The two leadership entries that lack an approved exact identity link are `Adegoke Wuyi` and `Philip`. The prepared dataset records exact links separately from unresolved candidates rather than silently linking either.
+The remaining ten leadership assignments have exact-name candidates in the musician roster. The two leadership entries are now owner-confirmed links to the canonical musician records `Adegoke Adewuyi` and `Philip Hunliho`. The prepared dataset records exact links separately from unresolved candidates rather than silently linking either.
 
 Other source spellings/capitalization to preserve verbatim until approved: `Morenikeji Micheal`, `Theophilous`, `John Israel faith`, and the lowercase instrument/group values on roster rows 29, 30 and 33. Do not silently change `Micheal` to “Michael,” expand `Theophilous`, or normalize the source display names. `Abayomi Prosper`, `Abayomi Peace` and `Abayomi Daniel` are three distinct roster entries, not duplicate candidates based on their shared name component.
 
@@ -86,7 +86,7 @@ Founders are historical records, not a People CMS record type in this schema; th
 
 The current [People landing page](../../../app/people/page.tsx) routes musicians and leadership and shows Alumni as upcoming. The [site page register](../../../app/admin/site-pages/page.tsx) points People Management at the admin workflow, while the Alumni public section is not yet a live route. The source pack is therefore suitable for draft preparation, but it does not make an alumni public section publish-ready by itself.
 
-No live database was queried for this review. Actual registry contents, whether migrations are already applied, and any pre-existing records must be verified against a non-production database before a later approved import.
+The live `dso-website-dev` database has been queried. The first-stage records are present; the owner-approved canonical corrections are now recorded in this reconciliation.
 
 ## Proposed import plan — no writes performed
 
@@ -101,4 +101,4 @@ Before any database import:
 5. Review the actual non-production database and active registry; reconcile rather than overwrite any existing records.
 6. Only after explicit approval, prepare/validate a v1.1-specific import against the confirmed registry, keep content draft/review-required, and record revisions/audit events using the established CMS workflow.
 
-No records were imported; no database or environment setting was changed; no migration, staging, commit, push or deployment was performed.
+Owner-approved corrections supersede earlier spellings. Live database publication is handled separately from this source reconciliation.
