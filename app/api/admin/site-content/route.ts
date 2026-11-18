@@ -30,7 +30,7 @@ function valid(value: unknown): value is SiteContent {
     typeof event.startAt === "string" && (!event.endAt || validDate(event.endAt)) &&
     (!event.startAt || validDate(event.startAt)) &&
     (!event.endAt || !event.startAt || Date.parse(event.endAt) >= Date.parse(event.startAt)) &&
-    typeof event.venue === "string" && event.venue.length <= 300 &&
+    typeof event.venue === "string" && event.venue.length <= 300 &&\n    (event.address === undefined || (typeof event.address === "string" && event.address.length <= 500)) &&
     typeof event.description === "string" && event.description.length <= 8000 &&
     typeof event.programme === "string" && event.programme.length <= 8000 &&
     safeUrl(event.image) && typeof event.imageAlt === "string" && event.imageAlt.length <= 500 &&
