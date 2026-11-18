@@ -377,10 +377,16 @@ export async function listPeopleRecords(resource: PeopleResource, publicOnly = f
     return (await queryDatabase(
       `SELECT a.id::text, a.name, a.former_leadership_responsibility AS "formerLeadershipResponsibility",
               a.instrument, a.biography, a.portrait_media_id::text AS "portraitMediaId",
-              a.portrait_alt_text AS "portraitAltText", a.image_credit AS "imageCredit",
+              a.portrait_alt_text AS "portraitAltText",
+              CASE WHEN ma.id IS NOT NULL THEN ma.blob_path ELSE NULL END AS "portraitPath",
+              a.image_credit AS "imageCredit",
               a.profile_link AS "profileLink", a.status, a.display_order AS "displayOrder",
               a.created_at AS "createdAt", a.updated_at AS "updatedAt"
-       FROM public.people_alumni a ${where} ORDER BY a.display_order, a.name`,
+       FROM public.people_alumni a
+       LEFT JOIN public.media_assets ma ON ma.id = a.portrait_media_id
+         AND ma.status = 'published'
+         AND ma.permission_status IN ('approved', 'not_required')
+       ${where} ORDER BY a.display_order, a.name`,
     )).rows;
   }
   const where = publicOnly ? "WHERE c.status = 'published'" : "";
