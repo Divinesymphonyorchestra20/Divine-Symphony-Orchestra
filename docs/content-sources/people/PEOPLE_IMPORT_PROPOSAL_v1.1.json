@@ -1,6 +1,6 @@
 {
   "format": "dso-people-import-proposal/v1",
-  "approvalState": "approved-for-first-stage-import",
+  "approvalState": "owner-approved-first-look-published",
   "sourcePackage": "DSO_People_Source_Pack_v1.1",
   "sourceCounts": {
     "musicians": 33,
@@ -153,9 +153,9 @@
           "group": "Violins"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 2,
@@ -173,9 +173,9 @@
           "group": "Woodwinds"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 3,
@@ -193,9 +193,9 @@
           "group": "Woodwinds"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 4,
@@ -213,9 +213,9 @@
           "group": "Percussion"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 5,
@@ -237,9 +237,9 @@
           "group": "Violins"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 6,
@@ -257,9 +257,9 @@
           "group": "Violins"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 7,
@@ -277,9 +277,9 @@
           "group": "Woodwinds"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 8,
@@ -297,9 +297,9 @@
           "group": "Violas"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 9,
@@ -317,9 +317,9 @@
           "group": "Violas"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 10,
@@ -337,9 +337,9 @@
           "group": "Cellos"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 11,
@@ -357,9 +357,9 @@
           "group": "Violins"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 12,
@@ -377,9 +377,9 @@
           "group": "Violas"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 13,
@@ -400,9 +400,9 @@
           "group": "Violins"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 14,
@@ -420,9 +420,9 @@
           "group": "Cellos"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 15,
@@ -440,9 +440,9 @@
           "group": "Violins"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 16,
@@ -460,9 +460,9 @@
           "group": "Violins"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 17,
@@ -480,9 +480,9 @@
           "group": "Violas"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 18,
@@ -500,9 +500,9 @@
           "group": "Violins"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 19,
@@ -520,9 +520,9 @@
           "group": "Cellos"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 20,
@@ -544,9 +544,9 @@
           "group": "Harp"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 21,
@@ -564,9 +564,9 @@
           "group": "Violas"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 22,
@@ -584,9 +584,9 @@
           "group": "Brass"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 23,
@@ -604,9 +604,9 @@
           "group": "Brass"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 24,
@@ -624,9 +624,9 @@
           "group": "Percussion"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 25,
@@ -647,9 +647,9 @@
           "group": "Brass"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 26,
@@ -667,9 +667,9 @@
           "group": "Woodwinds"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 27,
@@ -687,9 +687,9 @@
           "group": "Woodwinds"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 28,
@@ -707,9 +707,9 @@
           "group": "Cellos"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 29,
@@ -731,9 +731,9 @@
           "group": "Percussion"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 30,
@@ -751,9 +751,9 @@
           "group": "Woodwinds"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 31,
@@ -771,9 +771,9 @@
           "group": "Bass"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 32,
@@ -791,9 +791,9 @@
           "group": "Bass"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceRosterNumber": 33,
@@ -811,9 +811,9 @@
           "group": "Violins"
         }
       ],
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     }
   ],
   "leadershipAssignments": [
@@ -827,9 +827,9 @@
       "identityStatus": "exact-name-candidate",
       "titleAsSupplied": "Overall Leader (Main)/concert master",
       "musicalRoleAsSupplied": "Violin",
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceAssignmentNumber": 2,
@@ -841,9 +841,9 @@
       "identityStatus": "exact-name-candidate",
       "titleAsSupplied": "Head of DSO Schools",
       "musicalRoleAsSupplied": "Viola",
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceAssignmentNumber": 3,
@@ -855,9 +855,9 @@
       "identityStatus": "exact-name-candidate",
       "titleAsSupplied": "PRO",
       "musicalRoleAsSupplied": "Violin",
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceAssignmentNumber": 4,
@@ -869,9 +869,9 @@
       "identityStatus": "exact-name-candidate",
       "titleAsSupplied": "Artistic Director",
       "musicalRoleAsSupplied": "Viola",
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceAssignmentNumber": 5,
@@ -883,9 +883,9 @@
       "identityStatus": "exact-name-candidate",
       "titleAsSupplied": "Strings Sectional Head/conductor",
       "musicalRoleAsSupplied": "Violin",
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceAssignmentNumber": 6,
@@ -897,9 +897,9 @@
       "identityStatus": "exact-name-candidate",
       "titleAsSupplied": "Media",
       "musicalRoleAsSupplied": "Violin",
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceAssignmentNumber": 7,
@@ -911,9 +911,9 @@
       "identityStatus": "exact-name-candidate",
       "titleAsSupplied": "Welfare",
       "musicalRoleAsSupplied": "Violin / Harp",
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceAssignmentNumber": 8,
@@ -926,9 +926,9 @@
       "identityStatus": "owner-confirmed-canonical-identity-linked",
       "titleAsSupplied": "Section Leader, Percussion",
       "musicalRoleAsSupplied": "Percussion",
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceAssignmentNumber": 9,
@@ -941,9 +941,9 @@
       "identityStatus": "owner-confirmed-canonical-identity-linked",
       "titleAsSupplied": "Logistics",
       "musicalRoleAsSupplied": "Trumpet",
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceAssignmentNumber": 10,
@@ -955,9 +955,9 @@
       "identityStatus": "exact-name-candidate",
       "titleAsSupplied": "Admin Office/conductor",
       "musicalRoleAsSupplied": "Oboe",
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceAssignmentNumber": 11,
@@ -969,9 +969,9 @@
       "identityStatus": "exact-name-candidate",
       "titleAsSupplied": "Artistic Director/conductor",
       "musicalRoleAsSupplied": "Bassoon",
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     },
     {
       "sourceAssignmentNumber": 12,
@@ -983,9 +983,9 @@
       "identityStatus": "exact-name-candidate",
       "titleAsSupplied": "Programme Coordinator",
       "musicalRoleAsSupplied": "Cello",
-      "status": "draft",
+      "status": "published",
       "active": true,
-      "reviewRequired": true
+      "reviewRequired": false
     }
   ],
   "founders": [
