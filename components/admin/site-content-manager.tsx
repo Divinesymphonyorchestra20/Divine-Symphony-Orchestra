@@ -135,7 +135,8 @@ export default function SiteContentManager() {
             <label className="dso-field">Admission<input value={item.admission||""} onChange={e=>updateEvent(index,{admission:e.target.value})}/></label>
             <label className="dso-field">Conductor(s)<input value={item.conductor||""} onChange={e=>updateEvent(index,{conductor:e.target.value})}/></label>
             <label className="dso-field">Performers / featured artists<input value={item.performers||""} onChange={e=>updateEvent(index,{performers:e.target.value})}/></label>
-            <label className="dso-field">Venue<input value={item.venue} onChange={e=>updateEvent(index,{venue:e.target.value})}/></label>\n            <label className="dso-field">City / country / full address<input value={item.address||""} placeholder="Lagos, Nigeria" onChange={e=>updateEvent(index,{address:e.target.value})}/></label>
+            <label className="dso-field">Venue<input value={item.venue} onChange={e=>updateEvent(index,{venue:e.target.value})}/></label>
+            <label className="dso-field">City / country / full address<input value={item.address||""} placeholder="Lagos, Nigeria" onChange={e=>updateEvent(index,{address:e.target.value})}/></label>
             <label className="dso-field">Start date and time<input type="datetime-local" value={dateInput(item.startAt)} onChange={e=>updateEvent(index,{startAt:isoDate(e.target.value)})}/></label>
             <label className="dso-field">End date and time<input type="datetime-local" value={dateInput(item.endAt)} onChange={e=>updateEvent(index,{endAt:isoDate(e.target.value)})}/></label>
             <label className="dso-field">Registration URL<input type="url" value={item.registrationUrl} onChange={e=>updateEvent(index,{registrationUrl:e.target.value})}/></label>
