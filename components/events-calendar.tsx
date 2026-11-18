@@ -21,7 +21,7 @@ export default function EventsCalendar({events}:Props){
   const [month,setMonth]=useState(()=>new Date(now.getFullYear(),now.getMonth(),1));
   const [mode,setMode]=useState<"All Events"|"Upcoming"|"Past Events">("All Events");
   const [category,setCategory]=useState("All Events");
-  const [selectedDate,setSelectedDate]=useState("");
+  const [selectedDate,setSelectedDate]=useState("");\n  const monthValue=`${month.getFullYear()}-${String(month.getMonth()+1).padStart(2,"0")}`;
   const dated=useMemo(()=>events.filter(e=>e.status==="published"&&e.startAt&&Number.isFinite(Date.parse(e.startAt))),[events]);
   const filtered=useMemo(()=>dated.filter(e=>{
     const d=new Date(e.startAt); const past=d.getTime()<now.getTime();
@@ -40,7 +40,7 @@ export default function EventsCalendar({events}:Props){
   const eventDays=new Map<string,EventItem[]>();
   for(const e of dated){const key=eventDateKey(e.startAt);eventDays.set(key,[...(eventDays.get(key)||[]),e]);}
   const hasFilters=mode!=="All Events"||category!=="All Events"||Boolean(selectedDate);
-  function reset(){setMode("All Events");setCategory("All Events");setSelectedDate("");}
+  function reset(){setMode("All Events");setCategory("All Events");setSelectedDate("");}\n  function selectDate(key:string){setSelectedDate(current=>current===key?"":key);requestAnimationFrame(()=>document.getElementById("event-results")?.scrollIntoView({behavior:"smooth",block:"start"}));}
   function card(e:EventItem,pastEvent=false){
     return <article className="dso-event-row" key={e.id}>
       <div className="dso-event-row-date"><span>{fmt(e.startAt,{weekday:"short"})}</span><strong>{fmt(e.startAt,{day:"2-digit"})}</strong><span>{fmt(e.startAt,{month:"short",year:"numeric"})}</span><small>{fmt(e.startAt,{hour:"numeric",minute:"2-digit"})} WAT</small></div>
@@ -52,13 +52,13 @@ export default function EventsCalendar({events}:Props){
     <div className="dso-events-layout">
       <aside className="dso-events-sidebar">
         <section className="dso-calendar-panel" aria-label="Monthly event calendar">
-          <div className="dso-calendar-heading"><button type="button" aria-label="Previous month" onClick={()=>setMonth(new Date(month.getFullYear(),month.getMonth()-1,1))}>‹</button><h2>{month.toLocaleDateString("en-NG",{month:"long",year:"numeric"})}</h2><button type="button" aria-label="Next month" onClick={()=>setMonth(new Date(month.getFullYear(),month.getMonth()+1,1))}>›</button></div>
+          <div className="dso-calendar-heading"><button type="button" aria-label="Previous month" onClick={()=>setMonth(new Date(month.getFullYear(),month.getMonth()-1,1))}>‹</button><h2>{month.toLocaleDateString("en-NG",{month:"long",year:"numeric"})}</h2><button type="button" aria-label="Next month" onClick={()=>setMonth(new Date(month.getFullYear(),month.getMonth()+1,1))}>›</button></div><div className="dso-calendar-quick-nav"><label>Go to month<input aria-label="Choose calendar month" type="month" value={monthValue} onChange={e=>{if(e.target.value){const [year,monthNumber]=e.target.value.split("-").map(Number);setMonth(new Date(year,monthNumber-1,1));setSelectedDate("");}}}/></label><button type="button" onClick={()=>{const today=new Date();setMonth(new Date(today.getFullYear(),today.getMonth(),1));setSelectedDate("");}}>Today</button></div>
           <div className="dso-calendar-grid" role="grid" aria-label={month.toLocaleDateString("en-NG",{month:"long",year:"numeric"})}>
             {["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map(d=><span className="dso-calendar-weekday" key={d}>{d}</span>)}
             {Array.from({length:offset},(_,i)=><span key={"blank-"+i} aria-hidden="true"/>)}
-            {Array.from({length:days},(_,i)=>{const date=new Date(month.getFullYear(),month.getMonth(),i+1);const key=dateKey(date);const hits=eventDays.get(key)||[];const active=selectedDate===key;return <button type="button" role="gridcell" key={key} className={`dso-calendar-day ${hits.length?"has-event":""} ${active?"selected":""}`} aria-label={`${date.toLocaleDateString("en-NG",{dateStyle:"full"})}, ${hits.length} published event(s)`} aria-pressed={active} onClick={()=>setSelectedDate(active?"":key)}>{i+1}{hits.length>0&&<i aria-hidden="true"/>}</button>})}
+            {Array.from({length:days},(_,i)=>{const date=new Date(month.getFullYear(),month.getMonth(),i+1);const key=dateKey(date);const hits=eventDays.get(key)||[];const active=selectedDate===key;return <button type="button" role="gridcell" key={key} className={`dso-calendar-day ${hits.length?"has-event":""} ${active?"selected":""}`} aria-label={`${date.toLocaleDateString("en-NG",{dateStyle:"full"})}, ${hits.length} published event(s)${hits.length?": "+hits.map(event=>event.title).join(", "):""}`} aria-pressed={active} onClick={()=>selectDate(active?"":key)}>{i+1}{hits.length>0&&<i aria-hidden="true"/>}</button>})}
           </div>
-          <button className="dso-calendar-reset" type="button" onClick={reset}>All dates / Clear selection</button>
+          <button className="dso-calendar-reset" type="button" onClick={()=>setSelectedDate("")}>All dates / Clear date selection</button>
           <p className="dso-calendar-legend"><i/> Published event date</p>
         </section>
         <section className="dso-event-filters"><h2>Filter Events</h2>
