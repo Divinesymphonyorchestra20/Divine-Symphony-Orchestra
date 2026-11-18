@@ -16,11 +16,11 @@ export default async function EventDetailPage({params}:{params:Promise<{slug:str
   {event.image&&<img className="dso-event-preview-image" src={event.image} alt={event.imageAlt||event.title}/>}
   <p className="eyebrow dark">Divine Symphony Orchestra · {event.category||"Concerts & Events"}</p>
   <h1>{event.title}</h1><p className="dso-event-preview-lead">{event.description}</p>
-  <div className="dso-event-preview-meta"><p><b>Date & time</b><span>{date}{end?" · Ends "+end:""} {event.dateStatus==="provisional"?"(provisional)":""}</span></p><p><b>Venue</b><span>{event.venue||"To be confirmed"}</span></p><p><b>Admission</b><span>{event.admission||"Details to be confirmed"}</span></p></div>
+  <div className="dso-event-preview-meta"><p><b>Date & time</b><span>{event.dateStatus==="provisional"?"Provisional planning date: "+(event.planningMonth||date):date}{end?" · Ends "+end:""} {event.dateStatus==="provisional"?"· Subject to confirmation":""}</span></p><p><b>Venue</b><span>{event.venue||"To be confirmed"}{event.address?", "+event.address:""}</span></p><p><b>Admission</b><span>{event.admission||"Details to be confirmed"}</span></p></div>
   {event.conductor&&<section className="dso-event-detail-section"><h2>Conductor</h2><p>{event.conductor}</p></section>}
   {event.performers&&<section className="dso-event-detail-section"><h2>Featuring</h2><p>{event.performers}</p></section>}
   {event.programme&&<section className="dso-event-detail-section"><h2>Programme</h2>{event.programme.split("\n").map((line,index)=><p key={index}>{line}</p>)}</section>}
-  {event.scheduleText&&<section className="dso-event-detail-section"><h2>Anniversary week</h2><p>{event.scheduleText}</p></section>}
+  {event.scheduleText&&<section className="dso-event-detail-section"><h2>Anniversary week</h2><p>{event.scheduleText.split("\\n").map((line,index)=><span key={index} className="dso-event-schedule-line">{line}<br/></span>)}</p></section>}
   {event.registrationUrl&&<p><a className="dso-event-registration" href={event.registrationUrl} target={external?"_blank":undefined} rel={external?"noreferrer":undefined}>Event information / registration ↗</a></p>}
  </main>;
 }
