@@ -50,6 +50,9 @@ export default function OurMusiciansDirectory({
   const visible = activeGroup === "__all__"
     ? sorted
     : sorted.filter(musician => musician.instruments.some(instrument => instrument.groupSlug === activeGroup));
+  const availableLetters = Array.from(new Set(visible.map(musician => musician.displayName.trim().charAt(0).toUpperCase())))
+    .filter(letter => /^[A-Z]$/.test(letter))
+    .sort();
 
   return (
     <section className="musicians-directory" aria-labelledby="musicians-directory-heading">
@@ -73,6 +76,15 @@ export default function OurMusiciansDirectory({
         ))}
       </nav>
 
+      {visible.length > 0 && (
+        <nav className="people-alphabet-nav" aria-label="Jump to musicians by first letter">
+          <span className="people-alphabet-label">Jump to</span>
+          {availableLetters.map(letter => (
+            <a href={`#musician-letter-${letter}`} key={letter} aria-label={`Musicians starting with ${letter}`}>{letter}</a>
+          ))}
+        </nav>
+      )}
+
       {visible.length === 0 ? (
         <div className="musicians-empty" role="status">
           <h3>{activeGroup === "__all__" ? "No published musicians are available yet." : "No published musicians are listed in this section yet."}</h3>
@@ -80,8 +92,12 @@ export default function OurMusiciansDirectory({
         </div>
       ) : (
         <div className="musician-grid" aria-live="polite">
-          {visible.map(musician => (
+          {visible.map((musician, index) => {
+            const letter = musician.displayName.trim().charAt(0).toUpperCase();
+            const previousLetter = index > 0 ? visible[index - 1].displayName.trim().charAt(0).toUpperCase() : "";
+            return (
             <Link
+              id={letter !== previousLetter && /^[A-Z]$/.test(letter) ? `musician-letter-${letter}` : undefined}
               className="musician-card musician-card-link"
               href={`/people/musicians/${encodeURIComponent(musician.profileSlug)}`}
               key={musician.id}
@@ -114,7 +130,7 @@ export default function OurMusiciansDirectory({
                 </span>
               </div>
             </Link>
-          ))}
+          );})}
         </div>
       )}
     </section>
