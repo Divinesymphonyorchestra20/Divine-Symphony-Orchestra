@@ -10,7 +10,7 @@ export default async function EventPreview({params}:{params:Promise<{slug:string
  return <main className="dso-event-preview"><Link href="/concerts-and-events" className="dso-detail-back">← Back to Concerts & Events</Link>
  {event.image&&<img className="dso-event-preview-image" src={event.image} alt={event.imageAlt||event.title}/>}
  <p className="eyebrow dark">Divine Symphony Orchestra · Event preview</p><h1>{event.title}</h1><p className="dso-event-preview-lead">{event.description}</p>
- <div className="dso-event-preview-meta"><p><b>Date & time</b><span>{date} WAT</span></p><p><b>Venue</b><span>{event.venue||"To be confirmed"}</span></p><p><b>Admission</b><span>{(event as typeof event & {admission?:string}).admission||"See event details"}</span></p></div>
+ <div className="dso-event-preview-meta"><p><b>Date & time</b><span>{event.dateStatus==="provisional"?"Provisional planning date: "+(event.planningMonth||date):date+" WAT"}{event.dateStatus==="provisional"?" · Subject to confirmation":""}</span></p><p><b>Venue</b><span>{event.venue||"To be confirmed"}{event.address?", "+event.address:""}</span></p><p><b>Admission</b><span>{(event as typeof event & {admission?:string}).admission||"See event details"}</span></p></div>
  <Link href={"/concerts-and-events/"+event.slug} className="dso-event-action">See Event <span aria-hidden="true">→</span></Link>
  </main>;
 }
