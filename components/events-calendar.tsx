@@ -7,7 +7,7 @@ type EventItem = {
   id:string; title:string; slug:string; status:"draft"|"published"|"archived";
   startAt:string; endAt:string; venue:string; description:string; programme:string;
   image:string; imageAlt:string; registrationUrl:string; featured:boolean;
-  category?:string; timezone?:string; admission?:string; performers?:string;
+  category?:string; timezone?:string; admission?:string; address?:string; planningMonth?:string; dateStatus?:"provisional"|"confirmed"; performers?:string;
   conductor?:string; archiveSummary?:string;
 };
 type Props={events:EventItem[]};
