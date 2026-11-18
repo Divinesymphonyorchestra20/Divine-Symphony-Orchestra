@@ -1,12 +1,12 @@
 import { get, put } from "@vercel/blob";
 import { isDatabaseContentStoreEnabled, readContentStoreWithLegacyImport, writeDatabaseContentStore } from "./content-store";
 import { mediaBlobPathFromUrl, syncContentMediaUsage } from "./media-store";
-export type ManagedEvent={id:string;title:string;slug:string;status:"draft"|"published"|"archived";startAt:string;endAt:string;venue:string;description:string;programme:string;image:string;imageAlt:string;registrationUrl:string;featured:boolean};
+export type ManagedEvent={id:string;title:string;slug:string;status:"draft"|"published"|"archived";startAt:string;endAt:string;venue:string;description:string;programme:string;image:string;imageAlt:string;registrationUrl:string;featured:boolean;category?:string;timezone?:string;admission?:string;performers?:string;conductor?:string;archiveSummary?:string;planningMonth?:string;scheduleText?:string;dateStatus?:"provisional"|"confirmed"};
 export type ManagedNews={id:string;title:string;slug:string;status:"draft"|"published"|"archived";publishedAt:string;summary:string;body:string;image:string;imageAlt:string;author:string;sourceUrl:string};
 export type GalleryAlbum={id:string;title:string;description:string;status:"draft"|"published"|"archived";collection:string;coverImage:string;coverAlt:string;sortOrder:number};
 export type ContactContent={intro:string;generalEmail:string;telephone:string;address:string;socialLinks:Array<{label:string;url:string}>;enquiryNote:string};
 export type SiteContent={version:1;updatedAt:string;events:ManagedEvent[];news:ManagedNews[];albums:GalleryAlbum[];contact:ContactContent};
-const empty:SiteContent={version:1,updatedAt:"",events:[],news:[],albums:[],contact:{intro:"Official contact information will be published after DSO confirms the details.",generalEmail:"",telephone:"",address:"",socialLinks:[],enquiryNote:"Website enquiries will be enabled when an official receiving address and handling process are confirmed."}};
+const empty:SiteContent={version:1,updatedAt:"",events:[{id:"dso-20th-anniversary-2027",title:"DSO 20th Anniversary Concert",slug:"dso-20th-anniversary-concert",status:"draft",startAt:"",endAt:"",venue:"Grace Hall, Mountain of Fire and Miracles Ministries, Lagos, Nigeria",description:"Celebrating 20 years of spiritual and musical heritage. A Symphony of Gratitude, Thanksgiving and Continuity.",programme:"Monday — Mid-service chamber performance\nTuesday — Outreach concert\nWednesday — Mid-service performance\nThursday — Outreach performance\nFriday — Rehearsal / outreach performance\nSaturday — Dress rehearsal\nSunday — Main anniversary concert",image:"",imageAlt:"",registrationUrl:"",featured:true,category:"Special Programmes",timezone:"Africa/Lagos",admission:"Free",performers:"Divine Symphony Orchestra",conductor:"",planningMonth:"July 2027",scheduleText:"Monday to Sunday anniversary-week programme. Individual dates and the official main concert date are pending DSO confirmation.",dateStatus:"provisional"}],news:[],albums:[],contact:{intro:"Official contact information will be published after DSO confirms the details.",generalEmail:"",telephone:"",address:"",socialLinks:[],enquiryNote:"Website enquiries will be enabled when an official receiving address and handling process are confirmed."}};
 const path="cms/site-content.json";
 function siteContentMediaReferences(content: SiteContent) {
   const references = [
@@ -41,6 +41,7 @@ export async function readSiteContent(): Promise<SiteContent> {
     contentType: "site_content", slug: "site-content", title: "DSO Events, News, Gallery and Contact",
     readLegacy: readLegacySiteContent, fallback: () => empty,
   });
+  if (!content.events.some(event => event.id === "dso-20th-anniversary-2027")) content.events.push(empty.events[0]);
   await syncContentMediaUsage("site_content", "site-content", siteContentMediaReferences(content));
   return content;
 }
