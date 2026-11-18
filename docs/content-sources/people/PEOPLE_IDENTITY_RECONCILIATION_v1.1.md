@@ -1,7 +1,7 @@
 # DSO People Source Pack v1.1 — identity reconciliation
 
 **Prepared:** 18 November 2026
-**State:** approved canonical identities applied; live database import pending or in progress.
+**State:** owner-approved canonical identities applied; 33 musician and 12 leadership records published to the live People CMS for first-look review. Eight alumni records remain draft because the public Alumni section is not yet implemented.
 
 ## Owner-approved canonical decisions
 
