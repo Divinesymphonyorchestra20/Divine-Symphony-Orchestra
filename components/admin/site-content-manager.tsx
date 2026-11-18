@@ -135,7 +135,7 @@ export default function SiteContentManager() {
             <label className="dso-field">Admission<input value={item.admission||""} onChange={e=>updateEvent(index,{admission:e.target.value})}/></label>
             <label className="dso-field">Conductor(s)<input value={item.conductor||""} onChange={e=>updateEvent(index,{conductor:e.target.value})}/></label>
             <label className="dso-field">Performers / featured artists<input value={item.performers||""} onChange={e=>updateEvent(index,{performers:e.target.value})}/></label>
-            <label className="dso-field">Venue<input value={item.venue} onChange={e=>updateEvent(index,{venue:e.target.value})}/></label>
+            <label className="dso-field">Venue<input value={item.venue} onChange={e=>updateEvent(index,{venue:e.target.value})}/></label>\n            <label className="dso-field">City / country / full address<input value={item.address||""} placeholder="Lagos, Nigeria" onChange={e=>updateEvent(index,{address:e.target.value})}/></label>
             <label className="dso-field">Start date and time<input type="datetime-local" value={dateInput(item.startAt)} onChange={e=>updateEvent(index,{startAt:isoDate(e.target.value)})}/></label>
             <label className="dso-field">End date and time<input type="datetime-local" value={dateInput(item.endAt)} onChange={e=>updateEvent(index,{endAt:isoDate(e.target.value)})}/></label>
             <label className="dso-field">Registration URL<input type="url" value={item.registrationUrl} onChange={e=>updateEvent(index,{registrationUrl:e.target.value})}/></label>
@@ -187,7 +187,7 @@ export default function SiteContentManager() {
             <button type="button" className="dso-remove-button" onClick={()=>updateContact({socialLinks:data.contact.socialLinks.filter((_,i)=>i!==index)})}>Remove</button>
           </div>)}
         </div>}
-        <p className="dso-site-content-tip">Use Draft until details are approved. Event dates may remain blank while the planning month and provisional programme are recorded. Set Date status to Confirmed only after DSO approval. Event images should be selected from the Shared Media Library.</p>
+        <p className="dso-site-content-tip">Use Draft until details are approved. A provisional date may be entered for calendar planning; keep Date status provisional until DSO confirms it. Set Date status to Confirmed only after DSO approval. Event images should be selected from the Shared Media Library.</p>
         <div className="dso-site-content-actions"><button onClick={save} disabled={saving}>{saving ? "Saving…" : "Save changes"}</button></div>
       </>}
       {error && <p className="dso-site-content-error" role="alert">{error}</p>}
