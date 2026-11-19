@@ -665,3 +665,193 @@ body{color:var(--dso-ink);-webkit-font-smoothing:antialiased}
 .home-news-inner>p:not(.eyebrow){font-size:14px;line-height:1.8;color:var(--muted);margin:0 auto 14px}
 .home-news-inner .solid-cta{margin-top:8px}
 @media(max-width:620px){.home-news-band{padding:40px 7%}.home-news-inner>p:not(.eyebrow){font-size:13px}}
+
+
+/* Approved DSO purple, plum, navy and gold visual treatment */
+.site-header{
+  background:#11101f;
+  border-bottom:1px solid rgba(218,190,238,.16);
+}
+.site-header nav a,
+.site-header nav .nav-dropdown-trigger{
+  color:#eee6f4;
+}
+.site-header nav a:hover,
+.site-header nav a:focus-visible,
+.site-header nav .active,
+.site-header nav .nav-dropdown.active .nav-dropdown-trigger{
+  color:#f2cf61;
+}
+.site-header .nav-dropdown-trigger{
+  background:transparent;
+  border-color:transparent;
+}
+.site-header .nav-dropdown-menu{
+  background:#21152d;
+  border:1px solid rgba(231,207,242,.18);
+  box-shadow:0 16px 36px rgba(10,5,18,.32);
+}
+.site-header .nav-dropdown-menu a{
+  color:#eee6f4;
+}
+.site-header .nav-dropdown-menu a:hover,
+.site-header .nav-dropdown-menu a:focus-visible{
+  background:rgba(164,94,184,.2);
+  color:#f2cf61;
+}
+.site-header .menu-link{
+  border-color:rgba(242,207,97,.75);
+  color:#f5d978;
+}
+.site-header .menu-link:hover,
+.site-header .menu-link:focus-visible{
+  background:#4b0758;
+  border-color:#f2cf61;
+  color:#fff;
+}
+.mobile-menu-toggle{
+  color:#f3eafa;
+  border-color:rgba(231,207,242,.32);
+  background:#21152d;
+}
+.hero-photo{opacity:.92}
+.hero-shade{
+  background:linear-gradient(90deg,
+    rgba(37,3,49,.91) 0%,
+    rgba(67,5,79,.84) 34%,
+    rgba(77,8,91,.66) 70%,
+    rgba(34,10,55,.62) 100%);
+}
+.feature-photo,
+.strings-photo{
+  position:relative;
+  filter:none;
+}
+.feature-photo::after,
+.strings-photo::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(110deg,
+    rgba(53,4,70,.78) 0%,
+    rgba(83,9,105,.66) 54%,
+    rgba(35,12,63,.7) 100%);
+  mix-blend-mode:multiply;
+}
+.feature-photo{
+  background-position:center;
+}
+.strings-feature{
+  background:#f3edf6;
+}
+.strings-photo::after{
+  background:linear-gradient(135deg,
+    rgba(64,7,83,.68),
+    rgba(90,12,107,.62));
+}
+.quick-links,
+.updates,
+.home-news-band,
+.section-cta-band{
+  background-color:#f5f0f7;
+}
+.home-history-band,
+.feature,
+.history-closing,
+.dso-gallery-hero{
+  background-color:#3a0648;
+}
+.history-hero-image{
+  opacity:.94;
+}
+.history-hero-shade,
+.inner-page-hero-shade{
+  background:linear-gradient(90deg,
+    rgba(39,3,51,.9) 0%,
+    rgba(65,5,79,.78) 48%,
+    rgba(52,7,68,.58) 100%);
+}
+.people-landing-hero{
+  background-image:linear-gradient(110deg,
+    rgba(43,4,61,.88),
+    rgba(84,9,103,.72) 58%,
+    rgba(33,13,57,.78)),
+    url('/images/hero-strings-section.jpg');
+  background-size:cover;
+  background-position:center;
+  background-blend-mode:normal;
+}
+.musicians-directory-hero{
+  background-image:linear-gradient(110deg,
+    rgba(43,4,61,.88),
+    rgba(84,9,103,.72) 58%,
+    rgba(33,13,57,.78)),
+    url('/images/hero-main-stage.jpg');
+  background-size:cover;
+  background-position:center;
+}
+.founders-hero{
+  background-image:linear-gradient(110deg,
+    rgba(43,4,61,.88),
+    rgba(84,9,103,.72) 58%,
+    rgba(33,13,57,.78)),
+    url('/images/hero-strings-section.jpg');
+  background-size:cover;
+  background-position:center;
+}
+.milestones-hero{
+  background-image:linear-gradient(110deg,
+    rgba(43,4,61,.88),
+    rgba(84,9,103,.72) 58%,
+    rgba(33,13,57,.78)),
+    url('/images/hero-main-stage.jpg');
+  background-size:cover;
+  background-position:center;
+}
+.site-footer{
+  background:#11101f;
+  border-top:3px solid #9b6bb1;
+}
+.site-footer .footer-bottom{
+  border-top-color:rgba(226,205,235,.2);
+  color:#ded3e8;
+}
+.site-footer>p{
+  color:#d7c9e4;
+}
+.solid-cta{
+  background:#5a0870;
+  border-color:#d5b14c;
+}
+.solid-cta:hover,
+.solid-cta:focus-visible{
+  background:#74118a;
+  border-color:#f2cf61;
+}
+.outline-cta{
+  background:rgba(48,4,62,.22);
+  border-color:#e3c35b;
+}
+.quick-card{
+  border-color:#e1d5e8;
+}
+.quick-card h2,
+.updates h2,
+.home-news-inner h2{
+  color:#30203a;
+}
+@media(max-width:950px){
+  .site-header nav{
+    background:#171326;
+    border-top:1px solid rgba(231,207,242,.14);
+  }
+}
+@media(max-width:620px){
+  .hero-shade{
+    background:linear-gradient(0deg,
+      rgba(37,3,49,.93) 0%,
+      rgba(67,5,79,.82) 56%,
+      rgba(66,5,79,.42) 100%);
+  }
+}
