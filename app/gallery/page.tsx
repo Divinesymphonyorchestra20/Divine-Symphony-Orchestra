@@ -6,6 +6,11 @@ export const dynamic="force-dynamic";
 export const metadata:Metadata={title:"Gallery | Divine Symphony Orchestra",description:"Photographs and videos from Divine Symphony Orchestra."};
 
 const mediaUrl=(pathname:string)=>"/api/media/"+pathname.split("/").map(encodeURIComponent).join("/");
+const formatGalleryDate=(value:string)=>{
+ if(/^\\d{4}-\\d{2}$/.test(value)){const [year,month]=value.split("-").map(Number);return new Intl.DateTimeFormat("en",{month:"long",year:"numeric"}).format(new Date(Date.UTC(year,month-1,1)));}
+ if(/^\\d{4}-\\d{2}-\\d{2}$/.test(value)){const [year,month,day]=value.split("-").map(Number);return new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",year:"numeric"}).format(new Date(Date.UTC(year,month-1,day)));}
+ return value;
+};
 type GalleryPhoto={kind:"photo";id:string;photo:{id:string;src:string;alt:string;caption:string;credit:string}};
 type GalleryVideo={kind:"video";id:string;video:{id:string;title:string;description:string;embed:string}};
 type GalleryItem=GalleryPhoto|GalleryVideo;
@@ -31,7 +36,7 @@ export default async function GalleryPage(){
   const mainVideos=entryVideos.filter(video=>!video.gallerySubEntryId);
   const subEntries=entry.subEntries.slice().sort((a,b)=>a.sortOrder-b.sortOrder);
   if(entryPhotos.length||entryVideos.length||subEntries.length===0){
-   sections.push({id:entry.id,title:entry.title,subtitle:entry.subtitle||"",date:entry.date||"",items:toItems(mainPhotos,mainVideos)});
+   sections.push({id:entry.id,title:entry.title,subtitle:entry.subtitle||"",date:formatGalleryDate(entry.date||""),items:toItems(mainPhotos,mainVideos)});
   }
   for(const sub of subEntries){
    const subPhotos=entryPhotos.filter(photo=>photo.gallerySubEntryId===sub.id);
