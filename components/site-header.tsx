@@ -73,6 +73,8 @@ export default function SiteHeader({active}:{active?:string}){
   return <header className="site-header" ref={headerRef}>
     <a className="brand" href="/" aria-label="Divine Symphony Orchestra home" onClick={close}>
       <Image className="brand-logo" src="/images/dso-logo-transparent.png" alt="Divine Symphony Orchestra logo" width={72} height={108} priority/>
+      <span className="brand-divider" aria-hidden="true"/>
+      <span className="brand-wordmark">Divine<br/>Symphony<br/>Orchestra</span>
     </a>
     <button className="mobile-menu-toggle" type="button" aria-expanded={menuOpen} aria-controls="primary-navigation" onClick={()=>setMenuOpen(value=>!value)}>
       <span aria-hidden="true">{menuOpen?"×":"☰"}</span>{menuOpen?"Close menu":"Menu"}
