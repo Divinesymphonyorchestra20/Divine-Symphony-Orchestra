@@ -16,12 +16,35 @@ export default function GalleryExperience({sections}:GalleryProps){
  const allItems=useMemo(()=>sections.flatMap(section=>section.items),[sections]);
  const [activeIndex,setActiveIndex]=useState<number|null>(null);
  const activeItem=activeIndex===null?null:allItems[activeIndex]||null;
- const close=()=>setActiveIndex(null);
- const previous=()=>setActiveIndex(index=>index===null?null:(index+allItems.length-1)%allItems.length);
- const next=()=>setActiveIndex(index=>index===null?null:(index+1)%allItems.length);
+ const open=(index:number)=>{
+  window.history.pushState({...window.history.state,dsoGalleryViewer:true,dsoGalleryIndex:index},"",window.location.href);
+  setActiveIndex(index);
+ };
+ const close=()=>{
+  if(window.history.state?.dsoGalleryViewer){window.history.back();return;}
+  setActiveIndex(null);
+ };
+ const move=(direction:-1|1)=>setActiveIndex(index=>{
+  if(index===null||allItems.length===0)return null;
+  const nextIndex=(index+direction+allItems.length)%allItems.length;
+  window.history.pushState({...window.history.state,dsoGalleryViewer:true,dsoGalleryIndex:nextIndex},"",window.location.href);
+  return nextIndex;
+ });
+ const previous=()=>move(-1);
+ const next=()=>move(1);
+
+ useEffect(()=>{
+  const onPopState=(event:PopStateEvent)=>{
+   const state=event.state as {dsoGalleryViewer?:boolean;dsoGalleryIndex?:number}|null;
+   setActiveIndex(state?.dsoGalleryViewer&&Number.isInteger(state.dsoGalleryIndex)&&state.dsoGalleryIndex!>=0&&state.dsoGalleryIndex!<allItems.length?state.dsoGalleryIndex!:null);
+  };
+  window.addEventListener("popstate",onPopState);
+  return()=>window.removeEventListener("popstate",onPopState);
+ },[allItems.length]);
 
  useEffect(()=>{
   if(activeIndex===null)return;
+  const previousOverflow=document.body.style.overflow;
   const onKey=(event:KeyboardEvent)=>{
    if(event.key==="Escape")close();
    if(event.key==="ArrowLeft")previous();
@@ -29,7 +52,7 @@ export default function GalleryExperience({sections}:GalleryProps){
   };
   document.addEventListener("keydown",onKey);
   document.body.style.overflow="hidden";
-  return()=>{document.removeEventListener("keydown",onKey);document.body.style.overflow="";};
+  return()=>{document.removeEventListener("keydown",onKey);document.body.style.overflow=previousOverflow;};
  },[activeIndex,allItems.length]);
 
  let touchStartX=0;
@@ -45,7 +68,7 @@ export default function GalleryExperience({sections}:GalleryProps){
     {section.items.length>0&&<div className="dso-gallery-square-grid">
      {section.items.map(item=>{
       const index=allItems.findIndex(candidate=>candidate.kind===item.kind&&candidate.id===item.id);
-      return <button type="button" className="dso-gallery-square-item" key={item.kind+"-"+item.id} onClick={()=>setActiveIndex(index)} aria-label={item.kind==="photo"?"View photograph": "Play "+item.video.title}>
+      return <button type="button" className="dso-gallery-square-item" key={item.kind+"-"+item.id} onClick={()=>open(index)} aria-label={item.kind==="photo"?"View photograph": "Play "+item.video.title}>
        {item.kind==="photo"?<img src={item.photo.src} alt={item.photo.alt||section.title} loading="lazy"/>:<span className="dso-gallery-video-tile"><span aria-hidden="true">▶</span><small>{item.video.title}</small></span>}
       </button>;
      })}
