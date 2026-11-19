@@ -863,3 +863,147 @@ body{color:var(--dso-ink);-webkit-font-smoothing:antialiased}
 .milestones-hero{
   background-image:url('/images/hero-main-stage.jpg');
 }
+
+
+/* Homepage hero aligned to the supplied DSO visual mockup */
+.site-header{
+  height:128px;
+  padding:0 2.5%;
+  background:#201d32;
+  border-bottom:1px solid rgba(255,255,255,.12);
+}
+.site-header .brand{min-width:88px}
+.site-header .brand-logo{width:76px;height:112px}
+.site-header nav{gap:clamp(18px,2vw,34px);font-size:clamp(14px,1.55vw,23px);font-weight:500}
+.site-header nav a{
+  color:#eeeaf4;
+  padding:12px 20px;
+  border-radius:16px;
+}
+.site-header nav a.active{
+  color:#f5d52f;
+  background:#40205e;
+}
+.site-header nav a:hover,
+.site-header nav a:focus-visible{color:#f5d52f}
+.dso-mockup-hero{
+  min-height:calc(100svh - 128px);
+  align-items:flex-start;
+  justify-content:center;
+  text-align:center;
+  background:#26032f;
+}
+.dso-mockup-hero .hero-photo{
+  inset:0;
+  opacity:1;
+  mask-image:none;
+  background-position:center 52%;
+}
+.dso-mockup-hero .hero-shade{
+  background:linear-gradient(180deg,
+    rgba(30,3,39,.62) 0%,
+    rgba(50,0,62,.58) 42%,
+    rgba(63,0,78,.48) 100%);
+}
+.dso-mockup-hero-copy{
+  width:min(100% - 36px,1100px);
+  max-width:1100px;
+  margin:0 auto;
+  padding:clamp(70px,8vh,108px) 0 70px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.dso-est-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  border:2px solid #f2cf22;
+  border-radius:999px;
+  color:#f5d52f;
+  font-size:clamp(17px,1.7vw,25px);
+  font-weight:600;
+  padding:10px 28px;
+  margin:0 0 26px;
+}
+.dso-est-badge span{font-size:1.3em}
+.dso-mockup-hero h1{
+  font:700 clamp(60px,7vw,108px)/.98 'Playfair Display',Georgia,serif;
+  letter-spacing:-.035em;
+  margin:0;
+  text-shadow:0 3px 22px rgba(20,0,28,.25);
+}
+.dso-mockup-hero h1 span{
+  background:linear-gradient(90deg,#c54bff 0%,#e3a7ef 45%,#f1c71b 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  font-style:normal;
+}
+.dso-mockup-hero .hero-intro{
+  max-width:none;
+  margin:10px 0 14px;
+  color:#e8dce9;
+  font-size:clamp(22px,2.5vw,36px);
+  line-height:1.35;
+  font-weight:500;
+}
+.dso-hero-actions{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:32px;
+  margin-top:14px;
+}
+.dso-discover-cta,
+.dso-gallery-cta{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+  min-width:214px;
+  min-height:76px;
+  padding:18px 34px;
+  border-radius:18px;
+  font-size:clamp(17px,1.8vw,27px);
+  font-weight:600;
+  transition:transform .18s ease,background .18s ease;
+}
+.dso-discover-cta{
+  color:white;
+  background:linear-gradient(105deg,#8d31ee,#7831df);
+  box-shadow:0 10px 30px rgba(42,0,65,.22);
+}
+.dso-gallery-cta{
+  color:#f4d326;
+  border:2px solid #f4d326;
+  background:rgba(25,3,34,.16);
+}
+.dso-discover-cta:hover,.dso-gallery-cta:hover{transform:translateY(-2px)}
+.dso-mockup-hero .ribbons{display:none}
+@media(max-width:950px){
+  .site-header{height:100px;padding:0 3%}
+  .site-header .brand-logo{width:62px;height:88px}
+  .site-header nav{gap:6px;font-size:14px}
+  .site-header nav a{padding:10px 12px}
+  .dso-mockup-hero{min-height:calc(100svh - 100px)}
+  .dso-mockup-hero-copy{padding-top:9vh}
+  .dso-mockup-hero h1{font-size:clamp(52px,8vw,78px)}
+}
+@media(max-width:620px){
+  .site-header{height:auto;min-height:82px;padding:10px 5%;gap:12px}
+  .site-header .brand-logo{width:48px;height:68px}
+  .site-header nav{order:3;width:100%;justify-content:space-between;overflow:visible;padding:0 0 8px;gap:4px;font-size:11px}
+  .site-header nav a{padding:8px 7px;border-radius:10px}
+  .dso-mockup-hero{min-height:calc(100svh - 82px);align-items:flex-start}
+  .dso-mockup-hero .hero-photo{background-position:57% center}
+  .dso-mockup-hero .hero-shade{background:linear-gradient(180deg,rgba(30,3,39,.52),rgba(50,0,62,.57) 50%,rgba(40,0,52,.65))}
+  .dso-mockup-hero-copy{width:calc(100% - 28px);padding:11vh 0 46px}
+  .dso-est-badge{font-size:16px;padding:8px 20px;margin-bottom:22px}
+  .dso-mockup-hero h1{font-size:clamp(43px,11vw,64px);line-height:1.02}
+  .dso-mockup-hero .hero-intro{font-size:20px;margin-top:14px}
+  .dso-hero-actions{gap:12px;margin-top:18px;width:100%}
+  .dso-discover-cta,.dso-gallery-cta{min-width:0;min-height:56px;padding:13px 20px;border-radius:14px;font-size:16px;flex:1}
+}
