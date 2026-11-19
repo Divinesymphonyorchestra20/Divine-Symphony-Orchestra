@@ -7,8 +7,8 @@ export const metadata:Metadata={title:"Gallery | Divine Symphony Orchestra",desc
 
 const mediaUrl=(pathname:string)=>"/api/media/"+pathname.split("/").map(encodeURIComponent).join("/");
 const formatGalleryDate=(value:string)=>{
- if(/^\\d{4}-\\d{2}$/.test(value)){const [year,month]=value.split("-").map(Number);return new Intl.DateTimeFormat("en",{month:"long",year:"numeric"}).format(new Date(Date.UTC(year,month-1,1)));}
- if(/^\\d{4}-\\d{2}-\\d{2}$/.test(value)){const [year,month,day]=value.split("-").map(Number);return new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",year:"numeric"}).format(new Date(Date.UTC(year,month-1,day)));}
+ if(/^\d{4}-\d{2}$/.test(value)){const [year,month]=value.split("-").map(Number);return new Intl.DateTimeFormat("en",{month:"long",year:"numeric"}).format(new Date(Date.UTC(year,month-1,1)));}
+ if(/^\d{4}-\d{2}-\d{2}$/.test(value)){const [year,month,day]=value.split("-").map(Number);return new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",year:"numeric"}).format(new Date(Date.UTC(year,month-1,day)));}
  return value;
 };
 type GalleryPhoto={kind:"photo";id:string;photo:{id:string;src:string;alt:string;caption:string;credit:string}};
