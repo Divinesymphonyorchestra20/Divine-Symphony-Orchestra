@@ -49,6 +49,7 @@ export default function PeopleManager() {
   const [tab, setTab] = useState<Tab>("musicians");
   const [instrumentMode, setInstrumentMode] = useState<"groups" | "instruments">("groups");
   const [records, setRecords] = useState<Record<Resource, RecordData[]>>(initialRecords);
+  const [recordErrors, setRecordErrors] = useState<Partial<Record<Resource, string>>>({});
   const [assets, setAssets] = useState<MediaAsset[]>([]);
   const [form, setForm] = useState<FormData>(emptyForms.musicians);
   const [busy, setBusy] = useState(true);
@@ -66,19 +67,49 @@ export default function PeopleManager() {
   async function load() {
     setBusy(true);
     try {
-      const responses = await Promise.all(resourceTabs.map(key => fetch(`/api/admin/people/${key}`, { cache: "no-store" })));
-      const payloads = await Promise.all(responses.map(async response => {
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || "Could not load People records.");
-        return data as { items: RecordData[] };
+      // Load each People section independently. A failure in one endpoint must
+      // not prevent the remaining directories from appearing in the admin UI.
+      const outcomes = await Promise.all(resourceTabs.map(async key => {
+        try {
+          const response = await fetch(`/api/admin/people/${key}`, { cache: "no-store" });
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error || "Could not load People records.");
+          return { key, items: Array.isArray(data.items) ? data.items as RecordData[] : [], error: "" };
+        } catch (error) {
+          return {
+            key,
+            items: null,
+            error: error instanceof Error ? error.message : "Could not load this People section.",
+          };
+        }
       }));
-      const groupResponse = await fetch("/api/admin/people/instrument-groups", { cache: "no-store" });
-      const groupPayload = await groupResponse.json();
-      if (!groupResponse.ok) throw new Error(groupPayload.error || "Could not load instrument groups.");
-      const next = { ...initialRecords };
-      resourceTabs.forEach((key, index) => { next[key] = payloads[index].items; });
-      next["instrument-groups"] = groupPayload.items;
-      setRecords(next);
+
+      let groupItems: RecordData[] | null = null;
+      let groupError = "";
+      try {
+        const groupResponse = await fetch("/api/admin/people/instrument-groups", { cache: "no-store" });
+        const groupPayload = await groupResponse.json();
+        if (!groupResponse.ok) throw new Error(groupPayload.error || "Could not load instrument groups.");
+        groupItems = Array.isArray(groupPayload.items) ? groupPayload.items as RecordData[] : [];
+      } catch (error) {
+        groupError = error instanceof Error ? error.message : "Could not load instrument groups.";
+      }
+
+      setRecords(current => {
+        const next = { ...current };
+        outcomes.forEach(outcome => {
+          if (outcome.items !== null) next[outcome.key] = outcome.items;
+        });
+        if (groupItems !== null) next["instrument-groups"] = groupItems;
+        return next;
+      });
+
+      const errors: Partial<Record<Resource, string>> = {};
+      outcomes.forEach(outcome => {
+        if (outcome.error) errors[outcome.key] = outcome.error;
+      });
+      if (groupError) errors["instrument-groups"] = groupError;
+      setRecordErrors(errors);
 
       try {
         const mediaResponse = await fetch("/api/admin/media-library", { cache: "no-store" });
@@ -341,10 +372,11 @@ export default function PeopleManager() {
     </nav>
     <div className="dso-people-admin-layout">
       <section className="dso-people-records">
-        <div className="dso-people-section-heading"><div><p className="dso-kicker">RECORDS</p><h2>{displayName}</h2></div>
+        <div className="dso-people-section-heading"><div><p className="dso-kicker">RECORDS</p><h2>{displayName} ({currentRecords.length})</h2></div>
           <button type="button" className="dso-add-button" onClick={addRecord}>+ Add {resource === "instrument-groups" ? "group" : resource === "instruments" ? "instrument" : resource === "musicians" ? "musician" : resource === "leadership" ? "assignment" : resource === "alumni" ? "alumnus" : "contributor"}</button>
         </div>
         {tab === "instruments" && <div className="dso-people-subtabs"><button className={instrumentMode === "groups" ? "active" : ""} type="button" onClick={() => { setInstrumentMode("groups"); setForm(emptyForms["instrument-groups"]); }}>Instrument groups</button><button className={instrumentMode === "instruments" ? "active" : ""} type="button" onClick={() => { setInstrumentMode("instruments"); setForm(emptyForms.instruments); }}>Instruments</button></div>}
+        {recordErrors[resource] && <p className="dso-people-notice error" role="alert">{recordErrors[resource]} <button type="button" className="dso-secondary" onClick={() => void load()}>Retry</button></p>}
         {busy ? <p>Loading People records…</p> : currentRecords.length ? <div className="dso-people-list">{currentRecords.map(record => {
           const id = valueAsText(record.id);
           const label = titleOf(record);
@@ -356,7 +388,7 @@ export default function PeopleManager() {
             </button>
             {(resource === "instrument-groups" || resource === "instruments") && record.active === true && <button type="button" className="dso-remove-button" onClick={() => void deactivate(record)}>Deactivate</button>}
           </article>;
-        })}</div> : <p className="dso-people-empty">No records yet. Add verified People content when approved details are available.</p>}
+        })}</div> : <p className="dso-people-empty">{recordErrors[resource] ? "Records could not be loaded. Use Retry above to try again." : "No records yet. Add verified People content when approved details are available."}</p>}
       </section>
       <section className="dso-people-editor">
         <div className="dso-people-section-heading"><div><p className="dso-kicker">EDITING</p><h2>{valueAsText(form.id) ? "Edit record" : "New record"}</h2></div><button type="button" className="dso-secondary" onClick={addRecord}>Clear</button></div>
