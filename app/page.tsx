@@ -78,6 +78,14 @@ export default async function Home() {
       </div>
       <a className="solid-cta" href="/concerts-and-events">View event details <span aria-hidden="true">→</span></a>
     </section>}
+    <section className="home-news-band" aria-labelledby="home-news-title">
+      <div className="home-news-inner">
+        <p className="eyebrow dark">From the orchestra</p>
+        <h2 id="home-news-title">News &amp; Stories</h2>
+        <p>Read the latest news, announcements and stories from Divine Symphony Orchestra.</p>
+        <a className="solid-cta" href="/news">Read news &amp; stories <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
     <SiteFooter />
   </main>;
 }
