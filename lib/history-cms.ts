@@ -5,9 +5,9 @@ import { syncContentMediaUsage } from "./media-store";
 export type PageKey = "history" | "founding-members" | "milestones" | "about" | "music" | "events" | "people" | "gallery" | "contact" | "our-heritage" | "our-story" | "our-legacy" | "orchestra" | "meet-the-members";
 export type Milestone = { id: string; year: string; title: string; kind: string; text: string; published: boolean; editorialNote?: string };
 export type Founder = { id: string; name: string; instrument: string; section: string; biography: string; profileLink?: string; published: boolean };
-export type HistoryMediaItem = { id: string; page: PageKey; collection: string; pathname: string; alt: string; caption: string; credit: string; published: boolean };
-export type HistoryVideo = { id: string; page: PageKey; title: string; description: string; youtubeUrl: string; published: boolean };
-export type HistoryContent = { version: 1; updatedAt: string; milestones: Milestone[]; founders: Founder[]; media: HistoryMediaItem[]; videos: HistoryVideo[] };
+export type GallerySubEntry = { id: string; title: string; sortOrder: number };\nexport type GalleryEntry = { id: string; title: string; date: string; sortOrder: number; published: boolean; subEntries: GallerySubEntry[] };\nexport type HistoryMediaItem = { id: string; page: PageKey; collection: string; pathname: string; alt: string; caption: string; credit: string; published: boolean; galleryEntryId?: string; gallerySubEntryId?: string };
+export type HistoryVideo = { id: string; page: PageKey; title: string; description: string; youtubeUrl: string; published: boolean; galleryEntryId?: string; gallerySubEntryId?: string };
+export type HistoryContent = { version: 1; updatedAt: string; milestones: Milestone[]; founders: Founder[]; media: HistoryMediaItem[]; videos: HistoryVideo[]; galleryEntries?: GalleryEntry[] };
 
 const CMS_PATH = "cms/history-content.json";
 
@@ -66,7 +66,7 @@ export async function readHistoryContent(): Promise<HistoryContent> {
 }
 
 export async function writeHistoryContent(content: HistoryContent): Promise<void> {
-  const safe: HistoryContent = { ...content, version: 1, updatedAt: new Date().toISOString() };
+  const safe: HistoryContent = { ...content, galleryEntries: Array.isArray(content.galleryEntries) ? content.galleryEntries : [], version: 1, updatedAt: new Date().toISOString() };
   if (isDatabaseContentStoreEnabled()) {
     await writeDatabaseContentStore({
       contentType: "history", slug: "history", title: "DSO History and Media",
