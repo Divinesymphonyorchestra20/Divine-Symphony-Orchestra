@@ -1007,3 +1007,85 @@ body{color:var(--dso-ink);-webkit-font-smoothing:antialiased}
   .dso-hero-actions{gap:12px;margin-top:18px;width:100%}
   .dso-discover-cta,.dso-gallery-cta{min-width:0;min-height:56px;padding:13px 20px;border-radius:14px;font-size:16px;flex:1}
 }
+
+/* Restored original DSO navigation on the approved lavender-plum design */
+.site-header{
+  background:#eadff0;border-bottom:1px solid rgba(65,28,75,.16);
+  gap:clamp(8px,1.2vw,20px);padding:0 clamp(14px,2.1vw,34px);
+}
+.site-header .brand{flex:0 0 auto;min-width:68px}
+.site-header .brand-logo{width:62px;height:88px}
+.site-header nav{
+  flex:1 1 auto;min-width:0;display:flex;align-items:center;justify-content:space-between;
+  gap:clamp(1px,.35vw,6px);overflow:visible;padding:0;
+  font-size:clamp(10px,.82vw,13px);font-weight:600;
+}
+.site-header nav>a,.site-header nav .nav-dropdown-trigger{
+  display:inline-flex;align-items:center;justify-content:center;gap:4px;min-height:40px;
+  padding:8px clamp(4px,.55vw,9px);border:0;border-radius:12px;color:#321b3c;
+  background:transparent;font:inherit;line-height:1.2;text-align:center;white-space:normal;cursor:pointer;
+}
+.site-header nav>a:hover,.site-header nav>a:focus-visible,
+.site-header nav .nav-dropdown-trigger:hover,.site-header nav .nav-dropdown-trigger:focus-visible{
+  color:#4b1b66;background:rgba(102,49,125,.1);outline-offset:2px;
+}
+.site-header nav>a.active,.site-header nav .nav-dropdown.active>.nav-dropdown-trigger{
+  color:#f5d52f;background:#4a2262;
+}
+.site-header .nav-dropdown{position:relative;flex:0 0 auto}
+.site-header .nav-dropdown-menu{
+  position:absolute;z-index:20;top:calc(100% + 8px);left:0;min-width:230px;
+  max-width:min(320px,90vw);padding:8px;border:1px solid rgba(65,28,75,.18);
+  border-radius:12px;background:#f4eaf7;box-shadow:0 14px 32px rgba(28,9,38,.22);
+}
+.site-header .nav-dropdown-menu[hidden]{display:none!important}
+.site-header .nav-dropdown-menu a{
+  display:flex;width:100%;min-height:38px;align-items:center;padding:9px 12px;
+  border-radius:8px;color:#321b3c;font-size:13px;line-height:1.3;white-space:normal;
+}
+.site-header .nav-dropdown-menu a:hover,.site-header .nav-dropdown-menu a:focus-visible{
+  color:#4b1b66;background:rgba(102,49,125,.12);
+}
+.site-header .menu-link{
+  flex:0 0 auto;min-height:40px;display:inline-flex;align-items:center;justify-content:center;
+  padding:9px 13px;border:1.5px solid #6b3d7c;border-radius:24px;color:#3d1e4b;
+  background:transparent;font-size:clamp(10px,.8vw,12px);font-weight:700;white-space:nowrap;
+}
+.site-header .menu-link:hover,.site-header .menu-link:focus-visible{color:#f5d52f;background:#4a2262}
+.mobile-menu-toggle{display:none}
+@media(max-width:1180px){
+  .site-header{height:auto;min-height:90px;flex-wrap:wrap;padding:8px 3%;gap:8px 14px}
+  .site-header .brand-logo{width:58px;height:82px}
+  .mobile-menu-toggle{
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;
+    margin-left:auto;padding:9px 15px;border:1px solid rgba(65,28,75,.35);border-radius:12px;
+    color:#321b3c;background:rgba(255,255,255,.35);font:600 14px 'DM Sans',Arial,sans-serif;cursor:pointer;
+  }
+  .site-header nav{
+    display:none;order:3;flex:1 0 100%;width:100%;padding:10px 0 14px;align-items:stretch;
+    justify-content:flex-start;flex-direction:column;gap:4px;border-top:1px solid rgba(65,28,75,.16);
+    overflow:visible;font-size:14px;
+  }
+  .site-header nav.is-open{display:flex}
+  .site-header nav>a,.site-header nav .nav-dropdown-trigger{
+    width:100%;min-height:44px;justify-content:flex-start;padding:10px 14px;text-align:left;font-size:14px;
+  }
+  .site-header .nav-dropdown{width:100%}
+  .site-header .nav-dropdown-menu{
+    position:static;width:100%;max-width:none;min-width:0;margin:3px 0 8px;padding:5px 8px 5px 18px;
+    border:0;border-left:2px solid #9b70aa;border-radius:0;background:rgba(255,255,255,.38);box-shadow:none;
+  }
+  .site-header .nav-dropdown-menu a{min-height:42px;font-size:14px}
+  .site-header .menu-link{align-self:flex-start;min-height:44px;margin:6px 0 0;padding:10px 18px;font-size:13px}
+}
+@media(max-width:620px){
+  .site-header{min-height:78px;padding:7px 4%}
+  .site-header .brand-logo{width:50px;height:70px}
+  .mobile-menu-toggle{min-height:44px;padding:9px 13px;font-size:13px}
+  .site-header nav{padding:10px 0 14px}
+}
+@media(min-width:1181px) and (max-width:1400px){
+  .site-header nav{font-size:10px;gap:1px}
+  .site-header nav>a,.site-header nav .nav-dropdown-trigger{padding-left:4px;padding-right:4px}
+  .site-header .menu-link{padding-left:9px;padding-right:9px}
+}
