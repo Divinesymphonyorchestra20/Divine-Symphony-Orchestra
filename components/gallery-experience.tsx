@@ -23,7 +23,7 @@ function buildEntry(section:Section):GalleryEntry{
 }
 
 export default function GalleryExperience({sections,legacySections}:{sections:Section[];legacySections:Section[]}){
- const entries=useMemo(()=>[...sections,...legacySections].map(buildEntry).filter(entry=>entry.items.length>0),[sections,legacySections]);
+ const entries=useMemo(()=>[...sections,...legacySections].map(buildEntry),[sections,legacySections]);
  const [activeEntryId,setActiveEntryId]=useState<string|null>(null);
  const [activeIndex,setActiveIndex]=useState(0);
  const activeEntry=entries.find(entry=>entry.id===activeEntryId)||null;
