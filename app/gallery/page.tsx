@@ -1,5 +1,6 @@
 import type {Metadata} from "next";
 import GalleryExperience from "../../components/gallery-experience";
+import SitePageLayout from "../../components/site-page-layout";
 import {readHistoryContent,youtubeEmbedUrl} from "../../lib/history-cms";
 
 export const dynamic="force-dynamic";
@@ -55,9 +56,8 @@ export default async function GalleryPage(){
  if(legacyVideos.length){
   sections.push({id:"legacy-videos",title:"Videos",subtitle:"",date:"",items:legacyVideos.map(video=>({kind:"video" as const,id:video.id,video:{id:video.id,title:video.title,description:video.description,embed:video.embed}}))});
  }
- return <main className="dso-gallery-page">
+ return <SitePageLayout active="Gallery"><main className="dso-gallery-page">
   <header className="dso-gallery-hero"><p className="eyebrow">DIVINE SYMPHONY ORCHESTRA</p><h1>The DSO Gallery</h1><p>In pictures &amp; sound</p></header>
   <GalleryExperience sections={sections}/>
-  <footer className="dso-gallery-footer"><p>Divine Symphony Orchestra</p><span>Music for Inspiration • Excellence • Impact</span></footer>
- </main>;
+ </main></SitePageLayout>;
 }
