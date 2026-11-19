@@ -108,17 +108,16 @@ export default function SiteContentManager() {
       <Link href="/admin">Back to dashboard</Link>
     </header>
     <nav className="dso-site-content-tabs">
-      {(["events", "news", "gallery", "contact"] as Tab[]).map(value => <button key={value} className={tab === value ? "active" : ""} onClick={() => setTab(value)}>{value === "events" ? "Events" : value === "news" ? "News" : value === "gallery" ? "Gallery albums" : "Contact"}</button>)}
+      {(["events", "news", "gallery", "contact"] as Tab[]).map(value => <button key={value} className={tab === value ? "active" : ""} onClick={() => setTab(value)}>{value === "events" ? "Events" : value === "news" ? "News" : value === "gallery" ? "Gallery Manager" : "Contact"}</button>)}
     </nav>
     <section className="dso-site-content-panel">
       <div className="dso-site-content-help">
-        <strong>{tab === "events" ? "Event records" : tab === "news" ? "News articles" : tab === "gallery" ? "Gallery albums" : "Official contact details"}</strong>
-        <p>{tab === "events" ? "Add confirmed dates, venues, programme details and approved posters. Use draft until DSO has approved the event information." : tab === "news" ? "Create stories with a unique URL slug, summary, full article and publication date." : tab === "gallery" ? "Create named albums and connect their cover images to files in the Shared Media Library." : "Only enter official details supplied and approved by DSO. Enquiry delivery remains inactive until the receiving process is confirmed."}</p>
+        <strong>{tab === "events" ? "Event records" : tab === "news" ? "News articles" : tab === "gallery" ? "Gallery Manager" : "Official contact details"}</strong>
+        <p>{tab === "events" ? "Add confirmed dates, venues, programme details and approved posters. Use draft until DSO has approved the event information." : tab === "news" ? "Create stories with a unique URL slug, summary, full article and publication date." : tab === "gallery" ? "The public Gallery is managed from one authoritative History content source. Use the dedicated Gallery Manager for collections, subheadings, photographs, videos and publishing." : "Only enter official details supplied and approved by DSO. Enquiry delivery remains inactive until the receiving process is confirmed."}</p>
       </div>
       <div className="dso-site-content-toolbar">
         {tab === "events" && <button type="button" onClick={addEvent}>+ Add event</button>}
         {tab === "news" && <button type="button" onClick={addNews}>+ Add article</button>}
-        {tab === "gallery" && <button type="button" onClick={addAlbum}>+ Add album</button>}
         <Link href="/admin/media">Open Shared Media Library ↗</Link>
       </div>
       {busy ? <p>Loading content…</p> : <>
@@ -162,17 +161,12 @@ export default function SiteContentManager() {
           <label className="dso-field">Full article<textarea rows={8} value={item.body} onChange={e=>updateNews(index,{body:e.target.value})}/></label>
           {imageField("Article image",item.image,value=>updateNews(index,{image:value}),item.imageAlt,value=>updateNews(index,{imageAlt:value}))}
         </article>)}</div>}
-        {tab === "gallery" && <div className="dso-structured-list">{data.albums.map((item,index)=><article className="dso-structured-card" key={item.id}>
-          <div className="dso-structured-card-top"><b>Album {index+1}</b><button type="button" className="dso-remove-button" onClick={()=>setData(current=>({...current,albums:current.albums.filter((_,i)=>i!==index)}))}>Remove</button></div>
-          <div className="dso-structured-grid">
-            <label className="dso-field">Album title<input value={item.title} onChange={e=>updateAlbum(index,{title:e.target.value})}/></label>
-            <label className="dso-field">Collection key<input value={item.collection} onChange={e=>updateAlbum(index,{collection:e.target.value})}/></label>
-            {statusField(item.status,value=>updateAlbum(index,{status:value}))}
-            <label className="dso-field">Sort order<input type="number" value={item.sortOrder} onChange={e=>updateAlbum(index,{sortOrder:Number(e.target.value)})}/></label>
-          </div>
-          <label className="dso-field">Description<textarea rows={3} value={item.description} onChange={e=>updateAlbum(index,{description:e.target.value})}/></label>
-          {imageField("Album cover",item.coverImage,value=>updateAlbum(index,{coverImage:value}),item.coverAlt,value=>updateAlbum(index,{coverAlt:value}))}
-        </article>)}</div>}
+        {tab === "gallery" && <section className="dso-structured-card dso-gallery-manager-link">
+          <h2>Manage the public Gallery</h2>
+          <p>Collections, headings, dates, square photographs, captions, credits, YouTube videos and publication status are all managed in the dedicated Gallery Manager. This is the single source used by the public Gallery page.</p>
+          <p>Previously stored album-cover records are retained for compatibility and are not used to generate the public Gallery. They are not copied into a second gallery system.</p>
+          <Link href="/admin/gallery" className="dso-site-content-toolbar-link">Open Gallery Manager ↗</Link>
+        </section>}
         {tab === "contact" && <div className="dso-structured-card">
           <label className="dso-field">Introduction<textarea rows={3} value={data.contact.intro} onChange={e=>updateContact({intro:e.target.value})}/></label>
           <div className="dso-structured-grid">
