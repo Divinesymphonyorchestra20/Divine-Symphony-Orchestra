@@ -855,3 +855,11 @@ body{color:var(--dso-ink);-webkit-font-smoothing:antialiased}
       rgba(66,5,79,.42) 100%);
   }
 }
+
+/* Inner history pages already have a separate translucent shade layer. */
+.founders-hero{
+  background-image:url('/images/hero-strings-section.jpg');
+}
+.milestones-hero{
+  background-image:url('/images/hero-main-stage.jpg');
+}
