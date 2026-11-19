@@ -13,10 +13,10 @@ export async function GET(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   if (!(await hasAdminPermission(request, "content.publish"))) return NextResponse.json({ error: "You do not have permission to publish DSO history content." }, { status: (await verifyAdminSession(request)) ? 403 : 401 });
   const content = await request.json().catch(() => null) as HistoryContent | null;
-  if (!content || content.version !== 1 || !Array.isArray(content.milestones) || !Array.isArray(content.founders) || !Array.isArray(content.media) || !Array.isArray(content.videos)) {
+  if (!content || content.version !== 1 || !Array.isArray(content.milestones) || !Array.isArray(content.founders) || !Array.isArray(content.media) || !Array.isArray(content.videos) || (content.galleryEntries !== undefined && !Array.isArray(content.galleryEntries))) {
     return NextResponse.json({ error: "The submitted history content is not valid." }, { status: 400 });
   }
-  if (content.milestones.length > 250 || content.founders.length > 250 || content.media.length > 500 || content.videos.length > 250) {
+  if (content.milestones.length > 250 || content.founders.length > 250 || content.media.length > 500 || content.videos.length > 250 || (content.galleryEntries?.length || 0) > 250 || (content.galleryEntries || []).some(entry => !Array.isArray(entry.subEntries) || entry.subEntries.length > 100)) {
     return NextResponse.json({ error: "The content exceeds the allowed item limits." }, { status: 413 });
   }
   try {
