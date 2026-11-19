@@ -30,17 +30,18 @@ export default async function Home() {
 
   return <main style={theme}>
     <SiteHeader active="Home" />
-    {show("hero") && <section className="hero">
+    {show("hero") && <section className="hero dso-mockup-hero">
       <div className="hero-photo" role="img" aria-label={c.hero.image.alt} style={bg(c.hero.image.src, c.hero.image.position)} />
       <div className="hero-shade" />
-      <div className="hero-copy">
-        <p className="eyebrow">{c.hero.eyebrow}</p>
+      <div className="hero-copy dso-mockup-hero-copy">
+        <p className="dso-est-badge"><span aria-hidden="true">♫</span> Est. 2007</p>
         <h1>{c.hero.title}<br /><span>{c.hero.accent}</span></h1>
-        <div className="gold-rule" />
-        <p className="hero-intro">{c.hero.text}</p>
-        <a className="outline-cta" href={c.hero.href}>{c.hero.button} <span>→</span></a>
+        <p className="hero-intro">Where Music Meets Worship</p>
+        <div className="dso-hero-actions">
+          <a className="dso-discover-cta" href={c.hero.href}>{c.hero.button} <span aria-hidden="true">→</span></a>
+          <a className="dso-gallery-cta" href="/gallery">Gallery</a>
+        </div>
       </div>
-      <div className="ribbons" aria-hidden="true"><i /><i /><i /><i /></div>
     </section>}
     {show("links") && <section className="quick-links" aria-label="Explore the orchestra">
       {c.links.map(x => <a className="quick-card" href={x.href} key={x.title}>
