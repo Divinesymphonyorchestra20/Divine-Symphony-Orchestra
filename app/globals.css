@@ -1710,3 +1710,7 @@ body{color:var(--dso-ink);-webkit-font-smoothing:antialiased}
 .dso-site-content-admin .dso-gallery-manager-link h2{margin:0 0 9px;color:#3d1747;font:700 23px 'Playfair Display',serif}
 .dso-site-content-admin .dso-gallery-manager-link p{max-width:780px;color:#6e6372;font-size:13px;line-height:1.7}
 .dso-site-content-admin .dso-gallery-manager-link .dso-site-content-toolbar-link{display:inline-flex;align-items:center;margin-top:8px;padding:11px 16px;border-radius:7px;background:#4b0758;color:#fff;font-size:12px;font-weight:700}
+
+.dso-gallery-replace-button{display:inline-flex;align-items:center;gap:5px;padding:8px 10px;border:1px solid #e3d8e7;border-radius:6px;background:#fff;color:#4c2857;font-size:11px;cursor:pointer}
+.dso-gallery-replace-button input{width:1px;height:1px;position:absolute;opacity:0;pointer-events:none}
+.dso-gallery-replace-button:focus-within{outline:2px solid #a96cb5;outline-offset:2px}
