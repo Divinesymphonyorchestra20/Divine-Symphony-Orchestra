@@ -1706,3 +1706,7 @@ body{color:var(--dso-ink);-webkit-font-smoothing:antialiased}
 }
 @media(min-width:1600px){.dso-gallery-square-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){.dso-gallery-square-item>img{transition:none}}
+
+.dso-site-content-admin .dso-gallery-manager-link h2{margin:0 0 9px;color:#3d1747;font:700 23px 'Playfair Display',serif}
+.dso-site-content-admin .dso-gallery-manager-link p{max-width:780px;color:#6e6372;font-size:13px;line-height:1.7}
+.dso-site-content-admin .dso-gallery-manager-link .dso-site-content-toolbar-link{display:inline-flex;align-items:center;margin-top:8px;padding:11px 16px;border-radius:7px;background:#4b0758;color:#fff;font-size:12px;font-weight:700}
