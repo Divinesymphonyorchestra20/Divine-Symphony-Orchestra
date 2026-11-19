@@ -30,7 +30,7 @@ export default async function GalleryPage(){
   const mainPhotos=entryPhotos.filter(photo=>!photo.gallerySubEntryId);
   const mainVideos=entryVideos.filter(video=>!video.gallerySubEntryId);
   const subEntries=entry.subEntries.slice().sort((a,b)=>a.sortOrder-b.sortOrder);
-  if(mainPhotos.length||mainVideos.length||subEntries.length===0){
+  if(entryPhotos.length||entryVideos.length||subEntries.length===0){
    sections.push({id:entry.id,title:entry.title,subtitle:entry.subtitle||"",date:entry.date||"",items:toItems(mainPhotos,mainVideos)});
   }
   for(const sub of subEntries){
