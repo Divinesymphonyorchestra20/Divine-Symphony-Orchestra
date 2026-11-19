@@ -15,7 +15,15 @@ const pages = [
   { name: "Music & Performances", path: "/music", purpose: "Repertoire, concert programmes, audio and video", admin: "Editable in the Institutional Content Manager; media can be added through History & Media Manager." },
   { name: "Concerts & Events", path: "/concerts-and-events", purpose: "Upcoming concerts, past performances and programmes", admin: "Managed through Events, News, Gallery & Contact in the Site Content Manager." },
   { name: "Gallery", path: "/gallery", purpose: "Photographs grouped into albums and collections", admin: "Albums are managed in the Site Content Manager; anniversary photographs remain in History & Media Manager." },
-  { name: "Contact", path: "/contact", purpose: "Official contact details and enquiry information", admin: "Official contact details are managed through the Site Content Manager." }
+  { name: "Contact", path: "/contact", purpose: "Official contact details and enquiry information", admin: "Official contact details are managed through the Site Content Manager." },
+  { name: "History of DSO", path: "/history", purpose: "Institutional history, founding account and supporting media", admin: "Managed through History & Media Manager." },
+  { name: "Founding Members", path: "/history/founding-members", purpose: "Profiles of the original D.K.O. Orchestra musicians", admin: "Founder records and supporting media are managed through History & Media Manager." },
+  { name: "Milestones", path: "/history/milestones", purpose: "Historical timeline and selected performance milestones", admin: "Milestone records are managed through History & Media Manager." },
+  { name: "People overview", path: "/people", purpose: "Overview of DSO musicians, leadership and alumni", admin: "People records are managed through People Management; the overview page layout is code-defined." },
+  { name: "Our Musicians", path: "/people/our-musicians", purpose: "Published musician directory and instrument groups", admin: "Musician profiles and publication status are managed through People Management." },
+  { name: "Alumni", path: "/people/alumni", purpose: "Former members and their contributions", admin: "Alumni records are managed through People Management." },
+  { name: "Music School", path: "/music-school", purpose: "Music education information and instructor profiles", admin: "Instructor profiles are sourced from People Management; page copy and programme layout are code-defined." },
+  { name: "Ministry & Impact", path: "/ministry-and-impact", purpose: "DSO ministry work and community impact", admin: "Editable in the Institutional Content Manager." }
 ];
 
 export default function SitePagesAdmin() {
