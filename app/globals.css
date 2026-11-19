@@ -1089,3 +1089,155 @@ body{color:var(--dso-ink);-webkit-font-smoothing:antialiased}
   .site-header nav>a,.site-header nav .nav-dropdown-trigger{padding-left:4px;padding-right:4px}
   .site-header .menu-link{padding-left:9px;padding-right:9px}
 }
+
+
+/* Mobile homepage hero and navigation overlay refinements */
+@media(max-width:620px){
+  .site-header{
+    position:relative;
+    z-index:50;
+    height:78px;
+    min-height:78px;
+    flex-wrap:nowrap;
+    padding:7px 4%;
+    gap:12px;
+  }
+  .site-header nav,
+  .site-header nav.is-open{
+    position:absolute;
+    top:100%;
+    left:4%;
+    right:4%;
+    z-index:100;
+    order:initial;
+    width:auto;
+    max-height:calc(100svh - 98px);
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    padding:12px;
+    border:1px solid rgba(235,218,245,.2);
+    border-radius:0 0 16px 16px;
+    background:#171326;
+    box-shadow:0 18px 38px rgba(12,5,20,.42);
+  }
+  .site-header nav{display:none}
+  .site-header nav.is-open{display:flex}
+  .site-header nav>a,
+  .site-header nav .nav-dropdown-trigger{
+    width:100%;
+    min-height:46px;
+    justify-content:flex-start;
+    padding:12px 14px;
+    border-radius:9px;
+    color:#f4edf8;
+    font-size:14px;
+    font-weight:600;
+    text-align:left;
+  }
+  .site-header nav>a:hover,
+  .site-header nav>a:focus-visible,
+  .site-header nav .nav-dropdown-trigger:hover,
+  .site-header nav .nav-dropdown-trigger:focus-visible{
+    color:#ffe17a;
+    background:rgba(191,143,211,.18);
+  }
+  .site-header nav>a.active,
+  .site-header nav .nav-dropdown.active>.nav-dropdown-trigger{
+    color:#ffe17a;
+    background:#4a2262;
+  }
+  .site-header .nav-dropdown{width:100%}
+  .site-header .nav-dropdown-menu{
+    position:static;
+    width:100%;
+    max-width:none;
+    min-width:0;
+    margin:3px 0 8px;
+    padding:5px 8px 5px 15px;
+    border:0;
+    border-left:2px solid #c49bd5;
+    border-radius:0 8px 8px 0;
+    background:#292039;
+    box-shadow:none;
+  }
+  .site-header .nav-dropdown-menu a{
+    min-height:42px;
+    padding:10px 12px;
+    color:#eee5f4;
+    font-size:13px;
+    line-height:1.35;
+  }
+  .site-header .nav-dropdown-menu a:hover,
+  .site-header .nav-dropdown-menu a:focus-visible{
+    color:#ffe17a;
+    background:rgba(191,143,211,.2);
+  }
+  .site-header .menu-link{
+    align-self:stretch;
+    justify-content:center;
+    min-height:46px;
+    margin:7px 0 0;
+    border-color:#c49bd5;
+    color:#ffe17a;
+    background:rgba(95,45,116,.2);
+  }
+
+  /* Show the complete stage photograph at its natural wide aspect ratio. */
+  .dso-mockup-hero{
+    min-height:0;
+    height:auto;
+    align-items:flex-start;
+    background:#31043c;
+  }
+  .dso-mockup-hero .hero-photo{
+    inset:0 0 auto;
+    width:100%;
+    height:auto;
+    aspect-ratio:16 / 9;
+    background-size:100% auto !important;
+    background-position:center top !important;
+    background-repeat:no-repeat !important;
+    opacity:1;
+  }
+  .dso-mockup-hero .hero-shade{
+    background:linear-gradient(180deg,
+      rgba(36,3,48,.18) 0%,
+      rgba(43,3,54,.18) 30%,
+      rgba(49,4,60,.78) 47%,
+      #31043c 70%,
+      #31043c 100%);
+  }
+  .dso-mockup-hero-copy{
+    width:calc(100% - 28px);
+    max-width:520px;
+    margin:0 auto;
+    padding:clamp(220px,59vw,270px) 0 46px;
+  }
+  .dso-est-badge{
+    font-size:15px;
+    padding:8px 18px;
+    margin-bottom:17px;
+  }
+  .dso-mockup-hero h1{
+    font-size:clamp(40px,10.4vw,54px);
+    line-height:1.02;
+  }
+  .dso-mockup-hero .hero-intro{
+    margin-top:10px;
+    font-size:clamp(16px,4.5vw,19px);
+  }
+  .dso-hero-actions{
+    width:100%;
+    gap:10px;
+    margin-top:15px;
+  }
+  .dso-discover-cta,
+  .dso-gallery-cta{
+    min-width:0;
+    min-height:52px;
+    padding:12px 14px;
+    border-radius:13px;
+    font-size:14px;
+    flex:1 1 0;
+  }
+}
