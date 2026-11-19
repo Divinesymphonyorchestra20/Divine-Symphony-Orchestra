@@ -368,7 +368,7 @@ export async function listPeopleRecords(resource: PeopleResource, publicOnly = f
        LEFT JOIN public.people_musician_instruments mi ON mi.musician_id = m.id
        LEFT JOIN public.people_instruments i ON i.id = mi.instrument_id
        ${where}
-       GROUP BY l.id, m.display_name, m.profile_slug
+       GROUP BY l.id, m.display_name, m.profile_slug, m.first_name, m.last_name
        ORDER BY l.display_order, m.first_name, m.last_name`,
     )).rows;
   }
