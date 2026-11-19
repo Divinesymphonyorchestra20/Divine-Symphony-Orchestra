@@ -93,10 +93,10 @@ export default function SiteHeader({active}:{active?:string}){
           People <span aria-hidden="true">{peopleOpen?"⌃":"⌄"}</span>
         </button>
         <div id="people-navigation" className="nav-dropdown-menu" hidden={!peopleOpen}>
-          {peopleLinks.map(link=><a key={link.href} href={link.href} onClick={close}>{link.label}</a>)}
+          {peopleLinks.map(link=><a key={link.href} href={link.href} aria-current={pathname===link.href?"page":undefined} onClick={close}>{link.label}</a>)}
         </div>
       </div>
-      {mainLinks.slice(4).map(link=><a key={link.href} className={active===link.label?"active":""} aria-current={active===link.label?"page":undefined} href={link.href} onClick={close}>{link.label}</a>)}
+      {mainLinks.slice(4).map(link=><a key={link.href} className={pathname===link.href||active===link.label?"active":""} aria-current={pathname===link.href||active===link.label?"page":undefined} href={link.href} onClick={close}>{link.label}</a>)}
       <a className="menu-link" href="/contact" onClick={close}>Get in Touch</a>
     </nav>
   </header>;
