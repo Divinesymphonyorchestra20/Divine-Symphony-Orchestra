@@ -261,7 +261,7 @@ export default function PeopleManager() {
         const value = event.target.value;
         setField(key, value);
         if (key === "profileSlug" || key === "slug") setSlugEdited(true);
-        if (!form.id && !slugEdited && (key === "displayName" || key === "name")) {
+        if (!form.id && !slugEdited && ((resource === "musicians" && key === "displayName") || ((resource === "instrument-groups" || resource === "instruments") && key === "name"))) {
           const slugKey = resource === "musicians" ? "profileSlug" : "slug";
           const source = key === "displayName" ? value : value;
           const existing = currentRecords
