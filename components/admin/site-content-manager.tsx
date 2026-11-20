@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { ContactContent, GalleryAlbum, ManagedEvent, ManagedNews, SiteContent } from "../../lib/site-content-cms";
+import { slugify, uniqueSlug } from "../../lib/slug";
 
 const initial: SiteContent = {
   version: 1, updatedAt: "", events: [], news: [], albums: [],
@@ -13,7 +14,6 @@ const initial: SiteContent = {
   },
 };
 type Tab = "events" | "news" | "gallery" | "contact";
-const slugify = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const newId = () => typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : `dso-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const dateInput = (value: string) => {
   if (!value) return "";
@@ -30,6 +30,8 @@ export default function SiteContentManager() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [newRecordIds, setNewRecordIds] = useState<Set<string>>(() => new Set());
+  const [manualSlugIds, setManualSlugIds] = useState<Set<string>>(() => new Set());
 
   async function load() {
     setBusy(true); setError("");
@@ -45,11 +47,25 @@ export default function SiteContentManager() {
   useEffect(() => { void load(); }, []);
 
   function updateEvent(index: number, patch: Partial<ManagedEvent>) {
-    setData(current => ({ ...current, events: current.events.map((item, i) => i === index ? { ...item, ...patch } : item) }));
+    setData(current => ({ ...current, events: current.events.map((item, i) => {
+      if (i !== index) return item;
+      const next = { ...item, ...patch };
+      if (patch.title !== undefined && newRecordIds.has(item.id) && !manualSlugIds.has(item.id)) {
+        next.slug = uniqueSlug(patch.title, current.events.filter((_, j) => j !== index).map(record => record.slug), "event");
+      }
+      return next;
+    }) }));
     setMessage("");
   }
   function updateNews(index: number, patch: Partial<ManagedNews>) {
-    setData(current => ({ ...current, news: current.news.map((item, i) => i === index ? { ...item, ...patch } : item) }));
+    setData(current => ({ ...current, news: current.news.map((item, i) => {
+      if (i !== index) return item;
+      const next = { ...item, ...patch };
+      if (patch.title !== undefined && newRecordIds.has(item.id) && !manualSlugIds.has(item.id)) {
+        next.slug = uniqueSlug(patch.title, current.news.filter((_, j) => j !== index).map(record => record.slug), "story");
+      }
+      return next;
+    }) }));
     setMessage("");
   }
   function updateAlbum(index: number, patch: Partial<GalleryAlbum>) {
@@ -63,12 +79,16 @@ export default function SiteContentManager() {
 
   function addEvent() {
     const title = "New DSO event";
-    const item: ManagedEvent = { id: newId(), title, slug: slugify(title) + "-" + Date.now().toString(36), status: "draft", startAt: "", endAt: "", venue: "", description: "", programme: "", image: "", imageAlt: "", registrationUrl: "", featured: false };
+    const id = newId();
+    const item: ManagedEvent = { id, title, slug: uniqueSlug(title, data.events.map(record => record.slug), "event"), status: "draft", startAt: "", endAt: "", venue: "", description: "", programme: "", image: "", imageAlt: "", registrationUrl: "", featured: false };
+    setNewRecordIds(current => new Set(current).add(id));
     setData(current => ({ ...current, events: [...current.events, item] }));
   }
   function addNews() {
     const title = "New DSO story";
-    const item: ManagedNews = { id: newId(), title, slug: slugify(title) + "-" + Date.now().toString(36), status: "draft", publishedAt: "", summary: "", body: "", image: "", imageAlt: "", author: "", sourceUrl: "" };
+    const id = newId();
+    const item: ManagedNews = { id, title, slug: uniqueSlug(title, data.news.map(record => record.slug), "story"), status: "draft", publishedAt: "", summary: "", body: "", image: "", imageAlt: "", author: "", sourceUrl: "" };
+    setNewRecordIds(current => new Set(current).add(id));
     setData(current => ({ ...current, news: [...current.news, item] }));
   }
   function addAlbum() {
@@ -125,7 +145,7 @@ export default function SiteContentManager() {
           <div className="dso-structured-card-top"><b>Event {index+1}</b><button type="button" className="dso-remove-button" onClick={()=>setData(current=>({...current,events:current.events.filter((_,i)=>i!==index)}))}>Remove</button></div>
           <div className="dso-structured-grid">
             <label className="dso-field">Event title<input value={item.title} onChange={e=>updateEvent(index,{title:e.target.value})}/></label>
-            <label className="dso-field">URL slug<input value={item.slug} onChange={e=>updateEvent(index,{slug:e.target.value})}/></label>
+            <label className="dso-field">URL slug<input value={item.slug} onChange={e=>{setManualSlugIds(current=>new Set(current).add(item.id));updateEvent(index,{slug:e.target.value});}}/><small>Generated from the event title for new records. You can edit it; published URLs stay unchanged when the title is edited.</small></label>
             {statusField(item.status,value=>updateEvent(index,{status:value}))}
             <label className="dso-field">Event category<select value={item.category||"Concerts"} onChange={e=>updateEvent(index,{category:e.target.value})}><option>Concerts</option><option>Chamber Performances</option><option>Outreach</option><option>Special Programmes</option></select></label>
             <label className="dso-field">Planning month<input value={item.planningMonth||""} placeholder="e.g. July 2027 (provisional)" onChange={e=>updateEvent(index,{planningMonth:e.target.value})}/></label>
@@ -151,7 +171,7 @@ export default function SiteContentManager() {
           <div className="dso-structured-card-top"><b>Article {index+1}</b><button type="button" className="dso-remove-button" onClick={()=>setData(current=>({...current,news:current.news.filter((_,i)=>i!==index)}))}>Remove</button></div>
           <div className="dso-structured-grid">
             <label className="dso-field">Headline<input value={item.title} onChange={e=>updateNews(index,{title:e.target.value})}/></label>
-            <label className="dso-field">URL slug<input value={item.slug} onChange={e=>updateNews(index,{slug:e.target.value})}/></label>
+            <label className="dso-field">URL slug<input value={item.slug} onChange={e=>{setManualSlugIds(current=>new Set(current).add(item.id));updateNews(index,{slug:e.target.value});}}/><small>Generated from the headline for new records. You can edit it; published URLs stay unchanged when the headline is edited.</small></label>
             {statusField(item.status,value=>updateNews(index,{status:value}))}
             <label className="dso-field">Publication date<input type="date" value={item.publishedAt.slice(0,10)} onChange={e=>updateNews(index,{publishedAt:e.target.value})}/></label>
             <label className="dso-field">Author / source<input value={item.author} onChange={e=>updateNews(index,{author:e.target.value})}/></label>
