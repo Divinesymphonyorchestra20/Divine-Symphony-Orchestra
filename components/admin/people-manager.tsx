@@ -380,14 +380,14 @@ export default function PeopleManager() {
       <Link href="/admin">Back to dashboard</Link>
     </header>
     <nav className="dso-people-tabs" aria-label="People management sections">
-      {tabs.map(item => <button key={item.key} type="button" className={tab === item.key ? "active" : ""} onClick={() => { setTab(item.key); setForm(emptyForms[item.key === "instruments" ? instrumentMode === "groups" ? "instrument-groups" : "instruments" : item.key]); setPreview(null); setNotice(null); }}>{item.label}</button>)}
+      {tabs.map(item => <button key={item.key} type="button" className={tab === item.key ? "active" : ""} onClick={() => { setTab(item.key); setForm(emptyForms[item.key === "instruments" ? instrumentMode === "groups" ? "instrument-groups" : "instruments" : item.key]); setSlugEdited(false); setPreview(null); setNotice(null); }}>{item.label}</button>)}
     </nav>
     <div className="dso-people-admin-layout">
       <section className="dso-people-records">
         <div className="dso-people-section-heading"><div><p className="dso-kicker">RECORDS</p><h2>{displayName} ({currentRecords.length})</h2></div>
           <button type="button" className="dso-add-button" onClick={addRecord}>+ Add {resource === "instrument-groups" ? "group" : resource === "instruments" ? "instrument" : resource === "musicians" ? "musician" : resource === "leadership" ? "assignment" : resource === "alumni" ? "alumnus" : "contributor"}</button>
         </div>
-        {tab === "instruments" && <div className="dso-people-subtabs"><button className={instrumentMode === "groups" ? "active" : ""} type="button" onClick={() => { setInstrumentMode("groups"); setForm(emptyForms["instrument-groups"]); }}>Instrument groups</button><button className={instrumentMode === "instruments" ? "active" : ""} type="button" onClick={() => { setInstrumentMode("instruments"); setForm(emptyForms.instruments); }}>Instruments</button></div>}
+        {tab === "instruments" && <div className="dso-people-subtabs"><button className={instrumentMode === "groups" ? "active" : ""} type="button" onClick={() => { setInstrumentMode("groups"); setForm(emptyForms["instrument-groups"]); setSlugEdited(false); }}>Instrument groups</button><button className={instrumentMode === "instruments" ? "active" : ""} type="button" onClick={() => { setInstrumentMode("instruments"); setForm(emptyForms.instruments); setSlugEdited(false); }}>Instruments</button></div>}
         {recordErrors[resource] && <p className="dso-people-notice error" role="alert">{recordErrors[resource]} <button type="button" className="dso-secondary" onClick={() => void load()}>Retry</button></p>}
         {busy ? <p>Loading People records…</p> : currentRecords.length ? <div className="dso-people-list">{currentRecords.map(record => {
           const id = valueAsText(record.id);
