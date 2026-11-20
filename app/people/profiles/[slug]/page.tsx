@@ -5,6 +5,18 @@ import SiteHeader from "../../../../components/site-header";
 import SiteFooter from "../../../../components/site-footer";
 import { readHistoryContent, publishedHistoryContent } from "../../../../lib/history-cms";
 import { listPeopleRecords } from "../../../../lib/people-cms";
+import { slugify } from "../../../../lib/slug";
+
+export const dynamic = "force-dynamic";
+
+port type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import SiteHeader from "../../../../components/site-header";
+import SiteFooter from "../../../../components/site-footer";
+import { readHistoryContent, publishedHistoryContent } from "../../../../lib/history-cms";
+import { listPeopleRecords } from "../../../../lib/people-cms";
+import { slugify } from "../../../../lib/slug";
 
 export const dynamic = "force-dynamic";
 
