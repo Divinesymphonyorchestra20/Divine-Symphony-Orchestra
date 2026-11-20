@@ -1,7 +1,7 @@
 "use client";
 import {useEffect,useState} from "react";
 import type {InstitutionalItem,InstitutionalKey,InstitutionalPage,InstitutionalSection,InstitutionalStore} from "../../../lib/institutional-cms";
-import { slugify, uniqueSlug } from "../../../lib/slug";
+import { uniqueSlug } from "../../../lib/slug";
 const keys:InstitutionalKey[]=["about","heritage","story","legacy","orchestra","members","music","ministry"];
 const labels:Record<InstitutionalKey,string>={about:"About DSO",heritage:"Our Heritage",story:"Our Story",legacy:"Our Legacy",orchestra:"The Orchestra",members:"Meet the Members",music:"Music & Performances",ministry:"Ministry & Impact"};
 export default function InstitutionalAdmin(){
