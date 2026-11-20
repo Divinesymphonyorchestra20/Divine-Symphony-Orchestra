@@ -77,13 +77,17 @@ export async function GET(request: NextRequest) {
 }
 
 function fillMissingSlugs(content: SiteContent): SiteContent {
-  const events = content.events.map((item, index, all) => {
-    if (item.slug?.trim()) return item;
-    return { ...item, slug: uniqueSlug(item.title, all.filter((_, i) => i !== index).map(other => other.slug), "event") };
+  const eventUsed: string[] = [];
+  const events = content.events.map(item => {
+    const slug = item.slug?.trim() || uniqueSlug(item.title, [...content.events.map(other => other.slug), ...eventUsed], "event");
+    eventUsed.push(slug);
+    return { ...item, slug };
   });
-  const news = content.news.map((item, index, all) => {
-    if (item.slug?.trim()) return item;
-    return { ...item, slug: uniqueSlug(item.title, all.filter((_, i) => i !== index).map(other => other.slug), "story") };
+  const newsUsed: string[] = [];
+  const news = content.news.map(item => {
+    const slug = item.slug?.trim() || uniqueSlug(item.title, [...content.news.map(other => other.slug), ...newsUsed], "story");
+    newsUsed.push(slug);
+    return { ...item, slug };
   });
   return { ...content, events, news };
 }
