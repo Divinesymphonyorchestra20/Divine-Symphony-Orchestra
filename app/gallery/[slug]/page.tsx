@@ -3,8 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import HistoryMedia from "../../../components/history-media";
 import { readPublishedSiteContent } from "../../../lib/site-content-cms";
+import { slugify } from "../../../lib/slug";
 export const dynamic = "force-dynamic";
-const slugify = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 async function getAlbum(slug: string) {
   return (await readPublishedSiteContent()).albums.find(item => item.status === "published" && slugify(item.collection) === slug);
 }
