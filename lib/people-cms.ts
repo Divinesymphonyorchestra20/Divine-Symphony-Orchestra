@@ -520,7 +520,8 @@ export async function savePeopleRecord(
       const name = text(input.name, "Group name", 120, true);
       const requestedSlug = text(input.slug, "Group slug", 140);
       const existing = await client.query<{ slug: string }>("SELECT slug FROM public.people_instrument_groups WHERE ($1::uuid IS NULL OR id <> $1)", [id]);
-      const slug = requestedSlug || uniqueSlug(name, existing.rows.map(row => row.slug), "group");
+      const current = id ? await client.query<{ slug: string }>("SELECT slug FROM public.people_instrument_groups WHERE id=$1", [id]) : { rows: [] as Array<{ slug: string }> };
+      const slug = requestedSlug || current.rows[0]?.slug || uniqueSlug(name, existing.rows.map(row => row.slug), "group");
       if (!slugPattern.test(slug)) throw new PeopleCmsError("Group slugs may contain lowercase letters, numbers and single hyphens.");
       const displayOrder = order(input.displayOrder);
       const activeValue = active(input.active);
@@ -544,7 +545,8 @@ export async function savePeopleRecord(
       const name = text(input.name, "Instrument name", 120, true);
       const requestedSlug = text(input.slug, "Instrument slug", 140);
       const existing = await client.query<{ slug: string }>("SELECT slug FROM public.people_instruments WHERE ($1::uuid IS NULL OR id <> $1)", [id]);
-      const slug = requestedSlug || uniqueSlug(name, existing.rows.map(row => row.slug), "instrument");
+      const current = id ? await client.query<{ slug: string }>("SELECT slug FROM public.people_instruments WHERE id=$1", [id]) : { rows: [] as Array<{ slug: string }> };
+      const slug = requestedSlug || current.rows[0]?.slug || uniqueSlug(name, existing.rows.map(row => row.slug), "instrument");
       if (!slugPattern.test(slug)) throw new PeopleCmsError("Instrument slugs may contain lowercase letters, numbers and single hyphens.");
       const displayOrder = order(input.displayOrder);
       const activeValue = active(input.active);
@@ -578,7 +580,8 @@ export async function savePeopleRecord(
         "SELECT profile_slug AS \"profileSlug\" FROM public.people_musicians WHERE ($1::uuid IS NULL OR id <> $1)",
         [id],
       );
-      const profileSlug = requestedProfileSlug || uniqueSlug(displayName, existing.rows.map(row => row.profileSlug), "musician");
+      const current = id ? await client.query<{ profileSlug: string }>("SELECT profile_slug AS \"profileSlug\" FROM public.people_musicians WHERE id=$1", [id]) : { rows: [] as Array<{ profileSlug: string }> };
+      const profileSlug = requestedProfileSlug || current.rows[0]?.profileSlug || uniqueSlug(displayName, existing.rows.map(row => row.profileSlug), "musician");
       if (!slugPattern.test(profileSlug)) throw new PeopleCmsError("Profile slugs may contain lowercase letters, numbers and single hyphens.");
       const biography = text(input.biography, "Biography", 20000);
       const portraitMediaId = optionalUuid(input.portraitMediaId, "Portrait");
