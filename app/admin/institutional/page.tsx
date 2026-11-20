@@ -5,7 +5,7 @@ import { uniqueSlug } from "../../../lib/slug";
 const keys:InstitutionalKey[]=["about","heritage","story","legacy","orchestra","members","music","ministry"];
 const labels:Record<InstitutionalKey,string>={about:"About DSO",heritage:"Our Heritage",story:"Our Story",legacy:"Our Legacy",orchestra:"The Orchestra",members:"Meet the Members",music:"Music & Performances",ministry:"Ministry & Impact"};
 export default function InstitutionalAdmin(){
- const [store,setStore]=useState<InstitutionalStore|null>(null),[key,setKey]=useState<InstitutionalKey>("about"),[signed,setSigned]=useState(false),[password,setPassword]=useState(""),[email,setEmail]=useState(""),[loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(""),[notice,setNotice]=useState("");
+ const [store,setStore]=useState<InstitutionalStore|null>(null),[key,setKey]=useState<InstitutionalKey>("about"),[signed,setSigned]=useState(false),[password,setPassword]=useState(""),[email,setEmail]=useState(""),[loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(""),[notice,setNotice]=useState(""),[newItemIds,setNewItemIds]=useState<Set<string>>(()=>new Set()),[manualItemSlugs,setManualItemSlugs]=useState<Set<string>>(()=>new Set());
  const page=store?.draft[key];
  async function load(){setLoading(true);setError("");try{const r=await fetch("/api/admin/institutional",{cache:"no-store"});if(r.status===401){setSigned(false);return}const d=await r.json();if(!r.ok)throw Error(d.error);setStore(d);setSigned(true)}catch(e){setError(e instanceof Error?e.message:"Could not load content")}finally{setLoading(false)}}
  useEffect(()=>{void load()},[]);
