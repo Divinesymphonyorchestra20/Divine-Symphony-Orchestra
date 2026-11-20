@@ -3,13 +3,13 @@ import SiteHeader from "./site-header";
 import SiteFooter from "./site-footer";
 import type { InstitutionalPage } from "../lib/institutional-cms";
 import HistoryMedia from "./history-media";
+import { slugify } from "../lib/slug";
 
-const slugifyInstitutionalItem = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
 function InstitutionalItemCard({ item, pageKey }: { item: InstitutionalPage["items"][number]; pageKey: InstitutionalPage["key"] }) {
  const content = <>{item.image&&<img className="institutional-item-image" src={item.image} alt={item.imageAlt||item.title}/>}{item.year&&<p className="eyebrow dark">{item.year}</p>}{item.category&&<small className="institutional-item-category">{item.category}</small>}<h3>{item.title}</h3>{item.subtitle&&<p>{item.subtitle}</p>}{item.role&&<p>{item.role}</p>}{item.instrument&&<p>{item.instrument}</p>}<p>{item.description}</p>{item.credit&&<small className="institutional-credit">{item.credit}</small>}</>;
- const profileHref = !item.link && !item.mediaUrl && pageKey === "members" ? "/meet-the-members/" + slugifyInstitutionalItem(item.title) :
-   !item.link && !item.mediaUrl && pageKey === "music" ? "/music/" + slugifyInstitutionalItem(item.title) : null;
+ const profileHref = !item.link && !item.mediaUrl && pageKey === "members" ? "/meet-the-members/" + (item.slug || slugify(item.title)) :
+   !item.link && !item.mediaUrl && pageKey === "music" ? "/music/" + (item.slug || slugify(item.title)) : null;
  if(profileHref) return <Link className="founder-card founder-card-link" href={profileHref}>{content}<span className="history-inline-link">View details <span aria-hidden="true">→</span></span></Link>;
  if(item.link&&!item.mediaUrl){const external=item.link.startsWith("https://")||item.link.startsWith("http://");return external?<a className="founder-card founder-card-link" href={item.link} target="_blank" rel="noreferrer">{content}<span className="history-inline-link">Read source ↗</span></a>:<Link className="founder-card founder-card-link" href={item.link}>{content}<span className="history-inline-link">Explore <span aria-hidden="true">→</span></span></Link>;}
  return <article className="founder-card">{content}{item.link&&<a className="history-inline-link" href={item.link}>Explore <span aria-hidden="true">→</span></a>}{item.mediaUrl&&<a className="history-inline-link" href={item.mediaUrl} target="_blank" rel="noreferrer">View media ↗</a>}</article>;
