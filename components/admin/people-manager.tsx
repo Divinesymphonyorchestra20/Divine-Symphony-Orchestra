@@ -270,6 +270,7 @@ export default function PeopleManager() {
           setField(slugKey, uniqueSlug(source, existing, resource === "musicians" ? "musician" : resource === "instrument-groups" ? "group" : "instrument"));
         }
       }} />}
+      {(key === "profileSlug" || key === "slug") && <small>Generated from the record name for new records. You can edit the URL slug before saving.</small>}
     </label>;
   }
 
