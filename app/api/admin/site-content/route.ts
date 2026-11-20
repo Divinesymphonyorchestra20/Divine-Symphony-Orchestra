@@ -94,7 +94,7 @@ export async function PUT(request: NextRequest) {
   }
   try {
     const submitted = await request.json();
-    const content = submitted && typeof submitted === "object" ? fillMissingSlugs(submitted as SiteContent) : submitted;
+    const content = submitted && typeof submitted === "object" && Array.isArray((submitted as SiteContent).events) && Array.isArray((submitted as SiteContent).news) ? fillMissingSlugs(submitted as SiteContent) : submitted;
     if (!valid(content)) return NextResponse.json({ error: "The content format is invalid. Check required fields, dates, unique slugs and secure links." }, { status: 400 });
     await writeSiteContent(content);
     return NextResponse.json({ ok: true });
