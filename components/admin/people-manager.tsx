@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import PeopleRecordPreview from "./people-record-preview";
+import { uniqueSlug } from "../../lib/slug";
 
 type Tab = "musicians" | "instruments" | "leadership" | "alumni" | "contributors";
 type Resource = "musicians" | "instrument-groups" | "instruments" | "leadership" | "alumni" | "contributors";
@@ -58,6 +59,7 @@ export default function PeopleManager() {
   const [notice, setNotice] = useState<Notice | null>(null);
   const [mediaNotice, setMediaNotice] = useState("");
   const [preview, setPreview] = useState<PreviewData | null>(null);
+  const [slugEdited, setSlugEdited] = useState(false);
 
   const resource: Resource = tab === "instruments" ? instrumentMode === "groups" ? "instrument-groups" : "instruments" : tab;
   const currentRecords = records[resource];
@@ -153,12 +155,14 @@ export default function PeopleManager() {
       }
     }
     setForm(next);
+    setSlugEdited(false);
     setPreview(null);
     setNotice(null);
   }
 
   function addRecord() {
     setForm({ ...emptyForms[resource], displayOrder: currentRecords.length });
+    setSlugEdited(false);
     setPreview(null);
     setNotice(null);
   }
@@ -256,8 +260,15 @@ export default function PeopleManager() {
       : <input maxLength={options.max} required={options.required} placeholder={options.placeholder} value={val} onChange={event => {
         const value = event.target.value;
         setField(key, value);
-        if (key === "displayName" && !form.profileSlug) setField("profileSlug", slugify(value));
-        if (key === "name" && !form.slug) setField("slug", slugify(value));
+        if (key === "profileSlug" || key === "slug") setSlugEdited(true);
+        if (!form.id && !slugEdited && (key === "displayName" || key === "name")) {
+          const slugKey = resource === "musicians" ? "profileSlug" : "slug";
+          const source = key === "displayName" ? value : value;
+          const existing = currentRecords
+            .filter(record => record.id !== form.id)
+            .map(record => valueAsText(record[slugKey]));
+          setField(slugKey, uniqueSlug(source, existing, resource === "musicians" ? "musician" : resource === "instrument-groups" ? "group" : "instrument"));
+        }
       }} />}
     </label>;
   }
