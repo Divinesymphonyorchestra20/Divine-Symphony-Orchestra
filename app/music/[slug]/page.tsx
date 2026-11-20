@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { readInstitutionalPage } from "../../../lib/institutional-cms";
+import { slugify } from "../../../lib/slug";
 export const dynamic = "force-dynamic";
-const slugify = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 async function getMusicItem(slug: string) {
-  return (await readInstitutionalPage("music")).items.find(item => slugify(item.title) === slug);
+  return (await readInstitutionalPage("music")).items.find(item => (item.slug || slugify(item.title)) === slug);
 }
 export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{
   const {slug}=await params;const item=await getMusicItem(slug);
