@@ -42,10 +42,6 @@ function valueAsText(value: unknown) {
   return typeof value === "string" || typeof value === "number" ? String(value) : "";
 }
 
-function slugify(value: string) {
-  return value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-}
-
 export default function PeopleManager() {
   const [tab, setTab] = useState<Tab>("musicians");
   const [instrumentMode, setInstrumentMode] = useState<"groups" | "instruments">("groups");
