@@ -26,7 +26,7 @@ function valid(value: unknown): value is SiteContent {
 
   const eventsValid = data.events.every(event =>
     event && typeof event.title === "string" && event.title.trim().length > 0 && event.title.length <= 180 &&
-    typeof event.slug === "string" && event.slug.length <= 180 &&
+    typeof event.slug === "string" && event.slug.length <= 180 && (!event.slug || validSlug(event.slug)) &&
     validStatus(event.status) && (event.status !== "published" || (validSlug(event.slug) && validDate(event.startAt))) &&
     typeof event.startAt === "string" && (!event.endAt || validDate(event.endAt)) &&
     (!event.startAt || validDate(event.startAt)) &&
@@ -42,7 +42,7 @@ function valid(value: unknown): value is SiteContent {
   );
   const newsValid = data.news.every(item =>
     item && typeof item.title === "string" && item.title.trim().length > 0 && item.title.length <= 180 &&
-    typeof item.slug === "string" && item.slug.length <= 180 &&
+    typeof item.slug === "string" && item.slug.length <= 180 && (!item.slug || validSlug(item.slug)) &&
     validStatus(item.status) && (item.status !== "published" || (validSlug(item.slug) && validDate(item.publishedAt) && typeof item.body === "string" && item.body.trim().length > 0)) &&
     typeof item.publishedAt === "string" && (!item.publishedAt || validDate(item.publishedAt)) &&
     typeof item.summary === "string" && item.summary.length <= 1200 &&
