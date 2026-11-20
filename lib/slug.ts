@@ -6,7 +6,7 @@ export function slugify(value: string): string {
 
 export function uniqueSlug(value: string, existing: Iterable<string>, fallback = "item"): string {
   const base = slugify(value) || fallback;
-  const used = new Set(Array.from(existing, item => item.toLowerCase()));
+  const used = new Set(Array.from(existing).filter((item): item is string => typeof item === "string" && item.trim().length > 0).map(item => item.toLowerCase()));
   if (!used.has(base)) return base;
   let suffix = 2;
   while (used.has(`${base}-${suffix}`)) suffix += 1;
