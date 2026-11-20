@@ -1,5 +1,6 @@
 import "server-only";
 import { queryDatabase, withDatabaseTransaction } from "../db/client";
+import { uniqueSlug } from "./slug";
 
 export type PeopleStatus = "draft" | "published" | "unpublished" | "archived";
 export type PeopleResource = "musicians" | "instrument-groups" | "instruments" | "leadership" | "alumni" | "contributors";
@@ -517,7 +518,9 @@ export async function savePeopleRecord(
   await withDatabaseTransaction(async client => {
     if (resource === "instrument-groups") {
       const name = text(input.name, "Group name", 120, true);
-      const slug = text(input.slug, "Group slug", 140, true);
+      const requestedSlug = text(input.slug, "Group slug", 140);
+      const existing = await client.query<{ slug: string }>("SELECT slug FROM public.people_instrument_groups WHERE ($1::uuid IS NULL OR id <> $1)", [id]);
+      const slug = requestedSlug || uniqueSlug(name, existing.rows.map(row => row.slug), "group");
       if (!slugPattern.test(slug)) throw new PeopleCmsError("Group slugs may contain lowercase letters, numbers and single hyphens.");
       const displayOrder = order(input.displayOrder);
       const activeValue = active(input.active);
@@ -539,7 +542,9 @@ export async function savePeopleRecord(
       const groupId = optionalUuid(input.groupId, "Instrument group");
       if (!groupId) throw new PeopleCmsError("Choose an instrument group.");
       const name = text(input.name, "Instrument name", 120, true);
-      const slug = text(input.slug, "Instrument slug", 140, true);
+      const requestedSlug = text(input.slug, "Instrument slug", 140);
+      const existing = await client.query<{ slug: string }>("SELECT slug FROM public.people_instruments WHERE ($1::uuid IS NULL OR id <> $1)", [id]);
+      const slug = requestedSlug || uniqueSlug(name, existing.rows.map(row => row.slug), "instrument");
       if (!slugPattern.test(slug)) throw new PeopleCmsError("Instrument slugs may contain lowercase letters, numbers and single hyphens.");
       const displayOrder = order(input.displayOrder);
       const activeValue = active(input.active);
@@ -568,7 +573,12 @@ export async function savePeopleRecord(
       const lastName = text(input.lastName, "Last name", 120);
       const displayName = text(input.displayName, "Display name", 240, true);
       const musicalRole = text(input.musicalRole, "Musical role", 180);
-      const profileSlug = text(input.profileSlug, "Profile slug", 180, true);
+      const requestedProfileSlug = text(input.profileSlug, "Profile slug", 180);
+      const existing = await client.query<{ profileSlug: string }>(
+        "SELECT profile_slug AS \"profileSlug\" FROM public.people_musicians WHERE ($1::uuid IS NULL OR id <> $1)",
+        [id],
+      );
+      const profileSlug = requestedProfileSlug || uniqueSlug(displayName, existing.rows.map(row => row.profileSlug), "musician");
       if (!slugPattern.test(profileSlug)) throw new PeopleCmsError("Profile slugs may contain lowercase letters, numbers and single hyphens.");
       const biography = text(input.biography, "Biography", 20000);
       const portraitMediaId = optionalUuid(input.portraitMediaId, "Portrait");
