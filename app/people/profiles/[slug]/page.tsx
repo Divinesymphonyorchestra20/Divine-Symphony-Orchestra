@@ -9,22 +9,6 @@ import { slugify } from "../../../../lib/slug";
 
 export const dynamic = "force-dynamic";
 
-port type { Metadata } from "next";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import SiteHeader from "../../../../components/site-header";
-import SiteFooter from "../../../../components/site-footer";
-import { readHistoryContent, publishedHistoryContent } from "../../../../lib/history-cms";
-import { listPeopleRecords } from "../../../../lib/people-cms";
-import { slugify } from "../../../../lib/slug";
-
-export const dynamic = "force-dynamic";
-
-function slugify(value: string) {
-  return value.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-}
-
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   return { title: `${slug.split("-").map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(" ")} | Divine Symphony Orchestra` };
