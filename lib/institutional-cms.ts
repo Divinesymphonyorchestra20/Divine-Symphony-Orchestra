@@ -1,10 +1,11 @@
 import { get, put } from "@vercel/blob";
 import { isDatabaseContentStoreEnabled, readContentStoreWithLegacyImport, writeDatabaseContentStore } from "./content-store";
 import { mediaBlobPathFromUrl, syncContentMediaUsage } from "./media-store";
+import { uniqueSlug } from "./slug";
 
 export type InstitutionalKey = "about" | "heritage" | "story" | "legacy" | "orchestra" | "members" | "music" | "ministry";
 export type InstitutionalSection = { heading: string; body: string };
-export type InstitutionalItem = { title: string; subtitle?: string; description: string; category?: string; year?: string; role?: string; instrument?: string; image?: string; imageAlt?: string; mediaUrl?: string; credit?: string; link?: string };
+export type InstitutionalItem = { id?: string; slug?: string; title: string; subtitle?: string; description: string; category?: string; year?: string; role?: string; instrument?: string; image?: string; imageAlt?: string; mediaUrl?: string; credit?: string; link?: string };
 export type InstitutionalPage = { key: InstitutionalKey; eyebrow: string; title: string; emphasis: string; intro: string; sections: InstitutionalSection[]; items: InstitutionalItem[]; note?: string };
 export type InstitutionalStore = { version: 1; updatedAt: string; draft: Record<InstitutionalKey, InstitutionalPage>; published: Record<InstitutionalKey, InstitutionalPage> };
 export const institutionalKeys: InstitutionalKey[] = ["about","heritage","story","legacy","orchestra","members","music","ministry"];
@@ -22,7 +23,17 @@ export const defaultInstitutionalPages: Record<InstitutionalKey,InstitutionalPag
 const PATH="cms/institutional-content.json";
 const fallback=():InstitutionalStore=>({version:1,updatedAt:"",draft:defaultInstitutionalPages,published:defaultInstitutionalPages});
 function normalizeInstitutionalPages(pages: Partial<Record<InstitutionalKey, InstitutionalPage>>): Record<InstitutionalKey, InstitutionalPage> {
- return ensureHeritageBiography({ ...defaultInstitutionalPages, ...pages } as Record<InstitutionalKey, InstitutionalPage>);
+ const merged = { ...defaultInstitutionalPages, ...pages } as Record<InstitutionalKey, InstitutionalPage>;
+ for (const key of institutionalKeys) {
+  const page = merged[key];
+  const used: string[] = [];
+  merged[key] = { ...page, items: page.items.map(item => {
+   const slug = item.slug?.trim() || uniqueSlug(item.title, used, "item");
+   used.push(slug);
+   return { ...item, slug };
+  }) };
+ }
+ return ensureHeritageBiography(merged);
 }
 function ensureHeritageBiography(pages:Record<InstitutionalKey,InstitutionalPage>):Record<InstitutionalKey,InstitutionalPage>{
  const page=pages.heritage;
