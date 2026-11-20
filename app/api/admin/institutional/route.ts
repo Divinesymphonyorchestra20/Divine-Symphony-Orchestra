@@ -1,6 +1,7 @@
 import { NextRequest,NextResponse } from "next/server";
 import {hasAdminPermission, verifyAdminSession} from "../../../../lib/admin-auth";
 import { institutionalKeys,readInstitutionalStore,writeInstitutionalStore,type InstitutionalStore } from "../../../../lib/institutional-cms";
+import { slugify, uniqueSlug } from "../../../../lib/slug";
 export const runtime="nodejs";export const dynamic="force-dynamic";
 const safeDestination=(value:unknown,allowMedia=false):boolean=>{
  if(value===undefined||value===null||value==="")return true;
@@ -17,7 +18,9 @@ export async function PUT(request:NextRequest){
   const p=body.content[key];
   if(!p||p.key!==key||typeof p.title!=="string"||p.title.length>180||typeof p.intro!=="string"||p.intro.length>5000||!Array.isArray(p.sections)||!Array.isArray(p.items)||p.sections.length>30||p.items.length>100)return NextResponse.json({error:"One or more page records are incomplete or exceed the allowed limits."},{status:400});
   if(p.sections.some(s=>!s||typeof s.heading!=="string"||s.heading.length>180||typeof s.body!=="string"||s.body.length>8000))return NextResponse.json({error:"Each page section needs a valid heading and body."},{status:400});
-  if(p.items.some(item=>!item||typeof item.title!=="string"||item.title.length>180||typeof item.description!=="string"||item.description.length>8000||!safeDestination(item.link)||!safeDestination(item.mediaUrl)||!safeDestination(item.image,true)))return NextResponse.json({error:"Featured records need valid titles, descriptions and safe media/link destinations."},{status:400});
+  if(p.items.some(item=>!item||typeof item.title!=="string"||item.title.length>180||(item.slug!==undefined&&(typeof item.slug!=="string"||item.slug.length>180||Boolean(item.slug)&&!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.slug)))||(item.id!==undefined&&(typeof item.id!=="string"||item.id.length>100))||typeof item.description!=="string"||item.description.length>8000||!safeDestination(item.link)||!safeDestination(item.mediaUrl)||!safeDestination(item.image,true)))return NextResponse.json({error:"Featured records need valid titles, descriptions, slugs and safe media/link destinations."},{status:400});
+  const slugs=p.items.map(item=>item.slug).filter((slug):slug is string=>Boolean(slug));
+  if(new Set(slugs).size!==slugs.length)return NextResponse.json({error:"Each detail page needs a unique URL slug."},{status:409});
  }
  const current=await readInstitutionalStore();const next:InstitutionalStore={...current,draft:body.content,published:body.action==="publish"?body.content:current.published};
  try{await writeInstitutionalStore(next,{publish:body.action==="publish"});return NextResponse.json({ok:true,updatedAt:new Date().toISOString()})}catch(e){return NextResponse.json({error:e instanceof Error?e.message:"Could not save content."},{status:500})}
