@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { hasAdminPermission } from "../../../../lib/admin-auth";
 import { readSiteContent, writeSiteContent, type SiteContent } from "../../../../lib/site-content-cms";
+import { uniqueSlug } from "../../../../lib/slug";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -75,12 +76,25 @@ export async function GET(request: NextRequest) {
   return NextResponse.json(await readSiteContent(), { headers: { "Cache-Control": "no-store" } });
 }
 
+function fillMissingSlugs(content: SiteContent): SiteContent {
+  const events = content.events.map((item, index, all) => {
+    if (item.slug?.trim()) return item;
+    return { ...item, slug: uniqueSlug(item.title, all.filter((_, i) => i !== index).map(other => other.slug), "event") };
+  });
+  const news = content.news.map((item, index, all) => {
+    if (item.slug?.trim()) return item;
+    return { ...item, slug: uniqueSlug(item.title, all.filter((_, i) => i !== index).map(other => other.slug), "story") };
+  });
+  return { ...content, events, news };
+}
+
 export async function PUT(request: NextRequest) {
   if (!(await hasAdminPermission(request, "content.publish"))) {
     return NextResponse.json({ error: "You do not have permission to publish site content." }, { status: 403 });
   }
   try {
-    const content = await request.json();
+    const submitted = await request.json();
+    const content = submitted && typeof submitted === "object" ? fillMissingSlugs(submitted as SiteContent) : submitted;
     if (!valid(content)) return NextResponse.json({ error: "The content format is invalid. Check required fields, dates, unique slugs and secure links." }, { status: 400 });
     await writeSiteContent(content);
     return NextResponse.json({ ok: true });
