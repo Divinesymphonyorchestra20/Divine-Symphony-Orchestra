@@ -106,6 +106,8 @@ export default function SiteContentManager() {
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Save failed.");
       setData(current => ({ ...current, updatedAt: result.updatedAt || current.updatedAt }));
+      setNewRecordIds(new Set());
+      setManualSlugIds(new Set());
       setMessage("Changes saved. Public pages show published records only.");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Save failed.");
