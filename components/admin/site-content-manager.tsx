@@ -77,6 +77,17 @@ export default function SiteContentManager() {
     setMessage("");
   }
 
+  const footerSocialFields = ["Instagram", "Facebook", "YouTube", "WhatsApp Contact", "WhatsApp Channel"] as const;
+  function socialUrl(label: string) {
+    return data.contact.socialLinks.find(item => item.label.trim().toLowerCase() === label.toLowerCase())?.url || "";
+  }
+  function updateSocialUrl(label: string, url: string) {
+    const existing = data.contact.socialLinks.some(item => item.label.trim().toLowerCase() === label.toLowerCase());
+    updateContact({ socialLinks: existing
+      ? data.contact.socialLinks.map(item => item.label.trim().toLowerCase() === label.toLowerCase() ? { ...item, label, url } : item)
+      : [...data.contact.socialLinks, { label, url }] });
+  }
+
   function addEvent() {
     const title = "New DSO event";
     const id = newId();
@@ -197,8 +208,13 @@ export default function SiteContentManager() {
           </div>
           <label className="dso-field">Official address<textarea rows={3} value={data.contact.address} onChange={e=>updateContact({address:e.target.value})}/></label>
           <label className="dso-field">Enquiry note<textarea rows={3} value={data.contact.enquiryNote} onChange={e=>updateContact({enquiryNote:e.target.value})}/></label>
-          <div className="dso-structured-heading"><strong>Social links</strong><button type="button" className="dso-add-button" onClick={()=>updateContact({socialLinks:[...data.contact.socialLinks,{label:"New link",url:""}]})}>+ Add social link</button></div>
-          {data.contact.socialLinks.map((item,index)=><div className="dso-structured-grid dso-social-row" key={index}>
+          <div className="dso-structured-heading"><strong>Footer social links</strong></div>
+          <p className="dso-site-content-tip">Enter each official profile or channel URL below. Leave a field blank until DSO has confirmed the correct address. The footer will show the matching icon and activate its link as soon as a URL is saved.</p>
+          <div className="dso-structured-list">
+            {footerSocialFields.map(label=><label className="dso-field" key={label}>{label} URL<input type="url" value={socialUrl(label)} placeholder="https://" onChange={e=>updateSocialUrl(label,e.target.value)}/></label>)}
+          </div>
+          <div className="dso-structured-heading"><strong>Other social links</strong><button type="button" className="dso-add-button" onClick={()=>updateContact({socialLinks:[...data.contact.socialLinks,{label:"New link",url:""}]})}>+ Add other link</button></div>
+          {data.contact.socialLinks.map((item,index)=>({item,index})).filter(({item})=>!footerSocialFields.some(label=>item.label.trim().toLowerCase()===label.toLowerCase())).map(({item,index})=><div className="dso-structured-grid dso-social-row" key={index}>
             <label className="dso-field">Label<input value={item.label} onChange={e=>updateContact({socialLinks:data.contact.socialLinks.map((link,i)=>i===index?{...link,label:e.target.value}:link)})}/></label>
             <label className="dso-field">URL<input type="url" value={item.url} onChange={e=>updateContact({socialLinks:data.contact.socialLinks.map((link,i)=>i===index?{...link,url:e.target.value}:link)})}/></label>
             <button type="button" className="dso-remove-button" onClick={()=>updateContact({socialLinks:data.contact.socialLinks.filter((_,i)=>i!==index)})}>Remove</button>
