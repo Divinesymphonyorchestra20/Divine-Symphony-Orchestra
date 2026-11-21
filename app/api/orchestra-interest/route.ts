@@ -10,7 +10,9 @@ export async function POST(request:NextRequest){
   try{
     const origin=request.headers.get("origin");
     if(origin){try{if(new URL(origin).origin!==request.nextUrl.origin)return NextResponse.json({error:"The submission could not be verified."},{status:403});}catch{return NextResponse.json({error:"The submission could not be verified."},{status:403});}}
-    const contentLength=Number(request.headers.get("content-length")||0);\n    if(contentLength>20000)return NextResponse.json({error:"The submitted form is too large."},{status:413});\n    const body=await request.json().catch(()=>null);
+    const contentLength=Number(request.headers.get("content-length")||0);
+    if(contentLength>20000)return NextResponse.json({error:"The submitted form is too large."},{status:413});
+    const body=await request.json().catch(()=>null);
     if(!body||typeof body!=="object")return NextResponse.json({error:"Please complete the form and try again."},{status:400});
     if(typeof body.website==="string"&&body.website.trim())return NextResponse.json({ok:true});
     const required=["fullName","email","telephone","location","instrument","experienceLevel","performanceExperience","availability","motivation"];
