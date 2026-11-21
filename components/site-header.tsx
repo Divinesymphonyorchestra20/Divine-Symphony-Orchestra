@@ -103,7 +103,8 @@ export default function SiteHeader({active}:{active?:string}){
           {peopleLinks.map(link=><a key={link.href} href={link.href} aria-current={pathname===link.href?"page":undefined} onClick={close}>{link.label}</a>)}
         </div>
       </div>
-      <a className="menu-link" href="/contact" onClick={close}>Get in Touch</a>
+      <a className={pathname==="/join-the-orchestra"?"active":""} aria-current={pathname==="/join-the-orchestra"?"page":undefined} href="/join-the-orchestra" onClick={close}>Join the Orchestra</a>
+      <a className={pathname==="/support"?"active":""} aria-current={pathname==="/support"?"page":undefined} href="/support" onClick={close}>Support DSO</a>
     </nav>
   </header>;
 }
