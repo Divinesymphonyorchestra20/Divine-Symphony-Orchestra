@@ -19,10 +19,6 @@ export default async function SiteFooter() {
     ? "https://wa.me/" + internationalPhone + "?text=" + encodeURIComponent("Hello Divine Symphony Orchestra. I visited your website and would like to make an enquiry.")
     : "";
   const socialOrder = ["Instagram", "Facebook", "YouTube"];
-  const socials = socialOrder.flatMap(label => {
-    const item = links.find(link => link.label.toLowerCase().includes(label.toLowerCase()));
-    return item ? [item] : [];
-  });
   const channel = links.find(item => item.label.toLowerCase().includes("whatsapp") && item.label.toLowerCase().includes("channel"));
 
   return (
