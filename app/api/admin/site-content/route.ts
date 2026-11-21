@@ -64,8 +64,11 @@ function valid(value: unknown): value is SiteContent {
     String((contact as unknown as Record<string, unknown>)[key]).length <= 4000
   ) && (!contact.generalEmail || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.generalEmail)) &&
   Array.isArray(contact.socialLinks) && contact.socialLinks.length <= 12 &&
-  contact.socialLinks.every(link => link && typeof link.label === "string" && link.label.trim().length > 0 &&
-    link.label.length <= 100 && safeUrl(link.url) && Boolean(link.url));
+  contact.socialLinks.every(link => {
+    if (!link || typeof link.label !== "string" || !link.label.trim() || link.label.length > 100 || !safeUrl(link.url)) return false;
+    const footerField = ["instagram", "facebook", "youtube", "whatsapp contact", "whatsapp channel"].includes(link.label.trim().toLowerCase());
+    return footerField || Boolean(link.url);
+  });
   return eventsValid && newsValid && albumsValid && contactValid && JSON.stringify(data).length <= 500_000;
 }
 
