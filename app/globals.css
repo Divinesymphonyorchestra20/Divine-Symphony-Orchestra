@@ -1831,3 +1831,27 @@ body{color:var(--dso-ink);-webkit-font-smoothing:antialiased}
  .dso-action-cta{display:block;padding:32px 7%}
  .dso-action-cta .solid-cta{margin-top:18px}
 }
+
+
+/* Desktop primary navigation: compact spacing and clear seven-item order */
+@media(min-width:1181px){
+  .site-header{
+    gap:clamp(16px,2vw,28px);
+    padding-left:clamp(18px,3vw,44px);
+    padding-right:clamp(18px,3vw,44px);
+  }
+  .site-header nav{
+    flex:0 1 auto;
+    margin-left:auto;
+    justify-content:flex-end;
+    gap:clamp(8px,.9vw,14px);
+    font-size:clamp(11px,.78vw,12px);
+  }
+  .site-header nav>a,
+  .site-header nav .nav-dropdown-trigger{
+    min-height:40px;
+    padding:8px clamp(5px,.45vw,8px);
+    white-space:nowrap;
+  }
+  .site-header nav .nav-dropdown{flex:0 0 auto}
+}
