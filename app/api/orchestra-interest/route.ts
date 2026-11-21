@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
-import { queryDatabase } from "../../../db/client";
+import { withDatabaseTransaction } from "../../../db/client";
 export const runtime="nodejs";
 export const dynamic="force-dynamic";
 
@@ -10,7 +10,7 @@ export async function POST(request:NextRequest){
   try{
     const origin=request.headers.get("origin");
     if(origin){try{if(new URL(origin).origin!==request.nextUrl.origin)return NextResponse.json({error:"The submission could not be verified."},{status:403});}catch{return NextResponse.json({error:"The submission could not be verified."},{status:403});}}
-    const body=await request.json().catch(()=>null);
+    const contentLength=Number(request.headers.get("content-length")||0);\n    if(contentLength>20000)return NextResponse.json({error:"The submitted form is too large."},{status:413});\n    const body=await request.json().catch(()=>null);
     if(!body||typeof body!=="object")return NextResponse.json({error:"Please complete the form and try again."},{status:400});
     if(typeof body.website==="string"&&body.website.trim())return NextResponse.json({ok:true});
     const required=["fullName","email","telephone","location","instrument","experienceLevel","performanceExperience","availability","motivation"];
@@ -29,17 +29,19 @@ export async function POST(request:NextRequest){
       motivation:String(body.motivation).trim(),portfolioUrl:String(body.portfolioUrl||"").trim(),
       consent:true,submittedAt:new Date().toISOString(),
     };
-    const result=await queryDatabase<{id:string;created_at:Date}>(
-      `INSERT INTO public.content_entries (content_type,slug,title,status,payload)
-       VALUES ('orchestra_application',$1,$2,'submitted',$3::jsonb)
-       RETURNING id,created_at`,
-      [id,"Orchestra interest: "+payload.fullName,JSON.stringify(payload)]
-    );
-    await queryDatabase(
-      `INSERT INTO public.audit_events (action,resource_type,resource_id,metadata)
-       VALUES ('orchestra_application.submitted','orchestra_application',$1,$2::jsonb)`,
-      [result.rows[0].id,JSON.stringify({instrument:payload.instrument,experienceLevel:payload.experienceLevel})]
-    );
+    await withDatabaseTransaction(async client=>{
+      const result=await client.query<{id:string}>(
+        `INSERT INTO public.content_entries (content_type,slug,title,status,payload)
+         VALUES ('orchestra_application',$1,$2,'submitted',$3::jsonb)
+         RETURNING id`,
+        [id,"Orchestra interest: "+payload.fullName,JSON.stringify(payload)]
+      );
+      await client.query(
+        `INSERT INTO public.audit_events (action,resource_type,resource_id,metadata)
+         VALUES ('orchestra_application.submitted','orchestra_application',$1,$2::jsonb)`,
+        [result.rows[0].id,JSON.stringify({instrument:payload.instrument,experienceLevel:payload.experienceLevel})]
+      );
+    });
     return NextResponse.json({ok:true},{status:201,headers:{"Cache-Control":"no-store"}});
   }catch(error){
     console.error("Orchestra expression-of-interest submission failed",error);
