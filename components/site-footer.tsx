@@ -65,9 +65,18 @@ export default async function SiteFooter() {
       <section className="dso-footer-social" aria-label="Follow Divine Symphony Orchestra">
         <h3>Follow DSO</h3>
         <div className="dso-footer-social-links">
-          {socials.map(item => <a key={item.label} href={item.url} target="_blank" rel="noreferrer" aria-label={item.label} title={item.label}><SocialMark label={item.label}/></a>)}
-          {whatsappHref && <a className="whatsapp" href={whatsappHref} target="_blank" rel="noreferrer" aria-label="WhatsApp contact" title="WhatsApp contact"><SocialMark label="WhatsApp"/></a>}
-          {channel ? <a className="whatsapp-channel" href={channel.url} target="_blank" rel="noreferrer" aria-label="WhatsApp Channel" title="WhatsApp Channel"><span>Channel</span></a> : <span className="dso-footer-pending">WhatsApp Channel link to be added</span>}
+          {socialOrder.map(label => {
+            const item = links.find(link => link.label.toLowerCase().includes(label.toLowerCase()));
+            return item
+              ? <a key={label} href={item.url} target="_blank" rel="noreferrer" aria-label={label} title={label}><SocialMark label={label}/></a>
+              : <span className="is-pending" key={label} aria-label={label + " link to be added"} title={label + " link to be added"}><SocialMark label={label}/></span>;
+          })}
+          {whatsappHref
+            ? <a className="whatsapp" href={whatsappHref} target="_blank" rel="noreferrer" aria-label="WhatsApp contact" title="WhatsApp contact"><SocialMark label="WhatsApp"/></a>
+            : <span className="is-pending" aria-label="WhatsApp contact number to be added" title="WhatsApp contact number to be added"><SocialMark label="WhatsApp"/></span>}
+          {channel
+            ? <a className="whatsapp-channel" href={channel.url} target="_blank" rel="noreferrer" aria-label="WhatsApp Channel" title="WhatsApp Channel"><span>Channel</span></a>
+            : <span className="dso-footer-pending">WhatsApp Channel link to be added</span>}
         </div>
       </section>
 
@@ -79,8 +88,6 @@ export default async function SiteFooter() {
 
       <div className="footer-bottom dso-footer-bottom">
         <span>© {new Date().getFullYear()} Divine Symphony Orchestra. All rights reserved.</span>
-        <a href="/privacy">Privacy Policy</a>
-        <a href="/terms">Terms of Use</a>
       </div>
     </footer>
   );
