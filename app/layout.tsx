@@ -17,10 +17,10 @@ export const metadata: Metadata = {
     description: "Music for Inspiration • Excellence • Impact",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/images/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Divine Symphony Orchestra. Music for Inspiration, Excellence and Impact.",
+        alt: "Divine Symphony Orchestra social sharing image.",
       },
     ],
   },
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Divine Symphony Orchestra",
     description: "Music for Inspiration • Excellence • Impact",
-    images: ["/opengraph-image"],
+    images: ["/images/og-image.jpg"],
   },
 };
 
