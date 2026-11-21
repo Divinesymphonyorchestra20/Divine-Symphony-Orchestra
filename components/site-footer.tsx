@@ -13,13 +13,15 @@ function SocialMark({ label }: { label: string }) {
 export default async function SiteFooter() {
   const contact = (await readPublishedSiteContent()).contact;
   const links = contact.socialLinks.filter(item => item.url);
+  const socialUrl = (label: string) => links.find(item => item.label.trim().toLowerCase() === label.toLowerCase())?.url || "";
   const phone = contact.telephone.trim();
   const internationalPhone = phone.startsWith("+") ? phone.replace(/\D/g, "") : "";
-  const whatsappHref = internationalPhone
+  const phoneWhatsappHref = internationalPhone
     ? "https://wa.me/" + internationalPhone + "?text=" + encodeURIComponent("Hello Divine Symphony Orchestra. I visited your website and would like to make an enquiry.")
     : "";
+  const whatsappHref = socialUrl("WhatsApp Contact") || phoneWhatsappHref;
   const socialOrder = ["Instagram", "Facebook", "YouTube"];
-  const channel = links.find(item => item.label.toLowerCase().includes("whatsapp") && item.label.toLowerCase().includes("channel"));
+  const channelUrl = socialUrl("WhatsApp Channel");
 
   return (
     <footer className="site-footer dso-footer">
@@ -62,7 +64,7 @@ export default async function SiteFooter() {
         <h3>Follow DSO</h3>
         <div className="dso-footer-social-links">
           {socialOrder.map(label => {
-            const item = links.find(link => link.label.toLowerCase().includes(label.toLowerCase()));
+            const item = links.find(link => link.label.trim().toLowerCase() === label.toLowerCase());
             return item
               ? <a key={label} href={item.url} target="_blank" rel="noreferrer" aria-label={label} title={label}><SocialMark label={label}/></a>
               : <span className="is-pending" key={label} aria-label={label + " link to be added"} title={label + " link to be added"}><SocialMark label={label}/></span>;
@@ -70,8 +72,8 @@ export default async function SiteFooter() {
           {whatsappHref
             ? <a className="whatsapp" href={whatsappHref} target="_blank" rel="noreferrer" aria-label="WhatsApp contact" title="WhatsApp contact"><SocialMark label="WhatsApp"/></a>
             : <span className="is-pending" aria-label="WhatsApp contact number to be added" title="WhatsApp contact number to be added"><SocialMark label="WhatsApp"/></span>}
-          {channel
-            ? <a className="whatsapp-channel" href={channel.url} target="_blank" rel="noreferrer" aria-label="WhatsApp Channel" title="WhatsApp Channel"><span>Channel</span></a>
+          {channelUrl
+            ? <a className="whatsapp-channel" href={channelUrl} target="_blank" rel="noreferrer" aria-label="WhatsApp Channel" title="WhatsApp Channel"><span>Channel</span></a>
             : <span className="dso-footer-pending">WhatsApp Channel link to be added</span>}
         </div>
       </section>
