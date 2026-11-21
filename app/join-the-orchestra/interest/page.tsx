@@ -1,6 +1,6 @@
 import type {Metadata} from "next";
-import SitePageLayout from "../../../../components/site-page-layout";
-import OrchestraInterestForm from "../../../../components/orchestra-interest-form";
+import SitePageLayout from "../../../components/site-page-layout";
+import OrchestraInterestForm from "../../../components/orchestra-interest-form";
 export const metadata:Metadata={
   title:"Expression of Interest | Join Divine Symphony Orchestra",
   description:"Share your musical background and express your interest in participating in Divine Symphony Orchestra.",
