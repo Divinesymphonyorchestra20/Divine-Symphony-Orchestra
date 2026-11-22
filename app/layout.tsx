@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./music-school/music-school.css";
 import { readPublishedHomepage } from "../lib/homepage-cms";
+import { readPublishedSiteContent } from "../lib/site-content-cms";
 
 export const dynamic = "force-dynamic";
 
 const siteUrl = new URL("https://divine-symphony-orchestra.vercel.app");
 
-export const metadata: Metadata = {
+const defaultMetadata: Metadata = {
   metadataBase: siteUrl,
   title: "Divine Symphony Orchestra",
   description: "Music for Inspiration • Excellence • Impact",
@@ -34,6 +35,21 @@ export const metadata: Metadata = {
     images: ["/images/og-image.jpg"],
   },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = (await readPublishedSiteContent()).siteSettings;
+  const brandName = settings?.brandName || "Divine Symphony Orchestra";
+  const tagline = settings?.tagline || "Music for Inspiration • Excellence • Impact";
+  const logo = settings?.logoPath || "/images/dso-logo-transparent.png";
+  return {
+    ...defaultMetadata,
+    title: brandName,
+    description: tagline,
+    icons: { icon: logo, apple: logo },
+    openGraph: { ...defaultMetadata.openGraph, title: brandName, description: tagline },
+    twitter: { ...defaultMetadata.twitter, title: brandName, description: tagline, images: [logo] },
+  };
+}
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const theme = (await readPublishedHomepage()).theme;
