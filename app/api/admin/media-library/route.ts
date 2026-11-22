@@ -87,7 +87,7 @@ async function readBlobFallbackAssets(): Promise<Array<BlobMediaAsset & { usages
   }
   for (const asset of assets) {
     const usages = usagesByPath.get(asset.blob_path) || [];
-    if (usages.some(usage => usage.placement.startsWith("published")) && asset.status === "draft") { asset.status = "published"; changed = true; }
+    if (usages.some(usage => usage.placement?.startsWith("published")) && asset.status === "draft") { asset.status = "published"; changed = true; }
     asset.usages = usages;
   }
   if (changed) await writeBlobMediaAssets(assets);
