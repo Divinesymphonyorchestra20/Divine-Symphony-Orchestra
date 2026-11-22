@@ -1,15 +1,17 @@
 "use client";
 import {useEffect,useState} from "react";
 import type {InstitutionalItem,InstitutionalKey,InstitutionalPage,InstitutionalSection,InstitutionalStore} from "../../../lib/institutional-cms";
+import type {ContactContent,SiteSettings} from "../../../lib/site-content-cms";
 import { uniqueSlug } from "../../../lib/slug";
 import InstitutionalPageContent from "../../../components/institutional-page-content";
 import SiteHeader from "../../../components/site-header";
+import SiteFooterContent from "../../../components/site-footer-content";
 const keys:InstitutionalKey[]=["about","heritage","story","legacy","orchestra","members","music","ministry"];
 const labels:Record<InstitutionalKey,string>={about:"About DSO",heritage:"Our Heritage",story:"Our Story",legacy:"Our Legacy",orchestra:"The Orchestra",members:"Meet the Members",music:"Music & Performances",ministry:"Ministry & Impact"};
 export default function InstitutionalAdmin(){
- const [store,setStore]=useState<InstitutionalStore|null>(null),[key,setKey]=useState<InstitutionalKey>("about"),[signed,setSigned]=useState(false),[password,setPassword]=useState(""),[email,setEmail]=useState(""),[loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(""),[notice,setNotice]=useState(""),[newItemIds,setNewItemIds]=useState<Set<string>>(()=>new Set()),[manualItemSlugs,setManualItemSlugs]=useState<Set<string>>(()=>new Set());
+ const [store,setStore]=useState<InstitutionalStore|null>(null),[footerContent,setFooterContent]=useState<{contact:ContactContent;siteSettings?:SiteSettings}|null>(null),[key,setKey]=useState<InstitutionalKey>("about"),[signed,setSigned]=useState(false),[password,setPassword]=useState(""),[email,setEmail]=useState(""),[loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(""),[notice,setNotice]=useState(""),[newItemIds,setNewItemIds]=useState<Set<string>>(()=>new Set()),[manualItemSlugs,setManualItemSlugs]=useState<Set<string>>(()=>new Set());
  const page=store?.draft[key];
- async function load(){setLoading(true);setError("");try{const r=await fetch("/api/admin/institutional",{cache:"no-store"});if(r.status===401){setSigned(false);return}const d=await r.json();if(!r.ok)throw Error(d.error);setStore(d);setSigned(true)}catch(e){setError(e instanceof Error?e.message:"Could not load content")}finally{setLoading(false)}}
+ async function load(){setLoading(true);setError("");try{const [r,siteResponse]=await Promise.all([fetch("/api/admin/institutional",{cache:"no-store"}),fetch("/api/admin/site-content",{cache:"no-store"})]);if(r.status===401){setSigned(false);return}const [d,site]=await Promise.all([r.json(),siteResponse.json()]);if(!r.ok)throw Error(d.error);setStore(d);if(siteResponse.ok)setFooterContent({contact:site.contact,siteSettings:site.siteSettings});setSigned(true)}catch(e){setError(e instanceof Error?e.message:"Could not load content")}finally{setLoading(false)}}
  useEffect(()=>{void load()},[]);
  async function login(e:React.FormEvent){e.preventDefault();setLoading(true);try{const r=await fetch("/api/admin/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email,password})});const d=await r.json();if(!r.ok)throw Error(d.error);setPassword("");await load()}catch(e){setError(e instanceof Error?e.message:"Sign-in failed");setLoading(false)}}
  function patch(value:Partial<InstitutionalPage>){if(!store)return;setStore({...store,draft:{...store.draft,[key]:{...store.draft[key],...value}}});setNotice("")}
@@ -43,5 +45,5 @@ export default function InstitutionalAdmin(){
  {editItems()}
  <label className="dso-field">Editorial note<textarea rows={3} value={page.note||""} onChange={e=>patch({note:e.target.value})}/></label>
  <p className="dso-help">For records, use fields such as title, description, category, year, role, instrument, image, imageAlt, mediaUrl, credit and link. Leave unverified profile collections empty until DSO supplies approved records.</p>
- </div></section><section className="dso-preview-column"><div className="dso-preview-toolbar"><strong>Public page preview</strong><span>Draft text</span></div><div className="history-page dso-institutional-preview"><SiteHeader active={labels[key]}/><InstitutionalPageContent page={page} showEditorialNote/><div className="dso-preview-footer"><strong>Divine Symphony Orchestra</strong><span>Footer navigation and contact details are managed in Site Content.</span></div></div></section></div></main>
+ </div></section><section className="dso-preview-column"><div className="dso-preview-toolbar"><strong>Public page preview</strong><span>Draft text</span></div><div className="history-page dso-institutional-preview"><SiteHeader active={labels[key]}/><InstitutionalPageContent page={page} showEditorialNote/>{footerContent ? <SiteFooterContent contact={footerContent.contact} settings={footerContent.siteSettings}/> : <div className="dso-preview-footer"><strong>Footer preview unavailable</strong><span>Load Site Content Manager to check footer details.</span></div>}</div></section></div></main>
 }
