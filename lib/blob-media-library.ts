@@ -64,7 +64,7 @@ export async function deleteBlobMediaAsset(id: string): Promise<boolean> {
   if (asset.status !== "archived" || (asset.usages?.length || 0) > 0) {
     throw new Error("Only archived, unused media can be permanently deleted.");
   }
-  await del(asset.blob_path, { access: "private" });
+  await del(asset.blob_path);
   assets.splice(index, 1);
   await writeBlobMediaAssets(assets);
   return true;
