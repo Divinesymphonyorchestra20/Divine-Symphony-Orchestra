@@ -121,6 +121,7 @@ export default function MediaLibrary() {
             <button type="button" onClick={() => void save(asset)} disabled={saving === asset.id}>Save details</button>
             {asset.status !== "published" && <button type="button" onClick={() => void save(asset, "published")} disabled={saving === asset.id || !asset.alt_text.trim() || !["approved","not_required"].includes(asset.permission_status)}>Publish</button>}
             {asset.status !== "archived" && <button type="button" className="archive" onClick={() => void save(asset, "archived")} disabled={saving === asset.id || hasPublishedUsage}>Archive</button>}
+            {asset.status === "archived" && <button type="button" onClick={() => void save(asset, "draft")} disabled={saving === asset.id}>Restore as draft</button>}
           </div>
         </article>;
       })}</div>}
