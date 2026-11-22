@@ -126,12 +126,12 @@ export default async function MusicSchoolPage() {
 
       <section className="dso-school-application" id="school-enquiries">
         <div>
-          <p className="eyebrow">Admissions and enquiries</p>
-          <h2>Interested in learning with DSO?</h2>
-          <p>Contact the orchestra to ask about current instruments, teaching availability, application steps and the information required for enrolment. The school will confirm programme details directly.</p>
-          <a className="dso-school-primary-link" href="/contact?subject=DSO%20Music%20School%20application">Contact DSO about applying <span aria-hidden="true">→</span></a>
+          <p className="eyebrow">{pageContent.applicationEyebrow}</p>
+          <h2>{pageContent.applicationTitle}</h2>
+          <p>{pageContent.applicationText}</p>
+          <a className="dso-school-primary-link" href={pageContent.applicationHref}>{pageContent.applicationButton} <span aria-hidden="true">→</span></a>
         </div>
-        <p className="dso-school-portal-note">Student account access is not yet available on this website.</p>
+        <p className="dso-school-portal-note">{pageContent.portalNote}</p>
       </section>
       <SiteFooter />
     </main>
