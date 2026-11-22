@@ -1,3 +1,6 @@
+"use client";
+
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { biographyExcerpt } from "./biography-excerpt";
 import type { PublicLeadershipDirectoryEntry } from "../../lib/people-cms";
@@ -15,8 +18,15 @@ export default function LeadershipDirectory({
 }: {
   entries: PublicLeadershipDirectoryEntry[];
 }) {
-  const sortedEntries = [...entries].sort((a, b) => a.displayName.localeCompare(b.displayName, undefined, { sensitivity: "base" }));
-  const availableLetters = Array.from(new Set(sortedEntries.map(entry => entry.displayName.trim().charAt(0).toUpperCase())))
+  const [searchQuery, setSearchQuery] = useState("");
+  const sortedEntries = useMemo(() => [...entries].sort((a, b) => a.displayName.localeCompare(b.displayName, undefined, { sensitivity: "base" })), [entries]);
+  const visibleEntries = useMemo(() => {
+    const query = searchQuery.trim().toLocaleLowerCase();
+    if (!query) return sortedEntries;
+    return sortedEntries.filter(entry => [entry.displayName, ...entry.assignments.flatMap(item => [item.title, item.musicalRole])]
+      .join(" ").toLocaleLowerCase().includes(query));
+  }, [searchQuery, sortedEntries]);
+  const availableLetters = Array.from(new Set(visibleEntries.map(entry => entry.displayName.trim().charAt(0).toUpperCase())))
     .filter(letter => /^[A-Z]$/.test(letter))
     .sort();
 
@@ -25,10 +35,25 @@ export default function LeadershipDirectory({
       <div className="musicians-directory-heading">
         <p className="eyebrow dark">Leadership &amp; Direction</p>
         <h2 id="leadership-directory-heading">Guiding the Orchestra</h2>
-        <p>{entries.length} {entries.length === 1 ? "leader" : "leaders"} shown</p>
+        <p>{visibleEntries.length} {visibleEntries.length === 1 ? "leader" : "leaders"} shown</p>
       </div>
 
-      {sortedEntries.length > 0 && (
+      <div className="people-directory-search">
+        <label htmlFor="leadership-directory-search">Search leadership</label>
+        <div className="people-directory-search-control">
+          <input
+            id="leadership-directory-search"
+            type="search"
+            value={searchQuery}
+            onChange={event => setSearchQuery(event.target.value)}
+            placeholder="Type a leader's name..."
+            autoComplete="off"
+          />
+          {searchQuery && <button type="button" onClick={() => setSearchQuery("")} aria-label="Clear leadership search">Clear</button>}
+        </div>
+      </div>
+
+      {visibleEntries.length > 0 && (
         <nav className="people-alphabet-nav" aria-label="Jump to leadership by first letter">
           <span className="people-alphabet-label">Jump to</span>
           {availableLetters.map(letter => (
@@ -37,17 +62,17 @@ export default function LeadershipDirectory({
         </nav>
       )}
 
-      {sortedEntries.length === 0 ? (
+      {visibleEntries.length === 0 ? (
         <div className="musicians-empty" role="status">
-          <h3>No published leadership profiles are available yet.</h3>
-          <p>Approved DSO leadership profiles will appear here when they are ready to share.</p>
+          <h3>{searchQuery.trim() ? "No leaders match that search." : "No published leadership profiles are available yet."}</h3>
+          <p>{searchQuery.trim() ? "Try another name or clear your search to see the full directory." : "Approved DSO leadership profiles will appear here when they are ready to share."}</p>
         </div>
       ) : (
         <div className="leadership-directory-grid">
-          {sortedEntries.map((entry, index) => {
+          {visibleEntries.map((entry, index) => {
             const biography = biographyExcerpt(entry.biography);
             const letter = entry.displayName.trim().charAt(0).toUpperCase();
-            const previousLetter = index > 0 ? sortedEntries[index - 1].displayName.trim().charAt(0).toUpperCase() : "";
+            const previousLetter = index > 0 ? visibleEntries[index - 1].displayName.trim().charAt(0).toUpperCase() : "";
             return (
               <article id={letter !== previousLetter && /^[A-Z]$/.test(letter) ? `leader-letter-${letter}` : undefined} className="musician-card leadership-directory-card" key={entry.id}>
                 {entry.portraitPath ? (
