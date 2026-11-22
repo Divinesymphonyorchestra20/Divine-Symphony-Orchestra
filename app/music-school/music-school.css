@@ -37,3 +37,19 @@
 .dso-school-portal-note{padding:18px;border:1px solid rgba(255,255,255,.22);border-radius:9px}
 @media(max-width:900px){.dso-school-learning-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dso-school-instructor-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:650px){.dso-school-hero{min-height:420px;padding-top:70px;padding-bottom:70px}.dso-school-intro,.dso-school-learning,.dso-school-instruments,.dso-school-team,.dso-school-application{padding:52px 22px}.dso-school-intro,.dso-school-application{grid-template-columns:1fr;gap:20px}.dso-school-learning-grid{grid-template-columns:1fr}.dso-school-instructor-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dso-school-instructor>img,.dso-school-initials{height:150px}}
+
+
+/* Instructor portraits use the complete uploaded image rather than a cropped fill */
+.dso-school-instructor > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  object-position: center;
+  background: #f3edf4;
+}
+.dso-school-initials {
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
