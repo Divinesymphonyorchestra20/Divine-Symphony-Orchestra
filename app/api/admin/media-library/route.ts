@@ -99,6 +99,9 @@ export async function PUT(request: NextRequest) {
   if (body.status === "published" && !body.altText.trim()) {
     return NextResponse.json({ error: "Add alternative text before publishing this image." }, { status: 400 });
   }
+  if (body.status === "published" && !["approved", "not_required"].includes(String(body.permissionStatus || ""))) {
+    return NextResponse.json({ error: "Confirm that DSO has permission to publish this image, or mark permission as not required, before publishing it." }, { status: 400 });
+  }
   if (!isDatabaseContentStoreEnabled()) {
     return NextResponse.json({ error: "The shared media library is available on the development Preview only." }, { status: 503 });
   }
