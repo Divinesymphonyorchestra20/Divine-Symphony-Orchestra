@@ -9,7 +9,7 @@ import { readInstitutionalStore } from "../../../../lib/institutional-cms";
 import { readSiteContent } from "../../../../lib/site-content-cms";
 import { readPatronStore } from "../../../../lib/patron-cms";
 import { mediaBlobPathFromUrl } from "../../../../lib/media-store";
-import { readBlobMediaAssets, writeBlobMediaAssets, updateBlobMediaAsset, type BlobMediaAsset } from "../../../../lib/blob-media-library";
+import { readBlobMediaAssets, writeBlobMediaAssets, updateBlobMediaAsset, deleteBlobMediaAsset, type BlobMediaAsset } from "../../../../lib/blob-media-library";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -88,6 +88,7 @@ async function readBlobFallbackAssets(): Promise<Array<BlobMediaAsset & { usages
   for (const asset of assets) {
     const usages = usagesByPath.get(asset.blob_path) || [];
     if (usages.some(usage => usage.placement?.startsWith("published")) && asset.status === "draft") { asset.status = "published"; changed = true; }
+    if (JSON.stringify(asset.usages || []) !== JSON.stringify(usages)) changed = true;
     asset.usages = usages;
   }
   if (changed) await writeBlobMediaAssets(assets);
@@ -247,5 +248,30 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ error: "The media changes could not be saved." }, { status: 503 });
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  if (!(await hasAdminPermission(request, "media.archive"))) {
+    return NextResponse.json({ error: "You do not have permission to delete media." }, { status: 403 });
+  }
+  const body = await request.json().catch(() => null) as { id?: string } | null;
+  if (!body?.id || !/^[0-9a-f-]{36}$/i.test(body.id)) {
+    return NextResponse.json({ error: "A valid media record ID is required." }, { status: 400 });
+  }
+  if (isDatabaseContentStoreEnabled()) {
+    return NextResponse.json({ error: "Permanent deletion is disabled for the relational media store. Archive unused media instead." }, { status: 409 });
+  }
+  try {
+    const assets = await readBlobFallbackAssets();
+    const asset = assets.find(item => item.id === body.id);
+    if (!asset) return NextResponse.json({ error: "That media record could not be found." }, { status: 404 });
+    if (asset.status !== "archived" || asset.usages.length > 0) {
+      return NextResponse.json({ error: "Only archived media with no page or record usage can be permanently deleted." }, { status: 409 });
+    }
+    await deleteBlobMediaAsset(asset.id);
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    return NextResponse.json({ error: error instanceof Error ? error.message : "The media file could not be deleted." }, { status: 500 });
   }
 }
