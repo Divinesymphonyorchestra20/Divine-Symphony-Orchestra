@@ -2301,3 +2301,25 @@ a.dso-contact-social-card:hover{transform:translateY(-2px);border-color:#c9afd2;
     gap: 6px;
   }
 }
+
+
+/* Institutional page visual controls */
+.dso-institutional-hero{background-color:#35063b;background-size:cover;background-repeat:no-repeat;background-position:center;}
+.dso-institutional-hero.dso-hero-compact{min-height:330px;}
+.dso-institutional-hero.dso-hero-standard{min-height:440px;}
+.dso-institutional-hero.dso-hero-tall{min-height:560px;}
+.dso-institutional-hero .inner-page-hero-copy{max-width:760px;}
+.dso-institutional-hero.dso-hero-center .inner-page-hero-copy{margin-left:auto;margin-right:auto;padding-left:24px;text-align:center;}
+.dso-institutional-hero.dso-hero-center .inner-page-hero-copy>p:last-child{margin-left:auto;margin-right:auto;}
+.dso-hero-overlay-strong{background:linear-gradient(90deg,rgba(43,3,49,.97) 0%,rgba(62,5,67,.83) 48%,rgba(48,4,51,.32) 100%);}
+.dso-hero-overlay-balanced{background:linear-gradient(90deg,rgba(43,3,49,.82),rgba(48,4,51,.34));}
+.dso-hero-overlay-light{background:linear-gradient(90deg,rgba(43,3,49,.58),rgba(48,4,51,.12));}
+.dso-hero-overlay-none{background:transparent;}
+.dso-institutional-cta{display:inline-flex;align-items:center;gap:12px;margin-top:26px;padding:13px 19px;border:1px solid rgba(255,255,255,.8);border-radius:4px;color:#fff;text-decoration:none;font-size:12px;font-weight:700;}
+.dso-institutional-cta:hover{background:#fff;color:#35063b;}
+.dso-section-accent{background:linear-gradient(135deg,#3a0640,#68105f);color:#fff;}
+.dso-section-accent h2,.dso-section-accent p:not(.eyebrow){color:#fff;}
+.dso-section-accent .eyebrow{color:#f4d000;}
+.dso-preview-footer{display:flex;flex-direction:column;gap:8px;padding:34px 7%;background:#27042d;color:#fff;font-size:12px;}
+.dso-preview-footer span{color:#e7dbe9;}
+@media(max-width:620px){.dso-institutional-hero.dso-hero-compact{min-height:300px}.dso-institutional-hero.dso-hero-standard{min-height:380px}.dso-institutional-hero.dso-hero-tall{min-height:460px}.dso-institutional-hero.dso-hero-center .inner-page-hero-copy{padding-left:18px;padding-right:18px}}
