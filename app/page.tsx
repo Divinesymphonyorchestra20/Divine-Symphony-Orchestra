@@ -79,7 +79,7 @@ export default async function Home() {
       </div>
       <a className="solid-cta" href={c.event.href}>{c.event.button} <span aria-hidden="true">→</span></a>
     </section>}
-    {show("media") && c.media.items.length > 0 && <section className="home-media-band"><div className="home-media-heading"><p className="eyebrow dark">{c.media.eyebrow}</p><h2>{c.media.title}</h2><p>{c.media.text}</p></div><div className="home-media-grid">{c.media.items.map((item,index)=><a className="home-media-card" href={item.href || "/gallery"} key={item.title + index}><img src={item.image.src} alt={item.image.alt || item.title}/><span>{item.title}</span></a>)}</div></section>}
+    {show("media") && c.media.items.length > 0 && <section className="home-media-band"><div className="home-media-heading"><p className="eyebrow dark">{c.media.eyebrow}</p><h2>{c.media.title}</h2><p>{c.media.text}</p></div><div className="home-media-grid">{c.media.items.map((item,index)=><a className="home-media-card" href={item.href || "/gallery"} key={item.title + index}><img src={item.image.src} alt={item.image.alt || item.title} style={{objectPosition:item.image.position || "50% 50%"}}/><span>{item.title}</span></a>)}</div></section>}
     {show("news") && <section className="home-news-band" aria-labelledby="home-news-title">
       <div className="home-news-inner">
         <p className="eyebrow dark">{c.news.eyebrow}</p>
