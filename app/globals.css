@@ -2323,3 +2323,15 @@ a.dso-contact-social-card:hover{transform:translateY(-2px);border-color:#c9afd2;
 .dso-preview-footer{display:flex;flex-direction:column;gap:8px;padding:34px 7%;background:#27042d;color:#fff;font-size:12px;}
 .dso-preview-footer span{color:#e7dbe9;}
 @media(max-width:620px){.dso-institutional-hero.dso-hero-compact{min-height:300px}.dso-institutional-hero.dso-hero-standard{min-height:380px}.dso-institutional-hero.dso-hero-tall{min-height:460px}.dso-institutional-hero.dso-hero-center .inner-page-hero-copy{padding-left:18px;padding-right:18px}}
+
+
+/* Homepage selected media strip */
+.home-media-band{padding:76px max(6%,calc((100% - 1160px)/2));background:#faf8fb;}
+.home-media-heading{max-width:760px;margin:0 auto 28px;text-align:center;}
+.home-media-heading h2{font:600 clamp(30px,4vw,44px)/1.15 "Playfair Display",serif;color:#302436;margin:0 0 12px;}
+.home-media-heading>p:last-child{font-size:14px;line-height:1.8;color:#6f6672;}
+.home-media-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;}
+.home-media-card{display:flex;flex-direction:column;overflow:hidden;border-radius:10px;background:#fff;border:1px solid #e7dfe8;color:#302436;text-decoration:none;}
+.home-media-card img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;}
+.home-media-card span{padding:14px 16px;font-size:12px;font-weight:700;}
+@media(max-width:620px){.home-media-band{padding:54px 16px}.home-media-grid{grid-template-columns:1fr;gap:12px}}
