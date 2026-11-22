@@ -80,7 +80,12 @@ function valid(value: unknown): value is SiteContent {
       return Array.isArray(links) && links.length <= 20 && links.every(link => link && typeof link.label === "string" && link.label.trim().length > 0 && link.label.length <= 100 && safeUrl(link.href));
     })
   );
-  return eventsValid && newsValid && albumsValid && contactValid && settingsValid && JSON.stringify(data).length <= 500_000;
+  const actionPages = data.actionPages;
+  const actionPagesValid = actionPages === undefined || (["support","join"] as const).every(key => {
+    const page = actionPages[key];
+    return page && ["heroEyebrow","title","heroText","sectionEyebrow","sectionTitle","intro","note","ctaEyebrow","ctaTitle","ctaText","ctaButton"].every(field => typeof (page as unknown as Record<string, unknown>)[field] === "string" && String((page as unknown as Record<string, unknown>)[field]).length <= 8000) && safeUrl(page.ctaHref) && Array.isArray(page.cards) && page.cards.length <= 12 && page.cards.every(card => card && typeof card.number === "string" && card.number.length <= 20 && typeof card.title === "string" && card.title.trim().length > 0 && card.title.length <= 180 && typeof card.description === "string" && card.description.length <= 4000);
+  });
+  return eventsValid && newsValid && albumsValid && contactValid && settingsValid && actionPagesValid && JSON.stringify(data).length <= 500_000;
 }
 
 export async function GET(request: NextRequest) {
