@@ -30,7 +30,7 @@ export default function InstitutionalPageContent({ page, showEditorialNote = fal
   const sections = page.sections.filter(section => section.visible !== false);
   const items = page.items.filter(item => item.visible !== false);
   return <>
-    <section className={`inner-page-hero dso-institutional-hero dso-hero-${page.heroHeight || "standard"} dso-hero-${page.heroAlignment || "left"}`} style={page.heroImage ? { backgroundImage: `url("${page.heroImage}")`, backgroundPosition: page.heroImagePosition || "center" } : undefined}>
+    <section aria-label={page.heroImage ? page.heroImageAlt || page.title : undefined} className={`inner-page-hero dso-institutional-hero dso-hero-${page.heroHeight || "standard"} dso-hero-${page.heroAlignment || "left"}`} style={page.heroImage ? { backgroundImage: `url("${page.heroImage}")`, backgroundPosition: page.heroImagePosition || "center" } : undefined}>
       <div className={`inner-page-hero-shade dso-hero-overlay-${page.heroOverlay || "strong"}`} />
       <div className="inner-page-hero-copy">
         <p className="eyebrow">{page.eyebrow}</p>
