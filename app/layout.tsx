@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./music-school/music-school.css";
+import { readPublishedHomepage } from "../lib/homepage-cms";
+
+export const dynamic = "force-dynamic";
 
 const siteUrl = new URL("https://divine-symphony-orchestra.vercel.app");
 
@@ -32,6 +35,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body>{children}</body></html>;
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const theme = (await readPublishedHomepage()).theme;
+  const design = { "--purple": theme.purple, "--plum": theme.plum, "--magenta": theme.magenta, "--gold": theme.gold } as React.CSSProperties;
+  return <html lang="en"><body style={design}>{children}</body></html>;
 }
