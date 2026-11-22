@@ -8,6 +8,7 @@ import { readSiteContent } from "../../../../lib/site-content-cms";
 import { queryDatabase } from "../../../../db/client";
 import { readPatronStore } from "../../../../lib/patron-cms";
 import { isDatabaseContentStoreEnabled } from "../../../../lib/content-store";
+import { readBlobMediaAssets } from "../../../../lib/blob-media-library";
 
 export const runtime="nodejs";export const dynamic="force-dynamic";
 const peopleDatabaseAvailable = isDatabaseContentStoreEnabled();
@@ -71,6 +72,13 @@ export async function GET(request: NextRequest, context: { params: Promise<{ pat
       [key],
     );
     archived = asset.rows[0]?.status === "archived";
+  } else {
+    try {
+      const assets = await readBlobMediaAssets();
+      archived = assets.find(asset => asset.blob_path === key)?.status === "archived";
+    } catch {
+      archived = false;
+    }
   }
   const publiclyAvailable = (published || publishedPeopleImage) && !archived;
   if (!publiclyAvailable && !isAdmin) return new NextResponse("Not found", { status: 404 });
