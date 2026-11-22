@@ -53,7 +53,7 @@ export const defaultHomepageContent: HomepageContent = {
   media: { eyebrow: "In performance", title: "Moments through music", text: "Selected photographs and performance highlights from Divine Symphony Orchestra.", items: [] },
   sections: [
     { id: "hero", visible: true }, { id: "links", visible: true }, { id: "history", visible: true },
-    { id: "feature", visible: true }, { id: "event", visible: true }, { id: "media", visible: true }
+    { id: "feature", visible: true }, { id: "event", visible: true }, { id: "media", visible: true }, { id: "news", visible: true }
   ]
 };
 
@@ -92,11 +92,19 @@ export async function readHomepageStore(): Promise<HomepageStore> {
     contentType: "homepage", slug: "homepage", title: "DSO Homepage",
     readLegacy: readLegacyHomepageStore, fallback: fallbackHomepageStore,
   });
+  const withSectionDefaults = (content: HomepageContent): HomepageContent => ({
+    ...content,
+    sections: [
+      ...content.sections,
+      ...defaultHomepageContent.sections.filter(section => !content.sections.some(existing => existing.id === section.id)),
+    ],
+  });
+  const normalized = { ...store, draft: withSectionDefaults(store.draft), published: withSectionDefaults(store.published) };
   await syncContentMediaUsage("homepage", "homepage", [
-    ...homepageMediaReferences(store.published, "published"),
-    ...homepageMediaReferences(store.draft, "draft"),
+    ...homepageMediaReferences(normalized.published, "published"),
+    ...homepageMediaReferences(normalized.draft, "draft"),
   ]);
-  return store;
+  return normalized;
 }
 
 export async function writeHomepageStore(store: HomepageStore, options: { publish?: boolean } = {}): Promise<void> {
