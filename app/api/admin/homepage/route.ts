@@ -13,8 +13,11 @@ export async function GET(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   if (!(await hasAdminPermission(request, "content.publish"))) return NextResponse.json({ error: "You do not have permission to publish homepage changes." }, { status: (await verifyAdminSession(request)) ? 403 : 401 });
   const body = await request.json().catch(() => null) as { action?: string; content?: HomepageStore["draft"] } | null;
-  if (!body || !body.content || body.content.version !== 1 || !Array.isArray(body.content.sections) || !Array.isArray(body.content.links) || !body.content.hero || !body.content.feature || !body.content.theme || !["purple","plum","magenta","gold"].every(key => /^#[0-9a-f]{6}$/i.test(String(body.content?.theme?.[key as keyof typeof body.content.theme] || "")))) {
+  if (!body || !body.content || body.content.version !== 1 || !Array.isArray(body.content.sections) || !Array.isArray(body.content.links) || !body.content.hero || !body.content.feature || !body.content.theme || !body.content.news) {
     return NextResponse.json({ error: "The submitted homepage content is not valid." }, { status: 400 });
+  }
+  if (![body.content.theme.purple, body.content.theme.plum, body.content.theme.magenta, body.content.theme.gold].every(value => typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value))) {
+    return NextResponse.json({ error: "All four site colours must be valid six-digit hex values." }, { status: 400 });
   }
   const safeHref = (value: string) => typeof value === "string" && (value.startsWith("/") && !value.startsWith("//") || /^https:\/\//i.test(value));
   const safeImage = (value: string) => typeof value === "string" && (value.startsWith("/images/") || value.startsWith("/api/media/") || /^https:\/\//i.test(value));
