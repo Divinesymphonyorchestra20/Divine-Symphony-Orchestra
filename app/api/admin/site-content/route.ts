@@ -85,7 +85,13 @@ function valid(value: unknown): value is SiteContent {
     const page = actionPages[key];
     return page && ["heroEyebrow","title","heroText","sectionEyebrow","sectionTitle","intro","note","ctaEyebrow","ctaTitle","ctaText","ctaButton"].every(field => typeof (page as unknown as Record<string, unknown>)[field] === "string" && String((page as unknown as Record<string, unknown>)[field]).length <= 8000) && safeUrl(page.ctaHref) && Array.isArray(page.cards) && page.cards.length <= 12 && page.cards.every(card => card && typeof card.number === "string" && card.number.length <= 20 && typeof card.title === "string" && card.title.trim().length > 0 && card.title.length <= 180 && typeof card.description === "string" && card.description.length <= 4000);
   });
-  return eventsValid && newsValid && albumsValid && contactValid && settingsValid && actionPagesValid && JSON.stringify(data).length <= 500_000;
+  const musicSchool = data.musicSchool;
+  const musicSchoolValid = musicSchool === undefined || (
+    ["heroEyebrow","heroTitle","heroEmphasis","heroText","heroButton","introEyebrow","introTitle","learningEyebrow","learningTitle","learningText","instrumentsEyebrow","instrumentsTitle","instrumentsText","instrumentsLinkLabel","teamEyebrow","teamTitle","teamText"].every(field => typeof (musicSchool as unknown as Record<string, unknown>)[field] === "string" && String((musicSchool as unknown as Record<string, unknown>)[field]).length <= 8000) &&
+    safeUrl(musicSchool.instrumentsLinkHref) && Array.isArray(musicSchool.introParagraphs) && musicSchool.introParagraphs.length <= 8 && musicSchool.introParagraphs.every(item => typeof item === "string" && item.length <= 8000) &&
+    Array.isArray(musicSchool.learningAreas) && musicSchool.learningAreas.length <= 12 && musicSchool.learningAreas.every(card => card && typeof card.number === "string" && card.number.length <= 20 && typeof card.title === "string" && card.title.trim().length > 0 && card.title.length <= 180 && typeof card.description === "string" && card.description.length <= 4000)
+  );
+  return eventsValid && newsValid && albumsValid && contactValid && settingsValid && actionPagesValid && musicSchoolValid && JSON.stringify(data).length <= 500_000;
 }
 
 export async function GET(request: NextRequest) {
