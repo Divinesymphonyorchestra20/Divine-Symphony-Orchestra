@@ -9,7 +9,7 @@ export type HomepageContent = {
   version: 1;
   updatedAt: string;
   theme: { purple: string; plum: string; magenta: string; gold: string };
-  hero: { eyebrow: string; title: string; accent: string; text: string; button: string; href: string; image: HomeImage };
+  hero: { eyebrow: string; title: string; accent: string; text: string; button: string; href: string; image: HomeImage; secondaryButton?: string; secondaryHref?: string };
   links: HomeLink[];
   history: { eyebrow: string; title: string; text: string; button: string; href: string };
   feature: { eyebrow: string; title: string; accent: string; text: string; button: string; href: string; image: HomeImage };
@@ -25,7 +25,7 @@ export const defaultHomepageContent: HomepageContent = {
   hero: {
     eyebrow: "Music for Inspiration • Excellence • Impact", title: "Divine Symphony", accent: "Orchestra",
     text: "A shared love of music. A commitment to excellence. A sound that brings people together.",
-    button: "Discover DSO", href: "/about",
+    button: "Discover DSO", href: "/about", secondaryButton: "Gallery", secondaryHref: "/gallery",
     image: { src: "/images/hero-main-stage.jpg", alt: "Divine Symphony Orchestra performing on stage", position: "50% 42%", caption: "", credit: "" }
   },
   links: [
