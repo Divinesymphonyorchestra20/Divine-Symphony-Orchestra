@@ -4,7 +4,7 @@ import { slugify } from "../lib/slug";
 
 function InstitutionalItemCard({ item, pageKey }: { item: InstitutionalPage["items"][number]; pageKey: InstitutionalPage["key"] }) {
   const content = <>
-    {item.image && <img className="institutional-item-image" src={item.image} alt={item.imageAlt || item.title} />}
+    {item.image && <img className="institutional-item-image" src={item.image} alt={item.imageAlt || item.title} style={{objectPosition:item.imagePosition || "50% 50%"}} />}
     {item.year && <p className="eyebrow dark">{item.year}</p>}
     {item.category && <small className="institutional-item-category">{item.category}</small>}
     <h3>{item.title}</h3>
