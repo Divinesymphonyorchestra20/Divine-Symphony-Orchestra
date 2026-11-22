@@ -100,7 +100,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "You do not have permission to manage media." }, { status: 403 });
   }
   if (!isDatabaseContentStoreEnabled()) {
-    try { return NextResponse.json({ assets: await readBlobFallbackAssets() }, { headers: { "Cache-Control": "no-store" } }); }
+    try { return NextResponse.json({ assets: await readBlobFallbackAssets(), allowPermanentDelete: true }, { headers: { "Cache-Control": "no-store" } }); }
     catch { return NextResponse.json({ error: "The private media library could not be loaded." }, { status: 503 }); }
   }
   try {
