@@ -2090,3 +2090,67 @@ a.dso-contact-social-card:hover{transform:translateY(-2px);border-color:#c9afd2;
   .people-directory-search-control{gap:6px}
   .people-directory-search-control button{padding:8px 10px}
 }
+
+
+/* DSO people portraits: larger square cards and uncropped source photography */
+.musician-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.musician-portrait,
+.musician-placeholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  object-position: center;
+  background: #f3edf4;
+}
+.musician-profile-portrait,
+.people-leadership-preview-portrait {
+  object-fit: contain;
+  object-position: center;
+  background: #f3edf4;
+}
+@media (min-width: 1500px) {
+  .musician-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (max-width: 620px) {
+  .musician-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .musician-card-copy {
+    min-height: 0;
+    padding: 10px 9px 12px;
+  }
+  .musician-card-copy h3 {
+    font-size: 13px;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+  .musician-instruments {
+    gap: 4px;
+  }
+  .musician-instruments li {
+    padding: 4px 6px;
+    font-size: 7px;
+  }
+  .musician-placeholder span {
+    width: 54px;
+    height: 54px;
+    font-size: 18px;
+  }
+}
+@media (max-width: 360px) {
+  .musician-grid {
+    gap: 7px;
+  }
+  .musician-card-copy {
+    padding: 9px 7px 10px;
+  }
+  .musician-card-copy h3 {
+    font-size: 12px;
+  }
+}
