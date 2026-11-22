@@ -4,9 +4,9 @@ import { mediaBlobPathFromUrl, syncContentMediaUsage } from "./media-store";
 import { uniqueSlug } from "./slug";
 
 export type InstitutionalKey = "about" | "heritage" | "story" | "legacy" | "orchestra" | "members" | "music" | "ministry";
-export type InstitutionalSection = { heading: string; body: string; visible?: boolean };
+export type InstitutionalSection = { heading: string; body: string; visible?: boolean; variant?: "plain" | "tinted" | "accent" };
 export type InstitutionalItem = { id?: string; slug?: string; title: string; subtitle?: string; description: string; category?: string; year?: string; role?: string; instrument?: string; image?: string; imageAlt?: string; mediaUrl?: string; credit?: string; link?: string; visible?: boolean };
-export type InstitutionalPage = { key: InstitutionalKey; eyebrow: string; title: string; emphasis: string; intro: string; sections: InstitutionalSection[]; items: InstitutionalItem[]; note?: string };
+export type InstitutionalPage = { key: InstitutionalKey; eyebrow: string; title: string; emphasis: string; intro: string; sections: InstitutionalSection[]; items: InstitutionalItem[]; note?: string; heroImage?: string; heroImageAlt?: string; heroImagePosition?: string; heroOverlay?: "strong" | "balanced" | "light" | "none"; heroHeight?: "compact" | "standard" | "tall"; heroAlignment?: "left" | "center"; ctaLabel?: string; ctaHref?: string };
 export type InstitutionalStore = { version: 1; updatedAt: string; draft: Record<InstitutionalKey, InstitutionalPage>; published: Record<InstitutionalKey, InstitutionalPage> };
 export const institutionalKeys: InstitutionalKey[] = ["about","heritage","story","legacy","orchestra","members","music","ministry"];
 export const institutionalLabels: Record<InstitutionalKey,string> = {about:"About DSO",heritage:"Our Heritage",story:"Our Story",legacy:"Our Legacy",orchestra:"The Orchestra",members:"Meet the Members",music:"Music & Performances",ministry:"Ministry & Impact"};
@@ -52,14 +52,16 @@ function ensureHeritageBiography(pages:Record<InstitutionalKey,InstitutionalPage
  return {...pages,heritage:{...page,sections}};
 }
 function institutionalMediaReferences(pages: Record<InstitutionalKey, InstitutionalPage>, state: "draft" | "published") {
-  return institutionalKeys.flatMap(key => pages[key].items.flatMap((item, index) => {
-    const blobPath = mediaBlobPathFromUrl(item.image);
-    return blobPath ? [{
-      blobPath, fieldKey: `institutional.${key}.items.${index}`,
-      placement: `${state}:${key}`, sortOrder: index,
-      altText: item.imageAlt || "", caption: item.description || "", credit: item.credit || "", state,
-    }] : [];
-  }));
+  return institutionalKeys.flatMap(key => {
+    const page = pages[key];
+    const heroPath = mediaBlobPathFromUrl(page.heroImage);
+    const hero = heroPath ? [{ blobPath: heroPath, fieldKey: `institutional.${key}.heroImage`, placement: `${state}:${key}:hero`, sortOrder: -1, altText: page.heroImageAlt || "", caption: page.intro || "", credit: "", state }] : [];
+    const items = page.items.flatMap((item, index) => {
+      const blobPath = mediaBlobPathFromUrl(item.image);
+      return blobPath ? [{ blobPath, fieldKey: `institutional.${key}.items.${index}`, placement: `${state}:${key}`, sortOrder: index, altText: item.imageAlt || "", caption: item.description || "", credit: item.credit || "", state }] : [];
+    });
+    return [...hero, ...items];
+  });
 }
 
 async function readLegacyInstitutionalStore(): Promise<InstitutionalStore | null> {
