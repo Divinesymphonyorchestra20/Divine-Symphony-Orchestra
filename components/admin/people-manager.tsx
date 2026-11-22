@@ -56,9 +56,21 @@ export default function PeopleManager() {
   const [mediaNotice, setMediaNotice] = useState("");
   const [preview, setPreview] = useState<PreviewData | null>(null);
   const [slugEdited, setSlugEdited] = useState(false);
+  const [recordSearch, setRecordSearch] = useState("");
 
   const resource: Resource = tab === "instruments" ? instrumentMode === "groups" ? "instrument-groups" : "instruments" : tab;
   const currentRecords = records[resource];
+  const filteredRecords = useMemo(() => {
+    const query = recordSearch.trim().toLocaleLowerCase();
+    if (!query) return currentRecords;
+    const searchableText = (value: unknown): string => {
+      if (typeof value === "string" || typeof value === "number") return String(value);
+      if (Array.isArray(value)) return value.map(searchableText).join(" ");
+      if (value && typeof value === "object") return Object.values(value as Record<string, unknown>).map(searchableText).join(" ");
+      return "";
+    };
+    return currentRecords.filter(record => searchableText(record).toLocaleLowerCase().includes(query));
+  }, [currentRecords, recordSearch]);
   const groups = records["instrument-groups"] as unknown as InstrumentGroup[];
   const instruments = records.instruments as unknown as Instrument[];
 
@@ -376,16 +388,31 @@ export default function PeopleManager() {
       <Link href="/admin">Back to dashboard</Link>
     </header>
     <nav className="dso-people-tabs" aria-label="People management sections">
-      {tabs.map(item => <button key={item.key} type="button" className={tab === item.key ? "active" : ""} onClick={() => { setTab(item.key); setForm(emptyForms[item.key === "instruments" ? instrumentMode === "groups" ? "instrument-groups" : "instruments" : item.key]); setSlugEdited(false); setPreview(null); setNotice(null); }}>{item.label}</button>)}
+      {tabs.map(item => <button key={item.key} type="button" className={tab === item.key ? "active" : ""} onClick={() => { setTab(item.key); setRecordSearch(""); setForm(emptyForms[item.key === "instruments" ? instrumentMode === "groups" ? "instrument-groups" : "instruments" : item.key]); setSlugEdited(false); setPreview(null); setNotice(null); }}>{item.label}</button>)}
     </nav>
     <div className="dso-people-admin-layout">
       <section className="dso-people-records">
         <div className="dso-people-section-heading"><div><p className="dso-kicker">RECORDS</p><h2>{displayName} ({currentRecords.length})</h2></div>
           <button type="button" className="dso-add-button" onClick={addRecord}>+ Add {resource === "instrument-groups" ? "group" : resource === "instruments" ? "instrument" : resource === "musicians" ? "musician" : resource === "leadership" ? "assignment" : resource === "alumni" ? "alumnus" : "contributor"}</button>
         </div>
-        {tab === "instruments" && <div className="dso-people-subtabs"><button className={instrumentMode === "groups" ? "active" : ""} type="button" onClick={() => { setInstrumentMode("groups"); setForm(emptyForms["instrument-groups"]); setSlugEdited(false); }}>Instrument groups</button><button className={instrumentMode === "instruments" ? "active" : ""} type="button" onClick={() => { setInstrumentMode("instruments"); setForm(emptyForms.instruments); setSlugEdited(false); }}>Instruments</button></div>}
+        {tab === "instruments" && <div className="dso-people-subtabs"><button className={instrumentMode === "groups" ? "active" : ""} type="button" onClick={() => { setInstrumentMode("groups"); setRecordSearch(""); setForm(emptyForms["instrument-groups"]); setSlugEdited(false); }}>Instrument groups</button><button className={instrumentMode === "instruments" ? "active" : ""} type="button" onClick={() => { setInstrumentMode("instruments"); setRecordSearch(""); setForm(emptyForms.instruments); setSlugEdited(false); }}>Instruments</button></div>}
         {recordErrors[resource] && <p className="dso-people-notice error" role="alert">{recordErrors[resource]} <button type="button" className="dso-secondary" onClick={() => void load()}>Retry</button></p>}
-        {busy ? <p>Loading People records…</p> : currentRecords.length ? <div className="dso-people-list">{currentRecords.map(record => {
+        <div className="dso-people-search">
+          <label htmlFor="dso-people-record-search">Search {displayName?.toLocaleLowerCase() || "records"}</label>
+          <div className="dso-people-search-control">
+            <input
+              id="dso-people-record-search"
+              type="search"
+              value={recordSearch}
+              onChange={event => setRecordSearch(event.target.value)}
+              placeholder="Type a name or keyword..."
+              autoComplete="off"
+            />
+            {recordSearch && <button type="button" onClick={() => setRecordSearch("")}>Clear</button>}
+          </div>
+          <small>{recordSearch.trim() ? `Showing ${filteredRecords.length} of ${currentRecords.length} records` : `${currentRecords.length} records available`}</small>
+        </div>
+        {busy ? <p>Loading People records…</p> : filteredRecords.length ? <div className="dso-people-list">{filteredRecords.map(record => {
           const id = valueAsText(record.id);
           const label = titleOf(record);
           return <article key={id} className="dso-people-list-row">
@@ -396,7 +423,7 @@ export default function PeopleManager() {
             </button>
             {(resource === "instrument-groups" || resource === "instruments") && record.active === true && <button type="button" className="dso-remove-button" onClick={() => void deactivate(record)}>Deactivate</button>}
           </article>;
-        })}</div> : <p className="dso-people-empty">{recordErrors[resource] ? "Records could not be loaded. Use Retry above to try again." : "No records yet. Add verified People content when approved details are available."}</p>}
+        })}</div> : <p className="dso-people-empty">{recordSearch.trim() ? "No records match that search. Try another name or clear the search." : recordErrors[resource] ? "Records could not be loaded. Use Retry above to try again." : "No records yet. Add verified People content when approved details are available."}</p>}
       </section>
       <section className="dso-people-editor">
         <div className="dso-people-section-heading"><div><p className="dso-kicker">EDITING</p><h2>{valueAsText(form.id) ? "Edit record" : "New record"}</h2></div><button type="button" className="dso-secondary" onClick={addRecord}>Clear</button></div>
