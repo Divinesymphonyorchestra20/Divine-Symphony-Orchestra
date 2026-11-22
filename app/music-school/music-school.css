@@ -53,3 +53,43 @@
   height: auto;
   aspect-ratio: 1 / 1;
 }
+
+
+/* Match instructor portraits to the shared compact people-card layout */
+.dso-school-instructor-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+.dso-school-instructor {
+  min-width: 0;
+}
+.dso-school-instructor > img,
+.dso-school-initials {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  object-position: center;
+  background: #f3edf4;
+}
+@media (max-width: 900px) {
+  .dso-school-instructor-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+  }
+}
+@media (max-width: 620px) {
+  .dso-school-instructor-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 9px;
+  }
+  .dso-school-instructor-copy {
+    padding: 9px 8px 10px;
+    gap: 5px;
+  }
+  .dso-school-instructor-copy strong {
+    font-size: 12px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+}
