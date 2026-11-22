@@ -1,4 +1,4 @@
-import { get, put } from "@vercel/blob";
+import { del, get, put } from "@vercel/blob";
 
 export type BlobMediaAsset = {
   id: string;
@@ -54,4 +54,18 @@ export async function updateBlobMediaAsset(id: string, patch: Partial<BlobMediaA
   assets[index] = { ...assets[index], ...patch };
   await writeBlobMediaAssets(assets);
   return assets[index];
+}
+
+export async function deleteBlobMediaAsset(id: string): Promise<boolean> {
+  const assets = await readBlobMediaAssets();
+  const index = assets.findIndex(item => item.id === id);
+  if (index < 0) return false;
+  const asset = assets[index];
+  if (asset.status !== "archived" || (asset.usages?.length || 0) > 0) {
+    throw new Error("Only archived, unused media can be permanently deleted.");
+  }
+  await del(asset.blob_path, { access: "private" });
+  assets.splice(index, 1);
+  await writeBlobMediaAssets(assets);
+  return true;
 }
