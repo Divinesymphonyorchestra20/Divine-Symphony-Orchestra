@@ -3,6 +3,7 @@ import Link from "next/link";
 import SiteHeader from "../../components/site-header";
 import SiteFooter from "../../components/site-footer";
 import { listPeopleRecords } from "../../lib/people-cms";
+import { readPublishedSiteContent } from "../../lib/site-content-cms";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -35,6 +36,7 @@ function initials(name: string) {
 }
 
 export default async function MusicSchoolPage() {
+  const pageContent = (await readPublishedSiteContent()).musicSchool!;
   let musicians: Musician[] = [];
   let directoryUnavailable = false;
   try {
@@ -54,54 +56,48 @@ export default async function MusicSchoolPage() {
       <section className="dso-school-hero">
         <div className="dso-school-hero-shade" />
         <div className="dso-school-hero-copy">
-          <p className="eyebrow">Learn with Divine Symphony Orchestra</p>
-          <h1>DSO <em>Music School</em></h1>
-          <p>Building musical skill, confidence and understanding through guided music education.</p>
-          <a className="dso-school-primary-link" href="#school-enquiries">Apply or enquire <span aria-hidden="true">→</span></a>
+          <p className="eyebrow">{pageContent.heroEyebrow}</p>
+          <h1>{pageContent.heroTitle} <em>{pageContent.heroEmphasis}</em></h1>
+          <p>{pageContent.heroText}</p>
+          <a className="dso-school-primary-link" href="#school-enquiries">{pageContent.heroButton} <span aria-hidden="true">→</span></a>
         </div>
       </section>
 
       <section className="dso-school-intro">
         <div>
-          <p className="eyebrow dark">About the school</p>
-          <h2>Music education with a practical foundation</h2>
+          <p className="eyebrow dark">{pageContent.introEyebrow}</p>
+          <h2>{pageContent.introTitle}</h2>
         </div>
         <div className="dso-school-intro-copy">
-          <p>DSO Music School is an educational initiative of Divine Symphony Orchestra. Its focus is to help learners develop instrumental ability, music knowledge and practical musicianship.</p>
-          <p>Learning is intended to connect individual study with the shared experience of making music. Opportunities for ensemble work and participation will depend on the programme and arrangements confirmed by the school.</p>
+          {pageContent.introParagraphs.map((paragraph,index)=><p key={index}>{paragraph}</p>)}
         </div>
       </section>
 
       <section className="dso-school-learning">
         <header>
-          <p className="eyebrow dark">What students can study</p>
-          <h2>Areas of learning</h2>
-          <p>The school’s teaching focus includes the following areas. Specific classes and availability will be confirmed with applicants.</p>
+          <p className="eyebrow dark">{pageContent.learningEyebrow}</p>
+          <h2>{pageContent.learningTitle}</h2>
+          <p>{pageContent.learningText}</p>
         </header>
         <div className="dso-school-learning-grid">
-          <article><span>01</span><h3>Instrumental instruction</h3><p>Guided development of technique, musical expression and confidence on an instrument.</p></article>
-          <article><span>02</span><h3>Music theory</h3><p>Understanding notation, rhythm, harmony and the language of music.</p></article>
-          <article><span>03</span><h3>Practical musicianship</h3><p>Building listening, timing, reading and performance skills through practical study.</p></article>
-          <article><span>04</span><h3>Exam preparation</h3><p>Preparation for ABRSM and other recognised music examinations, where appropriate.</p></article>
-          <article><span>05</span><h3>Ensemble experience</h3><p>Rehearsal and group music-making opportunities as arranged by the school.</p></article>
-          <article><span>06</span><h3>Orchestral development</h3><p>Learning that can support a student’s future readiness for ensemble and orchestral participation.</p></article>
+{pageContent.learningAreas.map(card=><article key={card.number}><span>{card.number}</span><h3>{card.title}</h3><p>{card.description}</p></article>)}
         </div>
       </section>
 
       <section className="dso-school-instruments">
         <div>
-          <p className="eyebrow dark">Instrument options</p>
-          <h2>Find the right place to begin</h2>
-          <p>The school’s confirmed instrument catalogue and current class availability are being finalised. Please contact DSO before making an application so the team can advise on current options.</p>
-          <a href="/contact?subject=DSO%20Music%20School%20instrument%20enquiry">Ask about instrument availability <span aria-hidden="true">→</span></a>
+          <p className="eyebrow dark">{pageContent.instrumentsEyebrow}</p>
+          <h2>{pageContent.instrumentsTitle}</h2>
+          <p>{pageContent.instrumentsText}</p>
+          <a href={pageContent.instrumentsLinkHref}>{pageContent.instrumentsLinkLabel} <span aria-hidden="true">→</span></a>
         </div>
       </section>
 
       <section className="dso-school-team">
         <header>
-          <p className="eyebrow dark">Meet the teaching team</p>
-          <h2>Musicians who guide the learning</h2>
-          <p>Instructor cards link to the existing DSO musician profiles. The school does not create separate biographies.</p>
+          <p className="eyebrow dark">{pageContent.teamEyebrow}</p>
+          <h2>{pageContent.teamTitle}</h2>
+          <p>{pageContent.teamText}</p>
         </header>
         {directoryUnavailable ? (
           <p className="dso-school-empty" role="status">The instructor directory is temporarily unavailable. Please check back soon.</p>
