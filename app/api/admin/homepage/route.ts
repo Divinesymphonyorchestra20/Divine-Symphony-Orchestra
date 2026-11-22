@@ -18,7 +18,7 @@ export async function PUT(request: NextRequest) {
   }
   const safeHref = (value: string) => typeof value === "string" && (value.startsWith("/") && !value.startsWith("//") || /^https:\/\//i.test(value));
   const safeImage = (value: string) => typeof value === "string" && (value.startsWith("/images/") || value.startsWith("/api/media/") || /^https:\/\//i.test(value));
-  const hrefs = [body.content.hero.href, body.content.history.href, body.content.feature.href, body.content.event.href, ...body.content.links.map(item => item.href), ...body.content.media.items.map(item => item.href)];
+  const hrefs = [body.content.hero.href, body.content.history.href, body.content.feature.href, body.content.event.href, body.content.news.href, ...body.content.links.map(item => item.href), ...body.content.media.items.map(item => item.href)];
   if (hrefs.some(value => !safeHref(value)) || (body.content.hero.secondaryHref && !safeHref(body.content.hero.secondaryHref))) {
     return NextResponse.json({ error: "Homepage links must use a site path or a secure HTTPS address." }, { status: 400 });
   }
