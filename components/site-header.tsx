@@ -57,7 +57,7 @@ export default function SiteHeader({active}:{active?:string}){
     <a className="brand" href="/" aria-label="Divine Symphony Orchestra home" onClick={close}>
       <Image className="brand-logo" src={settings.logoPath} alt={settings.brandName+" logo"} width={72} height={108} priority/>
       <span className="brand-divider" aria-hidden="true"/>
-      <span className="brand-wordmark">{settings.brandName.split(" ").map((word,index)=><span key={index}>{word}</span>)}</span>
+      <span className="brand-wordmark">{settings.brandName.replace(/([a-z])([A-Z])/g,"$1 $2").split(/\s+/).filter(Boolean).map((word,index)=><span key={index}>{word}</span>)}</span>
     </a>
     <button className="mobile-menu-toggle" type="button" aria-expanded={menuOpen} aria-controls="primary-navigation" onClick={()=>setMenuOpen(value=>!value)}>
       <span aria-hidden="true">{menuOpen?"×":"☰"}</span>{menuOpen?"Close menu":"Menu"}
