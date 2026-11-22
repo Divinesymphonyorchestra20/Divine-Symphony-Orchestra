@@ -11,7 +11,9 @@ function SocialMark({ label }: { label: string }) {
 }
 
 export default async function SiteFooter() {
-  const contact = (await readPublishedSiteContent()).contact;
+  const content = await readPublishedSiteContent();
+  const contact = content.contact;
+  const settings = content.siteSettings;
   const links = contact.socialLinks.filter(item => item.url);
   const socialUrl = (label: string) => links.find(item => item.label.trim().toLowerCase() === label.toLowerCase())?.url || "";
   const phone = contact.telephone.trim();
@@ -27,24 +29,18 @@ export default async function SiteFooter() {
     <footer className="site-footer dso-footer">
       <div className="dso-footer-brand">
         <a className="brand footer-brand" href="/" aria-label="Divine Symphony Orchestra home">
-          <Image className="footer-logo" src="/images/dso-logo-transparent.png" alt="Divine Symphony Orchestra" width={54} height={81} />
+          <Image className="footer-logo" src={settings?.logoPath || "/images/dso-logo-transparent.png"} alt={settings?.brandName || "Divine Symphony Orchestra"} width={54} height={81} />
         </a>
         <div>
-          <h2>Divine Symphony Orchestra</h2>
-          <p>Music for Inspiration • Excellence • Impact</p>
+          <h2>{settings?.brandName || "Divine Symphony Orchestra"}</h2>
+          <p>{settings?.tagline || "Music for Inspiration • Excellence • Impact"}</p>
         </div>
       </div>
 
       <div className="dso-footer-columns">
         <section>
           <h3>Explore</h3>
-          <a href="/">Home</a>
-          <a href="/history">Our History</a>
-          <a href="/music">Our Music</a>
-          <a href="/concerts-and-events">Concerts &amp; Events</a>
-          <a href="/gallery">Gallery</a>
-          <a href="/people">Our People</a>
-          <a href="/news">News &amp; Stories</a>
+          {(settings?.footerExploreLinks || []).map((link,index)=><a key={link.href+index} href={link.href}>{link.label}</a>)}
         </section>
         <section>
           <h3>Get in Touch</h3>
@@ -55,8 +51,7 @@ export default async function SiteFooter() {
         </section>
         <section>
           <h3>Be Part of DSO</h3>
-          <a href="/support">Support DSO</a>
-          <a href="/join-the-orchestra">Join the Orchestra</a>
+          {(settings?.footerCommunityLinks || []).map((link,index)=><a key={link.href+index} href={link.href}>{link.label}</a>)}
         </section>
       </div>
 
