@@ -74,6 +74,7 @@ function valid(value: unknown): value is SiteContent {
     typeof settings.brandName === "string" && settings.brandName.length <= 120 &&
     typeof settings.tagline === "string" && settings.tagline.length <= 240 &&
     typeof settings.logoPath === "string" && settings.logoPath.length <= 500 && (settings.logoPath.startsWith("/images/") || settings.logoPath.startsWith("/api/media/")) &&
+    ["historyMenuLabel","exploreMenuLabel","peopleMenuLabel","footerExploreTitle","footerContactTitle","footerCommunityTitle"].every(key => typeof (settings as unknown as Record<string, unknown>)[key] === "string" && String((settings as unknown as Record<string, unknown>)[key]).length <= 100) &&
     ["primaryLinks","historyLinks","peopleLinks","exploreLinks","footerExploreLinks","footerCommunityLinks"].every(key => {
       const links = (settings as unknown as Record<string, unknown>)[key];
       return Array.isArray(links) && links.length <= 20 && links.every(link => link && typeof link.label === "string" && link.label.trim().length > 0 && link.label.length <= 100 && safeUrl(link.href));
