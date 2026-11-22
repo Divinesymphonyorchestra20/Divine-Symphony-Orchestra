@@ -63,7 +63,7 @@ async function readBlobFallbackAssets(): Promise<Array<BlobMediaAsset & { usages
   site.news.forEach(item=>addUrl(item.image,"site_content",item.title,"news."+item.id,item.status,item.imageAlt,item.summary));
   site.albums.forEach(item=>addUrl(item.coverImage,"site_content",item.title,"gallery."+item.id,item.status,item.coverAlt,item.description));
   addUrl(site.siteSettings?.logoPath || "","site_settings","site branding","site_settings.logo","published",site.siteSettings?.brandName || "DSO logo");
-  if (patron.published.portrait.published && patron.published.portrait.pathname) refs.push({ blobPath: patron.published.portrait.pathname, contentType: "patron", slug: "Visionary Patron", fieldKey: "patron.portrait", placement: "published:patron", alt: patron.published.portrait.altText || "", caption: "", credit: "" });
+  if (patron.published.portrait.published && patron.published.portrait.pathname) refs.push({ blobPath: patron.published.portrait.pathname, contentType: "patron", slug: "Visionary Patron", fieldKey: "patron.portrait", placement: "published:patron", alt: patron.published.portrait.alt || "", caption: "", credit: "" });
   const usagesByPath = new Map<string, UsageRecord[]>();
   for (const ref of refs) {
     const current = usagesByPath.get(ref.blobPath) || [];
@@ -90,7 +90,7 @@ async function readBlobFallbackAssets(): Promise<Array<BlobMediaAsset & { usages
     if (usages.some(usage => usage.placement.startsWith("published")) && asset.status === "draft") { asset.status = "published"; changed = true; }
     asset.usages = usages;
   }
-  if (changed || assets.length) await writeBlobMediaAssets(assets);
+  if (changed) await writeBlobMediaAssets(assets);
   return assets.map(asset => ({ ...asset, usages: usagesByPath.get(asset.blob_path) || [] })).sort((a,b)=>b.created_at.localeCompare(a.created_at));
 }
 
