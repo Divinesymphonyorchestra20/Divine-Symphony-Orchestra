@@ -2337,3 +2337,7 @@ a.dso-contact-social-card:hover{transform:translateY(-2px);border-color:#c9afd2;
 @media(max-width:620px){.home-media-band{padding:54px 16px}.home-media-grid{grid-template-columns:1fr;gap:12px}}
 
 @media(max-width:620px){.site-header .brand-wordmark span{display:block;}}
+
+
+/* Keep the approved three-line DSO wordmark on desktop and mobile. */
+.site-header .brand-wordmark span{display:block;}
