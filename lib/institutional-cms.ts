@@ -5,7 +5,7 @@ import { uniqueSlug } from "./slug";
 
 export type InstitutionalKey = "about" | "heritage" | "story" | "legacy" | "orchestra" | "members" | "music" | "ministry";
 export type InstitutionalSection = { heading: string; body: string; visible?: boolean; variant?: "plain" | "tinted" | "accent" };
-export type InstitutionalItem = { id?: string; slug?: string; title: string; subtitle?: string; description: string; category?: string; year?: string; role?: string; instrument?: string; image?: string; imageAlt?: string; mediaUrl?: string; credit?: string; link?: string; visible?: boolean };
+export type InstitutionalItem = { id?: string; slug?: string; title: string; subtitle?: string; description: string; category?: string; year?: string; role?: string; instrument?: string; image?: string; imageAlt?: string; imagePosition?: string; mediaUrl?: string; credit?: string; link?: string; visible?: boolean };
 export type InstitutionalPage = { key: InstitutionalKey; eyebrow: string; title: string; emphasis: string; intro: string; sections: InstitutionalSection[]; items: InstitutionalItem[]; note?: string; heroImage?: string; heroImageAlt?: string; heroImagePosition?: string; heroOverlay?: "strong" | "balanced" | "light" | "none"; heroHeight?: "compact" | "standard" | "tall"; heroAlignment?: "left" | "center"; ctaLabel?: string; ctaHref?: string };
 export type InstitutionalStore = { version: 1; updatedAt: string; draft: Record<InstitutionalKey, InstitutionalPage>; published: Record<InstitutionalKey, InstitutionalPage> };
 export const institutionalKeys: InstitutionalKey[] = ["about","heritage","story","legacy","orchestra","members","music","ministry"];
