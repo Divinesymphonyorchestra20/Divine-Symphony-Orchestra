@@ -2154,3 +2154,150 @@ a.dso-contact-social-card:hover{transform:translateY(-2px);border-color:#c9afd2;
     font-size: 12px;
   }
 }
+
+
+/* Shared compact photo-card layout across public pages */
+.musician-grid,
+.leadership-directory-grid,
+.founder-grid,
+.history-gallery-grid,
+.home-media-grid,
+.institutional-item-grid,
+.dso-gallery-entry-grid,
+.dso-gallery-square-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+.musician-grid .musician-card,
+.leadership-directory-grid .leadership-directory-card,
+.founder-grid .founder-card,
+.history-gallery-grid .history-gallery-item,
+.dso-gallery-entry-grid .dso-gallery-entry-card,
+.dso-gallery-square-grid .dso-gallery-square-item {
+  min-width: 0;
+}
+.musician-portrait,
+.musician-placeholder,
+.people-leadership-preview-portrait {
+  object-fit: contain;
+  object-position: center;
+  background: #f3edf4;
+}
+.history-gallery-grid .history-gallery-item img {
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  background: #f3edf4;
+}
+.dso-gallery-square-grid .dso-gallery-square-item > img {
+  object-fit: contain;
+  background: #f3edf4;
+}
+.dso-gallery-entry-grid .dso-gallery-entry-card img,
+.home-media-grid .home-media-item > div,
+.institutional-item-grid .institutional-item-image {
+  max-width: 100%;
+}
+.dso-photo-wall {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.musician-profile-layout {
+  grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+  gap: 36px;
+}
+.musician-profile-portrait,
+.musician-profile-placeholder {
+  aspect-ratio: 1 / 1;
+  max-height: 360px;
+  object-fit: contain;
+  object-position: center;
+  background: #f3edf4;
+}
+@media (max-width: 900px) {
+  .musician-grid,
+  .leadership-directory-grid,
+  .founder-grid,
+  .history-gallery-grid,
+  .home-media-grid,
+  .institutional-item-grid,
+  .dso-gallery-entry-grid,
+  .dso-gallery-square-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .dso-photo-wall {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .musician-profile-layout {
+    grid-template-columns: minmax(0, 250px) minmax(0, 1fr);
+    gap: 26px;
+  }
+}
+@media (max-width: 620px) {
+  .musician-grid,
+  .leadership-directory-grid,
+  .founder-grid,
+  .history-gallery-grid,
+  .home-media-grid,
+  .institutional-item-grid,
+  .dso-gallery-entry-grid,
+  .dso-gallery-square-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 9px;
+  }
+  .dso-photo-wall {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: clamp(100px, 29vw, 150px);
+  }
+  .musician-card-copy,
+  .leadership-directory-card-copy,
+  .alumni-card-copy {
+    padding: 9px 8px 10px;
+    gap: 7px;
+  }
+  .musician-card-copy h3,
+  .leadership-directory-card-copy h3,
+  .alumni-card-copy h3,
+  .founder-card h3 {
+    font-size: 12px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+  .musician-instruments li {
+    font-size: 7px;
+    padding: 3px 5px;
+  }
+  .history-gallery-grid .history-gallery-item img {
+    aspect-ratio: 1 / 1;
+  }
+  .history-gallery-item figcaption {
+    padding: 8px;
+    font-size: 10px;
+  }
+  .musician-profile {
+    padding: 30px 16px 58px;
+  }
+  .musician-profile-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  .musician-profile-portrait-column {
+    width: min(100%, 260px);
+    margin: 0 auto;
+  }
+  .musician-profile-portrait,
+  .musician-profile-placeholder {
+    max-height: 300px;
+  }
+}
+@media (max-width: 360px) {
+  .musician-grid,
+  .leadership-directory-grid,
+  .founder-grid,
+  .history-gallery-grid,
+  .home-media-grid,
+  .institutional-item-grid,
+  .dso-gallery-entry-grid,
+  .dso-gallery-square-grid {
+    gap: 6px;
+  }
+}
