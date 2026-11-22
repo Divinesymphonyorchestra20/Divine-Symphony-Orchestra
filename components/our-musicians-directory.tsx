@@ -43,13 +43,18 @@ export default function OurMusiciansDirectory({
   groups: PublicInstrumentGroup[];
 }) {
   const [activeGroup, setActiveGroup] = useState("__all__");
+  const [searchQuery, setSearchQuery] = useState("");
   const sorted = useMemo(
     () => [...musicians].sort((a, b) => a.firstName.localeCompare(b.firstName, undefined, { sensitivity: "base" }) || a.lastName.localeCompare(b.lastName, undefined, { sensitivity: "base" })),
     [musicians],
   );
-  const visible = activeGroup === "__all__"
-    ? sorted
-    : sorted.filter(musician => musician.instruments.some(instrument => instrument.groupSlug === activeGroup));
+  const visible = sorted.filter(musician => {
+    const matchesGroup = activeGroup === "__all__" || musician.instruments.some(instrument => instrument.groupSlug === activeGroup);
+    const query = searchQuery.trim().toLocaleLowerCase();
+    const searchable = [musician.displayName, musician.firstName, musician.lastName, ...musician.instruments.map(instrument => instrument.name)]
+      .join(" ").toLocaleLowerCase();
+    return matchesGroup && (!query || searchable.includes(query));
+  });
   const availableLetters = Array.from(new Set(visible.map(musician => musician.displayName.trim().charAt(0).toUpperCase())))
     .filter(letter => /^[A-Z]$/.test(letter))
     .sort();
@@ -60,6 +65,21 @@ export default function OurMusiciansDirectory({
         <p className="eyebrow dark">Musicians directory</p>
         <h2 id="musicians-directory-heading">The voices of DSO</h2>
         <p>{visible.length} {visible.length === 1 ? "musician" : "musicians"} shown</p>
+      </div>
+
+      <div className="people-directory-search">
+        <label htmlFor="musician-directory-search">Search musicians</label>
+        <div className="people-directory-search-control">
+          <input
+            id="musician-directory-search"
+            type="search"
+            value={searchQuery}
+            onChange={event => setSearchQuery(event.target.value)}
+            placeholder="Type a musician's name..."
+            autoComplete="off"
+          />
+          {searchQuery && <button type="button" onClick={() => setSearchQuery("")} aria-label="Clear musician search">Clear</button>}
+        </div>
       </div>
 
       <nav className="musician-group-nav" aria-label="Filter musicians by instrument group">
@@ -87,8 +107,8 @@ export default function OurMusiciansDirectory({
 
       {visible.length === 0 ? (
         <div className="musicians-empty" role="status">
-          <h3>{activeGroup === "__all__" ? "No published musicians are available yet." : "No published musicians are listed in this section yet."}</h3>
-          <p>The DSO People directory will appear here as approved records are published.</p>
+          <h3>{searchQuery.trim() ? "No musicians match that search." : activeGroup === "__all__" ? "No published musicians are available yet." : "No published musicians are listed in this section yet."}</h3>
+          <p>{searchQuery.trim() ? "Try another name or clear your search to see the full directory." : "The DSO People directory will appear here as approved records are published."}</p>
         </div>
       ) : (
         <div className="musician-grid" aria-live="polite">
