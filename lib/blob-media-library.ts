@@ -13,6 +13,7 @@ export type BlobMediaAsset = {
   permission_notes: string;
   status: "draft" | "published" | "archived";
   created_at: string;
+  usages?: Array<{ contentType: string; slug: string; fieldKey: string; placement: string | null }>;
 };
 
 const STORE_PATH = "cms/media-library.json";
