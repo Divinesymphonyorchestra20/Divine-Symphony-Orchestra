@@ -13,7 +13,7 @@ const initial: SiteContent = {
     enquiryNote: "Website enquiries will be enabled when an official receiving address and handling process are confirmed.",
   },
 };
-type Tab = "events" | "news" | "gallery" | "contact";
+type Tab = "events" | "news" | "gallery" | "contact" | "navigation";
 const newId = () => typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : `dso-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const dateInput = (value: string) => {
   if (!value) return "";
@@ -78,6 +78,11 @@ export default function SiteContentManager() {
   }
 
   const footerSocialFields = ["Instagram", "Facebook", "YouTube", "WhatsApp Contact", "WhatsApp Channel"] as const;
+  const settings = data.siteSettings || {brandName:"Divine Symphony Orchestra",tagline:"Music for Inspiration • Excellence • Impact",logoPath:"/images/dso-logo-transparent.png",primaryLinks:[{label:"Home",href:"/"},{label:"About",href:"/about"},{label:"Join the Orchestra",href:"/join-the-orchestra"},{label:"Support DSO",href:"/support"}],historyLinks:[],peopleLinks:[],exploreLinks:[],footerExploreLinks:[],footerCommunityLinks:[]};
+  function updateSettings(patch:Partial<NonNullable<SiteContent["siteSettings"]>>){setData(current=>({...current,siteSettings:{...settings,...patch}}));setMessage("");}
+  function updateNav(group:"primaryLinks"|"historyLinks"|"peopleLinks"|"exploreLinks"|"footerExploreLinks"|"footerCommunityLinks",index:number,patch:Partial<{label:string;href:string}>){updateSettings({[group]:settings[group].map((link,i)=>i===index?{...link,...patch}:link)});}
+  function addNav(group:"primaryLinks"|"historyLinks"|"peopleLinks"|"exploreLinks"|"footerExploreLinks"|"footerCommunityLinks"){updateSettings({[group]:[...settings[group],{label:"New link",href:"/"}]});}
+  function removeNav(group:"primaryLinks"|"historyLinks"|"peopleLinks"|"exploreLinks"|"footerExploreLinks"|"footerCommunityLinks",index:number){updateSettings({[group]:settings[group].filter((_,i)=>i!==index)});}
   function socialUrl(label: string) {
     return data.contact.socialLinks.find(item => item.label.trim().toLowerCase() === label.toLowerCase())?.url || "";
   }
@@ -141,12 +146,12 @@ export default function SiteContentManager() {
       <Link href="/admin">Back to dashboard</Link>
     </header>
     <nav className="dso-site-content-tabs">
-      {(["events", "news", "gallery", "contact"] as Tab[]).map(value => <button key={value} className={tab === value ? "active" : ""} onClick={() => setTab(value)}>{value === "events" ? "Events" : value === "news" ? "News" : value === "gallery" ? "Gallery Manager" : "Contact"}</button>)}
+      {(["events", "news", "gallery", "contact", "navigation"] as Tab[]).map(value => <button key={value} className={tab === value ? "active" : ""} onClick={() => setTab(value)}>{value === "events" ? "Events" : value === "news" ? "News" : value === "gallery" ? "Gallery Manager" : value === "contact" ? "Contact" : "Brand & Navigation"}</button>)}
     </nav>
     <section className="dso-site-content-panel">
       <div className="dso-site-content-help">
-        <strong>{tab === "events" ? "Event records" : tab === "news" ? "News articles" : tab === "gallery" ? "Gallery Manager" : "Official contact details"}</strong>
-        <p>{tab === "events" ? "Add confirmed dates, venues, programme details and approved posters. Use draft until DSO has approved the event information." : tab === "news" ? "Create stories with a unique URL slug, summary, full article and publication date." : tab === "gallery" ? "The public Gallery is managed from one authoritative History content source. Use the dedicated Gallery Manager for collections, subheadings, photographs, videos and publishing." : "Only enter official details supplied and approved by DSO. Enquiry delivery remains inactive until the receiving process is confirmed."}</p>
+        <strong>{tab === "events" ? "Event records" : tab === "news" ? "News articles" : tab === "gallery" ? "Gallery Manager" : tab === "contact" ? "Official contact details" : "Site branding and navigation"}</strong>
+        <p>{tab === "events" ? "Add confirmed dates, venues, programme details and approved posters. Use draft until DSO has approved the event information." : tab === "news" ? "Create stories with a unique URL slug, summary, full article and publication date." : tab === "gallery" ? "The public Gallery is managed from one authoritative History content source. Use the dedicated Gallery Manager for collections, subheadings, photographs, videos and publishing." : tab === "contact" ? "Only enter official details supplied and approved by DSO. Enquiry delivery remains inactive until the receiving process is confirmed." : "Edit the public header navigation, brand name, logo, tagline and footer links. Changes are applied when saved."}</p>
       </div>
       <div className="dso-site-content-toolbar">
         {tab === "events" && <button type="button" onClick={addEvent}>+ Add event</button>}
@@ -200,6 +205,10 @@ export default function SiteContentManager() {
           <p>Previously stored album-cover records are retained for compatibility and are not used to generate the public Gallery. They are not copied into a second gallery system.</p>
           <Link href="/admin/gallery" className="dso-site-content-toolbar-link">Open Gallery Manager ↗</Link>
         </section>}
+        {tab === "navigation" && <div className="dso-structured-list">
+          <div className="dso-structured-card"><h2>Brand identity</h2><label className="dso-field">Brand name<input value={settings.brandName} onChange={e=>updateSettings({brandName:e.target.value})}/></label><label className="dso-field">Tagline<input value={settings.tagline} onChange={e=>updateSettings({tagline:e.target.value})}/></label><label className="dso-field">Logo image path<input value={settings.logoPath} onChange={e=>updateSettings({logoPath:e.target.value})}/><small>Use a logo stored in /images or the approved Shared Media Library.</small></label></div>
+          {(["primaryLinks","historyLinks","exploreLinks","peopleLinks","footerExploreLinks","footerCommunityLinks"] as const).map(group=><div className="dso-structured-card" key={group}><div className="dso-structured-heading"><strong>{group.replace(/([A-Z])/g," $1")}</strong><button type="button" className="dso-add-button" onClick={()=>addNav(group)}>+ Add link</button></div>{settings[group].map((link,index)=><div className="dso-structured-grid" key={group+index}><label className="dso-field">Label<input value={link.label} onChange={e=>updateNav(group,index,{label:e.target.value})}/></label><label className="dso-field">Destination<input value={link.href} onChange={e=>updateNav(group,index,{href:e.target.value})}/></label><button type="button" className="dso-remove-button" onClick={()=>removeNav(group,index)}>Remove</button></div>)}</div>)}
+        </div>}
         {tab === "contact" && <div className="dso-structured-card">
           <label className="dso-field">Introduction<textarea rows={3} value={data.contact.intro} onChange={e=>updateContact({intro:e.target.value})}/></label>
           <div className="dso-structured-grid">
