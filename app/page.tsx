@@ -70,22 +70,22 @@ export default async function Home() {
     </section>}
     {show("event") && <section className="updates">
       <div className="updates-copy">
-        <p className="eyebrow dark">What’s happening</p>
-        <h2>{nextEvent ? nextEvent.title : "Keep up with DSO"}</h2>
+        <p className="eyebrow dark">{c.event.eyebrow}</p>
+        <h2>{nextEvent ? nextEvent.title : c.event.title}</h2>
         {nextEvent ? <>
           <p className="updates-event-meta">{eventDate}{nextEvent.venue ? " · " + nextEvent.venue : ""}</p>
           <p>{nextEvent.description || "Find event details, programme information and announcements on the Concerts & Events page."}</p>
-        </> : <p>See the latest concert and programme announcements from Divine Symphony Orchestra.</p>}
+        </> : <p>{c.event.text}</p>}
       </div>
       <a className="solid-cta" href={c.event.href}>{c.event.button} <span aria-hidden="true">→</span></a>
     </section>}
     {show("media") && c.media.items.length > 0 && <section className="home-media-band"><div className="home-media-heading"><p className="eyebrow dark">{c.media.eyebrow}</p><h2>{c.media.title}</h2><p>{c.media.text}</p></div><div className="home-media-grid">{c.media.items.map((item,index)=><a className="home-media-card" href={item.href || "/gallery"} key={item.title + index}><img src={item.image.src} alt={item.image.alt || item.title}/><span>{item.title}</span></a>)}</div></section>}
     {show("news") && <section className="home-news-band" aria-labelledby="home-news-title">
       <div className="home-news-inner">
-        <p className="eyebrow dark">From the orchestra</p>
-        <h2 id="home-news-title">News &amp; Stories</h2>
-        <p>Read the latest news, announcements and stories from Divine Symphony Orchestra.</p>
-        <a className="solid-cta" href="/news">Read news &amp; stories <span aria-hidden="true">→</span></a>
+        <p className="eyebrow dark">{c.news.eyebrow}</p>
+        <h2 id="home-news-title">{c.news.title}</h2>
+        <p>{c.news.text}</p>
+        <a className="solid-cta" href={c.news.href}>{c.news.button} <span aria-hidden="true">→</span></a>
       </div>
     </section>}
     <SiteFooter />
