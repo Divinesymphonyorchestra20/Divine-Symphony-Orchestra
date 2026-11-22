@@ -32,6 +32,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ pat
     site.events.some(item => item.status === "published" && item.image === url) ||
     site.news.some(item => item.status === "published" && item.image === url) ||
     site.albums.some(item => item.status === "published" && item.coverImage === url) ||
+    site.siteSettings?.logoPath === url ||
     (patron.published.portrait.published && patron.published.portrait.pathname === key);
   let publishedPeopleImage = false;
   if (peopleDatabaseAvailable) {
