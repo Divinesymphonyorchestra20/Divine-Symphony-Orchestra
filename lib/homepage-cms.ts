@@ -14,6 +14,7 @@ export type HomepageContent = {
   history: { eyebrow: string; title: string; text: string; button: string; href: string };
   feature: { eyebrow: string; title: string; accent: string; text: string; button: string; href: string; image: HomeImage };
   event: { eyebrow: string; title: string; text: string; button: string; href: string };
+  news: { eyebrow: string; title: string; text: string; button: string; href: string };
   media: { eyebrow: string; title: string; text: string; items: Array<{ title: string; image: HomeImage; href: string }> };
   sections: HomeSection[];
 };
@@ -51,6 +52,7 @@ export const defaultHomepageContent: HomepageContent = {
     button: "Explore events", href: "/concerts-and-events"
   },
   media: { eyebrow: "In performance", title: "Moments through music", text: "Selected photographs and performance highlights from Divine Symphony Orchestra.", items: [] },
+  news: { eyebrow: "From the orchestra", title: "News & Stories", text: "Read the latest news, announcements and stories from Divine Symphony Orchestra.", button: "Read news & stories", href: "/news" },
   sections: [
     { id: "hero", visible: true }, { id: "links", visible: true }, { id: "history", visible: true },
     { id: "feature", visible: true }, { id: "event", visible: true }, { id: "media", visible: true }, { id: "news", visible: true }
