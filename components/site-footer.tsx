@@ -39,18 +39,18 @@ export default async function SiteFooter() {
 
       <div className="dso-footer-columns">
         <section>
-          <h3>Explore</h3>
+          <h3>{settings?.footerExploreTitle || "Explore"}</h3>
           {(settings?.footerExploreLinks || []).map((link,index)=><a key={link.href+index} href={link.href}>{link.label}</a>)}
         </section>
         <section>
-          <h3>Get in Touch</h3>
+          <h3>{settings?.footerContactTitle || "Get in Touch"}</h3>
           <a href="/contact">Contact DSO</a>
           <a href="/contact?topic=booking">Booking Enquiries</a>
           {contact.generalEmail && <a href={"mailto:" + contact.generalEmail}>Official Email</a>}
           {whatsappHref ? <a href={whatsappHref} target="_blank" rel="noreferrer">WhatsApp Contact</a> : <a href="/contact">WhatsApp Contact details</a>}
         </section>
         <section>
-          <h3>Be Part of DSO</h3>
+          <h3>{settings?.footerCommunityTitle || "Be Part of DSO"}</h3>
           {(settings?.footerCommunityLinks || []).map((link,index)=><a key={link.href+index} href={link.href}>{link.label}</a>)}
         </section>
       </div>
