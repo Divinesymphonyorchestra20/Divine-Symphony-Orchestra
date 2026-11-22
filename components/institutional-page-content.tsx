@@ -26,16 +26,17 @@ function InstitutionalItemCard({ item, pageKey }: { item: InstitutionalPage["ite
   return <article className="founder-card">{content}{item.link && <a className="history-inline-link" href={item.link}>Explore <span aria-hidden="true">→</span></a>}{item.mediaUrl && <a className="history-inline-link" href={item.mediaUrl} target="_blank" rel="noreferrer">View media ↗</a>}</article>;
 }
 
-export default function InstitutionalPageContent({ page }: { page: InstitutionalPage }) {
+export default function InstitutionalPageContent({ page, showEditorialNote = false }: { page: InstitutionalPage; showEditorialNote?: boolean }) {
   const sections = page.sections.filter(section => section.visible !== false);
   const items = page.items.filter(item => item.visible !== false);
   return <>
-    <section className="inner-page-hero">
-      <div className="inner-page-hero-shade" />
+    <section className={`inner-page-hero dso-institutional-hero dso-hero-${page.heroHeight || "standard"} dso-hero-${page.heroAlignment || "left"}`} style={page.heroImage ? { backgroundImage: `url("${page.heroImage}")`, backgroundPosition: page.heroImagePosition || "center" } : undefined}>
+      <div className={`inner-page-hero-shade dso-hero-overlay-${page.heroOverlay || "strong"}`} />
       <div className="inner-page-hero-copy">
         <p className="eyebrow">{page.eyebrow}</p>
         <h1>{page.title}<br /><em>{page.emphasis}</em></h1>
         <p>{page.intro}</p>
+        {page.ctaLabel && page.ctaHref && <Link className="dso-institutional-cta" href={page.ctaHref}>{page.ctaLabel} <span aria-hidden="true">→</span></Link>}
       </div>
     </section>
     <article className="history-article">
@@ -45,7 +46,7 @@ export default function InstitutionalPageContent({ page }: { page: Institutional
         <p>{page.intro}</p>
       </header>
       <div className="institutional-section-grid">
-        {sections.map((section, index) => <section className={"history-section " + (index % 2 ? "history-section-tinted" : "")} key={section.heading}>
+        {sections.map((section, index) => <section className={"history-section " + (section.variant === "accent" ? "dso-section-accent" : section.variant === "tinted" || (!section.variant && index % 2) ? "history-section-tinted" : "")} key={section.heading}>
           <div className="history-section-number">{String(index + 1).padStart(2, "0")}</div>
           <div><p className="eyebrow dark">{page.eyebrow}</p><h2>{section.heading}</h2><p>{section.body}</p></div>
         </section>)}
@@ -60,7 +61,7 @@ export default function InstitutionalPageContent({ page }: { page: Institutional
         <div className="milestones-intro"><p className="eyebrow dark">Explore</p><h2>More from DSO</h2></div>
         <div className="institutional-item-grid">{items.map(item => <InstitutionalItemCard item={item} pageKey={page.key} key={item.id || item.slug || item.title} />)}</div>
       </section>}
-      {page.note && <aside className="institutional-editorial-note"><p>{page.note}</p></aside>}
+      {showEditorialNote && page.note && <aside className="institutional-editorial-note"><p>{page.note}</p></aside>}
     </article>
   </>;
 }
