@@ -96,6 +96,7 @@ export async function readHomepageStore(): Promise<HomepageStore> {
   });
   const withSectionDefaults = (content: HomepageContent): HomepageContent => ({
     ...content,
+    news: content.news || defaultHomepageContent.news,
     sections: [
       ...content.sections,
       ...defaultHomepageContent.sections.filter(section => !content.sections.some(existing => existing.id === section.id)),
