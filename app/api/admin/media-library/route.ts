@@ -183,7 +183,7 @@ export async function PUT(request: NextRequest) {
       if (body.status === "published" && !["approved", "not_required"].includes(String(nextPermission))) {
         return NextResponse.json({ error: "Confirm that DSO has permission to publish this image, or mark permission as not required, before publishing it." }, { status: 400 });
       }
-      await updateBlobMediaAsset(body.id, {
+      await updateBlobMediaAsset(asset.id, {
         alt_text: body.altText, caption: body.caption, credit: body.credit,
         status: body.status as BlobMediaAsset["status"],
         permission_status: nextPermission as BlobMediaAsset["permission_status"],
