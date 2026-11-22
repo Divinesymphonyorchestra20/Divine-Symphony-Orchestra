@@ -28,7 +28,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ pat
   const published =
     history.media.some(item => item.pathname === key && item.published) ||
     [home.published.hero.image.src, home.published.feature.image.src, ...home.published.media.items.map(item => item.image.src)].includes(url) ||
-    Object.values(institutional.published).some(page => page.items.some(item => item.image === url)) ||
+    Object.values(institutional.published).some(page => page.heroImage === url || page.items.some(item => item.image === url)) ||
     site.events.some(item => item.status === "published" && item.image === url) ||
     site.news.some(item => item.status === "published" && item.image === url) ||
     site.albums.some(item => item.status === "published" && item.coverImage === url) ||
