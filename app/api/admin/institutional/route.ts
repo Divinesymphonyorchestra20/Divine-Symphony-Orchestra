@@ -5,7 +5,7 @@ export const runtime="nodejs";export const dynamic="force-dynamic";
 const safeDestination=(value:unknown,allowMedia=false):boolean=>{
  if(value===undefined||value===null||value==="")return true;
  if(typeof value!=="string"||value.length>2048)return false;
- if(value.startsWith("/")&&!value.startsWith("//"))return !allowMedia||value.startsWith("/api/media/");
+ if(value.startsWith("/")&&!value.startsWith("//"))return !allowMedia||value.startsWith("/api/media/")||value.startsWith("/images/");
  try{const u=new URL(value);return u.protocol==="https:"}catch{return false}
 };
 export async function GET(request:NextRequest){if(!(await hasAdminPermission(request,"content.read_drafts")))return NextResponse.json({error:"You do not have permission to manage institutional content."},{status:(await verifyAdminSession(request))?403:401});return NextResponse.json(await readInstitutionalStore(),{headers:{"Cache-Control":"no-store"}})}
