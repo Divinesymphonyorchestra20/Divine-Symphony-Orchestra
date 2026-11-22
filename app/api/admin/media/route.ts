@@ -4,6 +4,7 @@ import { randomUUID } from "node:crypto";
 import { hasAdminPermission } from "../../../../lib/admin-auth";
 import { isDatabaseContentStoreEnabled } from "../../../../lib/content-store";
 import { queryDatabase } from "../../../../db/client";
+import { upsertBlobMediaAsset } from "../../../../lib/blob-media-library";
 
 export const runtime = "nodejs";
 
@@ -43,6 +44,15 @@ export async function POST(request: NextRequest) {
           String(form.get("credit") || "").slice(0, 500)],
       );
       id = asset.rows[0].id;
+    } else {
+      await upsertBlobMediaAsset({
+        id, blob_path: blob.pathname, original_filename: file.name, content_type: file.type, byte_size: file.size,
+        alt_text: String(form.get("altText") || "").slice(0, 1000),
+        caption: String(form.get("caption") || "").slice(0, 1000),
+        credit: String(form.get("credit") || "").slice(0, 500),
+        permission_status: "not_recorded", permission_notes: "", status: "draft",
+        created_at: new Date().toISOString(), usages: [],
+      });
     }
     return NextResponse.json({ id, pathname: blob.pathname, filename: file.name, contentType: file.type, size: file.size });
   } catch (error) {
