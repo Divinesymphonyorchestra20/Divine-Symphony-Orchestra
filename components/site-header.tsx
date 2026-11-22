@@ -4,34 +4,8 @@ import Image from "next/image";
 import {usePathname} from "next/navigation";
 import {useEffect,useRef,useState} from "react";
 type NavLink={href:string;label:string};
-type NavSettings={brandName:string;logoPath:string;primaryLinks:NavLink[];historyLinks:NavLink[];peopleLinks:NavLink[];exploreLinks:NavLink[]};
-const defaultNav:NavSettings={brandName:"Divine Symphony Orchestra",logoPath:"/images/dso-logo-transparent.png",primaryLinks:[{href:"/",label:"Home"},{href:"/about",label:"About"},{href:"/join-the-orchestra",label:"Join the Orchestra"},{href:"/support",label:"Support DSO"}],historyLinks:[{href:"/history",label:"History of DSO"},{href:"/history/founding-members",label:"Founding Members"},{href:"/history/milestones",label:"Milestones"},{href:"/our-heritage",label:"Our Heritage"},{href:"/our-story",label:"Our Story"},{href:"/our-legacy",label:"Our Legacy"},{href:"/dr-daniel-kolawole-olukoya",label:"Dr. Daniel K. Olukoya"}],peopleLinks:[{href:"/people",label:"People overview"},{href:"/people/our-musicians",label:"Our Musicians"},{href:"/people/leadership",label:"Leadership & Direction"},{href:"/people/alumni",label:"Alumni"},{href:"/orchestra",label:"The Orchestra"},{href:"/meet-the-members",label:"Meet the Members"}],exploreLinks:[{href:"/music",label:"Music & Performances"},{href:"/music-school",label:"Music School"},{href:"/ministry-and-impact",label:"Ministry & Impact"},{href:"/concerts-and-events",label:"Concerts & Events"},{href:"/gallery",label:"Gallery"},{href:"/news",label:"News & Stories"}]};
-
-const historyLinks=[
-  {href:"/history",label:"History of DSO"},
-  {href:"/history/founding-members",label:"Founding Members"},
-  {href:"/history/milestones",label:"Milestones"},
-  {href:"/our-heritage",label:"Our Heritage"},
-  {href:"/our-story",label:"Our Story"},
-  {href:"/our-legacy",label:"Our Legacy"},
-  {href:"/dr-daniel-kolawole-olukoya",label:"Dr. Daniel K. Olukoya"},
-];
-const peopleLinks=[
-  {href:"/people",label:"People overview"},
-  {href:"/people/our-musicians",label:"Our Musicians"},
-  {href:"/people/leadership",label:"Leadership & Direction"},
-  {href:"/people/alumni",label:"Alumni"},
-  {href:"/orchestra",label:"The Orchestra"},
-  {href:"/meet-the-members",label:"Meet the Members"},
-];
-const exploreLinks=[
-  {href:"/music",label:"Music & Performances"},
-  {href:"/music-school",label:"Music School"},
-  {href:"/ministry-and-impact",label:"Ministry & Impact"},
-  {href:"/concerts-and-events",label:"Concerts & Events"},
-  {href:"/gallery",label:"Gallery"},
-  {href:"/news",label:"News & Stories"},
-];
+type NavSettings={brandName:string;logoPath:string;historyMenuLabel:string;exploreMenuLabel:string;peopleMenuLabel:string;primaryLinks:NavLink[];historyLinks:NavLink[];peopleLinks:NavLink[];exploreLinks:NavLink[]};
+const defaultNav:NavSettings={brandName:"Divine Symphony Orchestra",logoPath:"/images/dso-logo-transparent.png",historyMenuLabel:"Our Heritage",exploreMenuLabel:"Explore",peopleMenuLabel:"People",primaryLinks:[{href:"/",label:"Home"},{href:"/about",label:"About"},{href:"/join-the-orchestra",label:"Join the Orchestra"},{href:"/support",label:"Support DSO"}],historyLinks:[{href:"/history",label:"History of DSO"},{href:"/history/founding-members",label:"Founding Members"},{href:"/history/milestones",label:"Milestones"},{href:"/our-heritage",label:"Our Heritage"},{href:"/our-story",label:"Our Story"},{href:"/our-legacy",label:"Our Legacy"},{href:"/dr-daniel-kolawole-olukoya",label:"Dr. Daniel K. Olukoya"}],peopleLinks:[{href:"/people",label:"People overview"},{href:"/people/our-musicians",label:"Our Musicians"},{href:"/people/leadership",label:"Leadership & Direction"},{href:"/people/alumni",label:"Alumni"},{href:"/orchestra",label:"The Orchestra"},{href:"/meet-the-members",label:"Meet the Members"}],exploreLinks:[{href:"/music",label:"Music & Performances"},{href:"/music-school",label:"Music School"},{href:"/ministry-and-impact",label:"Ministry & Impact"},{href:"/concerts-and-events",label:"Concerts & Events"},{href:"/gallery",label:"Gallery"},{href:"/news",label:"News & Stories"}]};
 
 export default function SiteHeader({active}:{active?:string}){
   const pathname=usePathname();
@@ -91,19 +65,19 @@ export default function SiteHeader({active}:{active?:string}){
     <nav id="primary-navigation" className={menuOpen?"is-open":""} aria-label="Main navigation">
       {settings.primaryLinks.filter(link=>link.href==="/"||link.href==="/about").map(link=><a key={link.href} className={pathname===link.href?"active":""} aria-current={pathname===link.href?"page":undefined} href={link.href} onClick={close}>{link.label}</a>)}
       <div className={"nav-dropdown"+(historyActive?" active":"")}>
-        <button ref={historyTriggerRef} type="button" className="nav-dropdown-trigger" aria-haspopup="true" aria-expanded={historyOpen} aria-controls="history-navigation" onClick={toggleHistory}>Our Heritage <span aria-hidden="true">{historyOpen?"⌃":"⌄"}</span></button>
+        <button ref={historyTriggerRef} type="button" className="nav-dropdown-trigger" aria-haspopup="true" aria-expanded={historyOpen} aria-controls="history-navigation" onClick={toggleHistory}>{settings.historyMenuLabel} <span aria-hidden="true">{historyOpen?"⌃":"⌄"}</span></button>
         <div id="history-navigation" className="nav-dropdown-menu" hidden={!historyOpen}>
           {settings.historyLinks.map(link=><a key={link.href} href={link.href} aria-current={pathname===link.href?"page":undefined} onClick={close}>{link.label}</a>)}
         </div>
       </div>
       <div className={"nav-dropdown"+(exploreActive?" active":"")}>
-        <button ref={exploreTriggerRef} type="button" className="nav-dropdown-trigger" aria-haspopup="true" aria-expanded={exploreOpen} aria-controls="explore-navigation" onClick={toggleExplore}>Explore <span aria-hidden="true">{exploreOpen?"⌃":"⌄"}</span></button>
+        <button ref={exploreTriggerRef} type="button" className="nav-dropdown-trigger" aria-haspopup="true" aria-expanded={exploreOpen} aria-controls="explore-navigation" onClick={toggleExplore}>{settings.exploreMenuLabel} <span aria-hidden="true">{exploreOpen?"⌃":"⌄"}</span></button>
         <div id="explore-navigation" className="nav-dropdown-menu" hidden={!exploreOpen}>
           {settings.exploreLinks.map(link=><a key={link.href} href={link.href} aria-current={pathname===link.href?"page":undefined} onClick={close}>{link.label}</a>)}
         </div>
       </div>
       <div className={"nav-dropdown"+(peopleActive?" active":"")}>
-        <button ref={peopleTriggerRef} type="button" className="nav-dropdown-trigger" aria-haspopup="true" aria-expanded={peopleOpen} aria-controls="people-navigation" onClick={togglePeople}>People <span aria-hidden="true">{peopleOpen?"⌃":"⌄"}</span></button>
+        <button ref={peopleTriggerRef} type="button" className="nav-dropdown-trigger" aria-haspopup="true" aria-expanded={peopleOpen} aria-controls="people-navigation" onClick={togglePeople}>{settings.peopleMenuLabel} <span aria-hidden="true">{peopleOpen?"⌃":"⌄"}</span></button>
         <div id="people-navigation" className="nav-dropdown-menu" hidden={!peopleOpen}>
           {settings.peopleLinks.map(link=><a key={link.href} href={link.href} aria-current={pathname===link.href?"page":undefined} onClick={close}>{link.label}</a>)}
         </div>
