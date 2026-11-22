@@ -16,6 +16,7 @@ type Filter = "all" | "draft" | "published" | "archived";
 
 export default function MediaLibrary() {
   const [assets, setAssets] = useState<MediaAsset[]>([]);
+  const [allowPermanentDelete, setAllowPermanentDelete] = useState(false);
   const [filter, setFilter] = useState<Filter>("all");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
@@ -30,6 +31,7 @@ export default function MediaLibrary() {
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Could not load the media library.");
       setAssets(data.assets || []);
+      setAllowPermanentDelete(Boolean(data.allowPermanentDelete));
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not load the media library.");
     } finally { setLoading(false); }
@@ -139,7 +141,7 @@ export default function MediaLibrary() {
             {asset.status !== "published" && <button type="button" onClick={() => void save(asset, "published")} disabled={saving === asset.id || !asset.alt_text.trim() || !["approved","not_required"].includes(asset.permission_status)}>Publish</button>}
             {asset.status !== "archived" && <button type="button" className="archive" onClick={() => void save(asset, "archived")} disabled={saving === asset.id || hasPublishedUsage}>Archive</button>}
             {asset.status === "archived" && <button type="button" onClick={() => void save(asset, "draft")} disabled={saving === asset.id}>Restore as draft</button>}
-            {asset.status === "archived" && asset.usages.length === 0 && <button type="button" className="archive" onClick={() => void deleteMedia(asset)} disabled={saving === asset.id}>Delete permanently</button>}
+            {allowPermanentDelete && asset.status === "archived" && asset.usages.length === 0 && <button type="button" className="archive" onClick={() => void deleteMedia(asset)} disabled={saving === asset.id}>Delete permanently</button>}
           </div>
         </article>;
       })}</div>}
