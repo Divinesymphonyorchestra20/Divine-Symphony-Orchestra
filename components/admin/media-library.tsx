@@ -61,6 +61,23 @@ export default function MediaLibrary() {
     } finally { setSaving(null); }
   }
 
+  async function deleteMedia(asset: MediaAsset) {
+    if (!window.confirm("Permanently delete this archived file? This cannot be undone.")) return;
+    setSaving(asset.id); setError(""); setNotice("");
+    try {
+      const response = await fetch("/api/admin/media-library", {
+        method: "DELETE", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: asset.id }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Could not delete this file.");
+      setAssets(current => current.filter(item => item.id !== asset.id));
+      setNotice("Archived media file permanently deleted.");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not delete this file.");
+    } finally { setSaving(null); }
+  }
+
   async function upload(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -122,6 +139,7 @@ export default function MediaLibrary() {
             {asset.status !== "published" && <button type="button" onClick={() => void save(asset, "published")} disabled={saving === asset.id || !asset.alt_text.trim() || !["approved","not_required"].includes(asset.permission_status)}>Publish</button>}
             {asset.status !== "archived" && <button type="button" className="archive" onClick={() => void save(asset, "archived")} disabled={saving === asset.id || hasPublishedUsage}>Archive</button>}
             {asset.status === "archived" && <button type="button" onClick={() => void save(asset, "draft")} disabled={saving === asset.id}>Restore as draft</button>}
+            {asset.status === "archived" && asset.usages.length === 0 && <button type="button" className="archive" onClick={() => void deleteMedia(asset)} disabled={saving === asset.id}>Delete permanently</button>}
           </div>
         </article>;
       })}</div>}
