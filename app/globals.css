@@ -2335,3 +2335,5 @@ a.dso-contact-social-card:hover{transform:translateY(-2px);border-color:#c9afd2;
 .home-media-card img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;}
 .home-media-card span{padding:14px 16px;font-size:12px;font-weight:700;}
 @media(max-width:620px){.home-media-band{padding:54px 16px}.home-media-grid{grid-template-columns:1fr;gap:12px}}
+
+@media(max-width:620px){.site-header .brand-wordmark span{display:block;}}
