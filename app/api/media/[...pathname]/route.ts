@@ -77,7 +77,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ pat
       const assets = await readBlobMediaAssets();
       archived = assets.find(asset => asset.blob_path === key)?.status === "archived";
     } catch {
-      archived = false;
+      archived = true;
     }
   }
   const publiclyAvailable = (published || publishedPeopleImage) && !archived;
